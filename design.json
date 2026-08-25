@@ -1,0 +1,275 @@
+{
+  "meta": {
+    "extractedAt": "2026-08-25",
+    "file": "Gamified activity",
+    "scope": {
+      "pages": null,
+      "resolveRemote": false,
+      "sections": null,
+      "selection": false
+    }
+  },
+  "pages": [
+    {
+      "frames": [
+        {
+          "h": 118,
+          "kidCount": 3,
+          "kids": [
+            {
+              "bv": {
+                "bottomLeftRadius": "Primitives:primitive/radius/md",
+                "bottomRightRadius": "Primitives:primitive/radius/md",
+                "fills": [
+                  "Semantics:semantic/color/background/primary/default"
+                ],
+                "itemSpacing": "Primitives:primitive/space/component/sm",
+                "paddingBottom": "Primitives:primitive/space/component/sm",
+                "paddingLeft": "Primitives:primitive/space/component/md",
+                "paddingRight": "Primitives:primitive/space/component/md",
+                "paddingTop": "Primitives:primitive/space/component/sm",
+                "strokes": [
+                  "Semantics:semantic/color/border/primary/default"
+                ],
+                "topLeftRadius": "Primitives:primitive/radius/md",
+                "topRightRadius": "Primitives:primitive/radius/md"
+              },
+              "fills": [
+                "#3b82f6"
+              ],
+              "gap": 8,
+              "h": 38,
+              "kids": [
+                {
+                  "bv": {
+                    "fills": [
+                      "Semantics:semantic/color/text/primary/default"
+                    ],
+                    "fontSize": [
+                      "Primitives:primitive/font/size/md"
+                    ],
+                    "fontWeight": [
+                      "Primitives:primitive/font/weight/medium"
+                    ],
+                    "lineHeight": [
+                      "Primitives:primitive/font/lineHeight/md"
+                    ]
+                  },
+                  "fills": [
+                    "#ffffff"
+                  ],
+                  "h": 20,
+                  "n": "Label",
+                  "t": "TEXT",
+                  "txt": {
+                    "chars": "Button",
+                    "font": "Geist",
+                    "lh": 20,
+                    "size": 14,
+                    "style": "Medium"
+                  },
+                  "w": 44
+                }
+              ],
+              "lm": "HORIZONTAL",
+              "n": "State=Default",
+              "pad": [
+                8,
+                16,
+                8,
+                16
+              ],
+              "r": 6,
+              "strokes": [
+                "#3b82f6"
+              ],
+              "sw": 1,
+              "t": "COMPONENT",
+              "w": 78
+            }
+          ],
+          "n": "Button",
+          "r": 5,
+          "t": "COMPONENT_SET",
+          "vp": {
+            "State": {
+              "values": [
+                "Default",
+                "Hover",
+                "Disabled"
+              ]
+            }
+          },
+          "w": 362
+        },
+        {
+          "fills": [
+            "#d9d9d9"
+          ],
+          "h": 11392,
+          "n": "Rectangle 1",
+          "t": "RECTANGLE",
+          "w": 20160
+        }
+      ],
+      "name": "Page 1",
+      "nodeCount": 9
+    }
+  ],
+  "variables": [
+    {
+      "modes": [
+        "Value"
+      ],
+      "name": "Primitives",
+      "variables": [
+        {
+          "name": "primitive/blue/300",
+          "type": "COLOR",
+          "values": {
+            "Value": "#93c5fd"
+          }
+        },
+        {
+          "name": "primitive/blue/500",
+          "type": "COLOR",
+          "values": {
+            "Value": "#3b82f6"
+          }
+        },
+        {
+          "name": "primitive/blue/600",
+          "type": "COLOR",
+          "values": {
+            "Value": "#2563eb"
+          }
+        },
+        {
+          "name": "primitive/font/lineHeight/md",
+          "type": "FLOAT",
+          "values": {
+            "Value": 20
+          }
+        },
+        {
+          "name": "primitive/font/size/md",
+          "type": "FLOAT",
+          "values": {
+            "Value": 14
+          }
+        },
+        {
+          "name": "primitive/font/weight/medium",
+          "type": "FLOAT",
+          "values": {
+            "Value": 500
+          }
+        },
+        {
+          "name": "primitive/gray/400",
+          "type": "COLOR",
+          "values": {
+            "Value": "#9ca3af"
+          }
+        },
+        {
+          "name": "primitive/radius/md",
+          "type": "FLOAT",
+          "values": {
+            "Value": 6
+          }
+        },
+        {
+          "name": "primitive/space/component/md",
+          "type": "FLOAT",
+          "values": {
+            "Value": 16
+          }
+        },
+        {
+          "name": "primitive/space/component/sm",
+          "type": "FLOAT",
+          "values": {
+            "Value": 8
+          }
+        },
+        {
+          "name": "primitive/white",
+          "type": "COLOR",
+          "values": {
+            "Value": "#ffffff"
+          }
+        }
+      ]
+    },
+    {
+      "modes": [
+        "Value"
+      ],
+      "name": "Semantics",
+      "variables": [
+        {
+          "name": "semantic/color/background/primary/default",
+          "type": "COLOR",
+          "values": {
+            "Value": {
+              "alias": "primitive/blue/500",
+              "collection": "Primitives"
+            }
+          }
+        },
+        {
+          "name": "semantic/color/background/primary/disabled",
+          "type": "COLOR",
+          "values": {
+            "Value": {
+              "alias": "primitive/blue/300",
+              "collection": "Primitives"
+            }
+          }
+        },
+        {
+          "name": "semantic/color/background/primary/hover",
+          "type": "COLOR",
+          "values": {
+            "Value": {
+              "alias": "primitive/blue/600",
+              "collection": "Primitives"
+            }
+          }
+        },
+        {
+          "name": "semantic/color/border/primary/default",
+          "type": "COLOR",
+          "values": {
+            "Value": {
+              "alias": "primitive/blue/500",
+              "collection": "Primitives"
+            }
+          }
+        },
+        {
+          "name": "semantic/color/text/primary/default",
+          "type": "COLOR",
+          "values": {
+            "Value": {
+              "alias": "primitive/white",
+              "collection": "Primitives"
+            }
+          }
+        },
+        {
+          "name": "semantic/color/text/primary/disabled",
+          "type": "COLOR",
+          "values": {
+            "Value": {
+              "alias": "primitive/gray/400",
+              "collection": "Primitives"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "version": 2
+}

@@ -1,0 +1,154 @@
+{
+  "colors.blue.300": {
+    "name": "primitive/blue/300",
+    "type": "COLOR",
+    "resolvedValue": "#93c5fd",
+    "scopes": [],
+    "codeSyntax": "var(--colors-blue-300)"
+  },
+  "colors.blue.500": {
+    "name": "primitive/blue/500",
+    "type": "COLOR",
+    "resolvedValue": "#3b82f6",
+    "scopes": [],
+    "codeSyntax": "var(--colors-blue-500)"
+  },
+  "colors.blue.600": {
+    "name": "primitive/blue/600",
+    "type": "COLOR",
+    "resolvedValue": "#2563eb",
+    "scopes": [],
+    "codeSyntax": "var(--colors-blue-600)"
+  },
+  "colors.white": {
+    "name": "primitive/white",
+    "type": "COLOR",
+    "resolvedValue": "#ffffff",
+    "scopes": [],
+    "codeSyntax": "var(--colors-white)"
+  },
+  "colors.gray.400": {
+    "name": "primitive/gray/400",
+    "type": "COLOR",
+    "resolvedValue": "#9ca3af",
+    "scopes": [],
+    "codeSyntax": "var(--colors-gray-400)"
+  },
+  "color.background.primary.default": {
+    "name": "semantic/color/background/primary/default",
+    "type": "COLOR",
+    "resolvedValue": "#3b82f6",
+    "scopes": [
+      "FRAME_FILL",
+      "SHAPE_FILL"
+    ],
+    "codeSyntax": "var(--color-background-primary-default)",
+    "aliasOf": "primitive/blue/500"
+  },
+  "color.background.primary.hover": {
+    "name": "semantic/color/background/primary/hover",
+    "type": "COLOR",
+    "resolvedValue": "#2563eb",
+    "scopes": [
+      "FRAME_FILL",
+      "SHAPE_FILL"
+    ],
+    "codeSyntax": "var(--color-background-primary-hover)",
+    "aliasOf": "primitive/blue/600"
+  },
+  "color.background.primary.disabled": {
+    "name": "semantic/color/background/primary/disabled",
+    "type": "COLOR",
+    "resolvedValue": "#93c5fd",
+    "scopes": [
+      "FRAME_FILL",
+      "SHAPE_FILL"
+    ],
+    "codeSyntax": "var(--color-background-primary-disabled)",
+    "aliasOf": "primitive/blue/300"
+  },
+  "color.text.primary.default": {
+    "name": "semantic/color/text/primary/default",
+    "type": "COLOR",
+    "resolvedValue": "#ffffff",
+    "scopes": [
+      "TEXT_FILL"
+    ],
+    "codeSyntax": "var(--color-text-primary-default)",
+    "aliasOf": "primitive/white"
+  },
+  "color.text.primary.disabled": {
+    "name": "semantic/color/text/primary/disabled",
+    "type": "COLOR",
+    "resolvedValue": "#9ca3af",
+    "scopes": [
+      "TEXT_FILL"
+    ],
+    "codeSyntax": "var(--color-text-primary-disabled)",
+    "aliasOf": "primitive/gray/400"
+  },
+  "color.border.primary.default": {
+    "name": "semantic/color/border/primary/default",
+    "type": "COLOR",
+    "resolvedValue": "#3b82f6",
+    "scopes": [
+      "STROKE_COLOR"
+    ],
+    "codeSyntax": "var(--color-border-primary-default)",
+    "aliasOf": "primitive/blue/500"
+  },
+  "space.component.sm": {
+    "name": "primitive/space/component/sm",
+    "type": "FLOAT",
+    "resolvedValue": 8,
+    "scopes": [
+      "GAP"
+    ],
+    "codeSyntax": "var(--space-component-sm)"
+  },
+  "space.component.md": {
+    "name": "primitive/space/component/md",
+    "type": "FLOAT",
+    "resolvedValue": 16,
+    "scopes": [
+      "GAP"
+    ],
+    "codeSyntax": "var(--space-component-md)"
+  },
+  "radii.md": {
+    "name": "primitive/radius/md",
+    "type": "FLOAT",
+    "resolvedValue": 6,
+    "scopes": [
+      "CORNER_RADIUS"
+    ],
+    "codeSyntax": "var(--radii-md)"
+  },
+  "font.size.md": {
+    "name": "primitive/font/size/md",
+    "type": "FLOAT",
+    "resolvedValue": 14,
+    "scopes": [
+      "FONT_SIZE"
+    ],
+    "codeSyntax": "var(--font-size-md)"
+  },
+  "font.weight.medium": {
+    "name": "primitive/font/weight/medium",
+    "type": "FLOAT",
+    "resolvedValue": 500,
+    "scopes": [
+      "FONT_WEIGHT"
+    ],
+    "codeSyntax": "var(--font-weight-medium)"
+  },
+  "font.lineHeight.md": {
+    "name": "primitive/font/lineHeight/md",
+    "type": "FLOAT",
+    "resolvedValue": 20,
+    "scopes": [
+      "LINE_HEIGHT"
+    ],
+    "codeSyntax": "var(--font-line-height-md)"
+  }
+}
