@@ -6,7 +6,17 @@ import { stripVTControlCharacters } from 'node:util'
 
 const ROOT = new URL('..', import.meta.url)
 const TOKENS_PATH = new URL('../src/tokens/tokens.figma.json', import.meta.url)
-const EXPECTED_FIGMA_DOCUMENT = process.env.FIGMA_DOCUMENT_NAME || 'Gamified activity'
+
+// No fallback on purpose: a silently-guessed target is exactly how a prior
+// run synced into the wrong Figma file. The expected name is set explicitly
+// in the "tokens:sync:figma" script in package.json, not hidden in here.
+const EXPECTED_FIGMA_DOCUMENT = process.env.FIGMA_DOCUMENT_NAME
+if (!EXPECTED_FIGMA_DOCUMENT) {
+  throw new Error(
+    'FIGMA_DOCUMENT_NAME is not set. Refusing to guess which Figma file to sync into — ' +
+      'set it to the exact document name (see the "tokens:sync:figma" script in package.json).',
+  )
+}
 
 function resolveCli() {
   const configured = process.env.FIGMA_CLI_BIN

@@ -1,6 +1,15 @@
 # Figma token sync and validation
 
-Target document: `Gamified activity`
+Target document: `agentic-design-system-playground`
+
+> **2026-08-25 correction:** the original validation run below synced into a
+> file named `Gamified activity` — an unrelated, still-empty file opened
+> ad-hoc for the Safe Mode plugin session, not a file dedicated to this
+> project. It has since been renamed to `agentic-design-system-playground`.
+> The script no longer ships a fallback document name (see
+> `scripts/sync-figma-variables.js`) — `FIGMA_DOCUMENT_NAME` is now required
+> and set explicitly in the `tokens:sync:figma` script in `package.json`, so
+> an ad-hoc file choice can no longer end up baked in as a silent default.
 
 ## Safe-mode workflow
 
@@ -8,7 +17,7 @@ Target document: `Gamified activity`
 2. Open `Plugins → Development → FigCli` in the target Figma document and keep the plugin window open.
 3. Run `npm run tokens:sync:figma`.
 
-Safe mode does not require a Figma access token or macOS Keychain access. The sync checks `figma.root.name` before its first write and refuses any document other than `Gamified activity`. Set `FIGMA_DOCUMENT_NAME` only when intentionally targeting a renamed document.
+Safe mode does not require a Figma access token or macOS Keychain access. The sync checks `figma.root.name` before its first write and refuses any document other than the one named in `FIGMA_DOCUMENT_NAME`. There is no default — the script errors out immediately if that variable isn't set, rather than guessing.
 
 ## Generated contract
 
