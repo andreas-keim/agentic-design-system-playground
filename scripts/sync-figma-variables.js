@@ -18,6 +18,11 @@ if (!EXPECTED_FIGMA_DOCUMENT) {
   )
 }
 
+// Variables that intentionally live only in Figma (see FIGMA_SYNC_VALIDATION.md
+// "Font family" section) — never flagged as orphaned even though they have
+// no corresponding entry in tokens.figma.json.
+const MANUALLY_MAINTAINED_VARIABLES = ['primitive/font/family/base']
+
 function resolveCli() {
   const configured = process.env.FIGMA_CLI_BIN
   if (configured) return configured
@@ -368,6 +373,49 @@ return { variants: result };
   )
 }
 
+// Reports variables in Primitives/Semantics that no longer have a matching
+// entry in tokens.figma.json (plus MANUALLY_MAINTAINED_VARIABLES) — e.g.
+// after a token is deleted from tokens.json. Dry-run by default: only
+// deletes when FIGMA_PRUNE_UNUSED=1 is set explicitly. No silent deletion,
+// same reasoning as the document-name guard having no fallback default.
+function pruneOrphanedVariables(expectedNames) {
+  const shouldDelete = process.env.FIGMA_PRUNE_UNUSED === '1'
+  return parseEvalResult(
+    runEval(`
+const expectedNames = new Set(${JSON.stringify(expectedNames)});
+const shouldDelete = ${JSON.stringify(shouldDelete)};
+
+const collections = await figma.variables.getLocalVariableCollectionsAsync();
+const variables = await figma.variables.getLocalVariablesAsync();
+const selectedCollections = collections.filter((collection) => ['Primitives', 'Semantics'].includes(collection.name));
+const scoped = variables.filter((variable) =>
+  selectedCollections.some((collection) => collection.id === variable.variableCollectionId),
+);
+const orphans = scoped.filter((variable) => !expectedNames.has(variable.name));
+
+const deleted = [];
+const failed = [];
+if (shouldDelete) {
+  for (const variable of orphans) {
+    try {
+      variable.remove();
+      deleted.push(variable.name);
+    } catch (error) {
+      failed.push({ name: variable.name, error: String((error && error.message) || error) });
+    }
+  }
+}
+
+return {
+  mode: shouldDelete ? 'prune' : 'dry-run',
+  orphanNames: orphans.map((variable) => variable.name),
+  deleted,
+  failed,
+};
+`),
+  )
+}
+
 function verify() {
   return parseEvalResult(
     runEval(`
@@ -431,6 +479,8 @@ function main() {
   const semanticUpdate = upsertSemantics(semantics)
   const textStyle = upsertButtonTextStyle()
   const codeAlignment = alignDisabledAndBorderToCode()
+  const expectedNames = [...tokens.map((token) => token.name), ...MANUALLY_MAINTAINED_VARIABLES]
+  const pruneResult = pruneOrphanedVariables(expectedNames)
   const verification = verify()
 
   const summary = {
@@ -444,6 +494,7 @@ function main() {
     },
     textStyle,
     codeAlignment,
+    prune: pruneResult,
     verification,
   }
 

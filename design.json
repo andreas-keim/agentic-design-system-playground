@@ -168,13 +168,6 @@
       "name": "Primitives",
       "variables": [
         {
-          "name": "primitive/blue/300",
-          "type": "COLOR",
-          "values": {
-            "Value": "#93c5fd"
-          }
-        },
-        {
           "name": "primitive/blue/500",
           "type": "COLOR",
           "values": {
@@ -214,13 +207,6 @@
           "type": "FLOAT",
           "values": {
             "Value": 500
-          }
-        },
-        {
-          "name": "primitive/gray/400",
-          "type": "COLOR",
-          "values": {
-            "Value": "#9ca3af"
           }
         },
         {
@@ -270,16 +256,6 @@
           }
         },
         {
-          "name": "semantic/color/background/primary/disabled",
-          "type": "COLOR",
-          "values": {
-            "Value": {
-              "alias": "primitive/blue/300",
-              "collection": "Primitives"
-            }
-          }
-        },
-        {
           "name": "semantic/color/background/primary/hover",
           "type": "COLOR",
           "values": {
@@ -305,16 +281,6 @@
           "values": {
             "Value": {
               "alias": "primitive/white",
-              "collection": "Primitives"
-            }
-          }
-        },
-        {
-          "name": "semantic/color/text/primary/disabled",
-          "type": "COLOR",
-          "values": {
-            "Value": {
-              "alias": "primitive/gray/400",
               "collection": "Primitives"
             }
           }
