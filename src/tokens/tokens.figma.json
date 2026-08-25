@@ -1,11 +1,4 @@
 {
-  "colors.blue.300": {
-    "name": "primitive/blue/300",
-    "type": "COLOR",
-    "resolvedValue": "#93c5fd",
-    "scopes": [],
-    "codeSyntax": "var(--colors-blue-300)"
-  },
   "colors.blue.500": {
     "name": "primitive/blue/500",
     "type": "COLOR",
@@ -26,13 +19,6 @@
     "resolvedValue": "#ffffff",
     "scopes": [],
     "codeSyntax": "var(--colors-white)"
-  },
-  "colors.gray.400": {
-    "name": "primitive/gray/400",
-    "type": "COLOR",
-    "resolvedValue": "#9ca3af",
-    "scopes": [],
-    "codeSyntax": "var(--colors-gray-400)"
   },
   "color.background.primary.default": {
     "name": "semantic/color/background/primary/default",
@@ -56,17 +42,6 @@
     "codeSyntax": "var(--color-background-primary-hover)",
     "aliasOf": "primitive/blue/600"
   },
-  "color.background.primary.disabled": {
-    "name": "semantic/color/background/primary/disabled",
-    "type": "COLOR",
-    "resolvedValue": "#93c5fd",
-    "scopes": [
-      "FRAME_FILL",
-      "SHAPE_FILL"
-    ],
-    "codeSyntax": "var(--color-background-primary-disabled)",
-    "aliasOf": "primitive/blue/300"
-  },
   "color.text.primary.default": {
     "name": "semantic/color/text/primary/default",
     "type": "COLOR",
@@ -76,16 +51,6 @@
     ],
     "codeSyntax": "var(--color-text-primary-default)",
     "aliasOf": "primitive/white"
-  },
-  "color.text.primary.disabled": {
-    "name": "semantic/color/text/primary/disabled",
-    "type": "COLOR",
-    "resolvedValue": "#9ca3af",
-    "scopes": [
-      "TEXT_FILL"
-    ],
-    "codeSyntax": "var(--color-text-primary-disabled)",
-    "aliasOf": "primitive/gray/400"
   },
   "color.border.primary.default": {
     "name": "semantic/color/border/primary/default",

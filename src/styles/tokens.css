@@ -3,16 +3,12 @@
  */
 
 :root {
-  --colors-blue-300: #93c5fd;
   --colors-blue-500: #3b82f6;
   --colors-blue-600: #2563eb;
   --colors-white: #ffffff;
-  --colors-gray-400: #9ca3af;
   --color-background-primary-default: #3b82f6;
   --color-background-primary-hover: #2563eb;
-  --color-background-primary-disabled: #93c5fd;
   --color-text-primary-default: #ffffff;
-  --color-text-primary-disabled: #9ca3af;
   --color-border-primary-default: #3b82f6;
   --space-component-sm: 8px;
   --space-component-md: 16px;
