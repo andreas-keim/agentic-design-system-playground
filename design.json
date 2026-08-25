@@ -1,0 +1,292 @@
+{
+  "meta": {
+    "extractedAt": "2026-08-25",
+    "file": "agentic-design-system-playground",
+    "scope": {
+      "pages": null,
+      "resolveRemote": false,
+      "sections": null,
+      "selection": false
+    }
+  },
+  "pages": [
+    {
+      "frames": [
+        {
+          "bv": {
+            "bottomLeftRadius": "Primitives:primitive/radius/md",
+            "bottomRightRadius": "Primitives:primitive/radius/md",
+            "fills": [
+              "Semantics:semantic/color/background/primary/default"
+            ],
+            "itemSpacing": "Primitives:primitive/space/component/sm",
+            "paddingBottom": "Primitives:primitive/space/component/sm",
+            "paddingLeft": "Primitives:primitive/space/component/md",
+            "paddingRight": "Primitives:primitive/space/component/md",
+            "paddingTop": "Primitives:primitive/space/component/sm",
+            "topLeftRadius": "Primitives:primitive/radius/md",
+            "topRightRadius": "Primitives:primitive/radius/md"
+          },
+          "fills": [
+            "#3b82f6"
+          ],
+          "gap": 8,
+          "h": 36,
+          "lm": "HORIZONTAL",
+          "mc": "Button",
+          "n": "Button",
+          "pad": [
+            8,
+            16,
+            8,
+            16
+          ],
+          "r": 6,
+          "t": "INSTANCE",
+          "w": 129
+        },
+        {
+          "fills": [
+            "#ffffff"
+          ],
+          "h": 736,
+          "kids": [
+            {
+              "gap": 52,
+              "h": 116,
+              "kidCount": 3,
+              "kids": [
+                {
+                  "bv": {
+                    "bottomLeftRadius": "Primitives:primitive/radius/md",
+                    "bottomRightRadius": "Primitives:primitive/radius/md",
+                    "fills": [
+                      "Semantics:semantic/color/background/primary/default"
+                    ],
+                    "itemSpacing": "Primitives:primitive/space/component/sm",
+                    "paddingBottom": "Primitives:primitive/space/component/sm",
+                    "paddingLeft": "Primitives:primitive/space/component/md",
+                    "paddingRight": "Primitives:primitive/space/component/md",
+                    "paddingTop": "Primitives:primitive/space/component/sm",
+                    "topLeftRadius": "Primitives:primitive/radius/md",
+                    "topRightRadius": "Primitives:primitive/radius/md"
+                  },
+                  "fills": [
+                    "#3b82f6"
+                  ],
+                  "gap": 8,
+                  "h": 36,
+                  "kids": [
+                    {
+                      "bv": {
+                        "fills": [
+                          "Semantics:semantic/color/text/primary/default"
+                        ],
+                        "fontFamily": [
+                          "Primitives:primitive/font/family/base"
+                        ],
+                        "fontSize": [
+                          "Primitives:primitive/font/size/md"
+                        ],
+                        "fontWeight": [
+                          "Primitives:primitive/font/weight/medium"
+                        ],
+                        "lineHeight": [
+                          "Primitives:primitive/font/lineHeight/md"
+                        ]
+                      },
+                      "fills": [
+                        "#ffffff"
+                      ],
+                      "h": 20,
+                      "n": "Label",
+                      "t": "TEXT",
+                      "txt": {
+                        "chars": "Primary button",
+                        "font": "Geist",
+                        "lh": 20,
+                        "size": 14,
+                        "style": "Medium"
+                      },
+                      "w": 97
+                    }
+                  ],
+                  "lm": "HORIZONTAL",
+                  "n": "State=Default",
+                  "pad": [
+                    8,
+                    16,
+                    8,
+                    16
+                  ],
+                  "r": 6,
+                  "t": "COMPONENT",
+                  "w": 129
+                }
+              ],
+              "lm": "HORIZONTAL",
+              "n": "Button",
+              "pad": [
+                40,
+                0,
+                40,
+                0
+              ],
+              "r": 5,
+              "t": "COMPONENT_SET",
+              "vp": {
+                "State": {
+                  "values": [
+                    "Default",
+                    "Hover",
+                    "Disabled"
+                  ]
+                }
+              },
+              "w": 491
+            }
+          ],
+          "n": "Buttons",
+          "r": 2,
+          "strokes": [
+            "#000000@10"
+          ],
+          "sw": 1,
+          "t": "SECTION",
+          "w": 1593
+        }
+      ],
+      "name": "Page 1",
+      "nodeCount": 11
+    }
+  ],
+  "variables": [
+    {
+      "modes": [
+        "Value"
+      ],
+      "name": "Primitives",
+      "variables": [
+        {
+          "name": "primitive/blue/500",
+          "type": "COLOR",
+          "values": {
+            "Value": "#3b82f6"
+          }
+        },
+        {
+          "name": "primitive/blue/600",
+          "type": "COLOR",
+          "values": {
+            "Value": "#2563eb"
+          }
+        },
+        {
+          "name": "primitive/font/family/base",
+          "type": "STRING",
+          "values": {
+            "Value": "Geist"
+          }
+        },
+        {
+          "name": "primitive/font/lineHeight/md",
+          "type": "FLOAT",
+          "values": {
+            "Value": 20
+          }
+        },
+        {
+          "name": "primitive/font/size/md",
+          "type": "FLOAT",
+          "values": {
+            "Value": 14
+          }
+        },
+        {
+          "name": "primitive/font/weight/medium",
+          "type": "FLOAT",
+          "values": {
+            "Value": 500
+          }
+        },
+        {
+          "name": "primitive/radius/md",
+          "type": "FLOAT",
+          "values": {
+            "Value": 6
+          }
+        },
+        {
+          "name": "primitive/space/component/md",
+          "type": "FLOAT",
+          "values": {
+            "Value": 16
+          }
+        },
+        {
+          "name": "primitive/space/component/sm",
+          "type": "FLOAT",
+          "values": {
+            "Value": 8
+          }
+        },
+        {
+          "name": "primitive/white",
+          "type": "COLOR",
+          "values": {
+            "Value": "#ffffff"
+          }
+        }
+      ]
+    },
+    {
+      "modes": [
+        "Value"
+      ],
+      "name": "Semantics",
+      "variables": [
+        {
+          "name": "semantic/color/background/primary/default",
+          "type": "COLOR",
+          "values": {
+            "Value": {
+              "alias": "primitive/blue/500",
+              "collection": "Primitives"
+            }
+          }
+        },
+        {
+          "name": "semantic/color/background/primary/hover",
+          "type": "COLOR",
+          "values": {
+            "Value": {
+              "alias": "primitive/blue/600",
+              "collection": "Primitives"
+            }
+          }
+        },
+        {
+          "name": "semantic/color/border/primary/default",
+          "type": "COLOR",
+          "values": {
+            "Value": {
+              "alias": "primitive/blue/500",
+              "collection": "Primitives"
+            }
+          }
+        },
+        {
+          "name": "semantic/color/text/primary/default",
+          "type": "COLOR",
+          "values": {
+            "Value": {
+              "alias": "primitive/white",
+              "collection": "Primitives"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "version": 2
+}

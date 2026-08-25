@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "tokens:build": "style-dictionary build --config style-dictionary.config.js"
+    "tokens:build": "style-dictionary build --config style-dictionary.config.js",
+    "tokens:sync:figma": "npm run tokens:build && FIGMA_DOCUMENT_NAME='agentic-design-system-playground' node scripts/sync-figma-variables.js"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
