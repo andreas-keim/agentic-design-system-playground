@@ -82,6 +82,9 @@
                         "fills": [
                           "Semantics:semantic/color/text/primary/default"
                         ],
+                        "fontFamily": [
+                          "Primitives:primitive/font/family/base"
+                        ],
                         "fontSize": [
                           "Primitives:primitive/font/size/md"
                         ],
@@ -183,6 +186,13 @@
           "type": "COLOR",
           "values": {
             "Value": "#2563eb"
+          }
+        },
+        {
+          "name": "primitive/font/family/base",
+          "type": "STRING",
+          "values": {
+            "Value": "Geist"
           }
         },
         {

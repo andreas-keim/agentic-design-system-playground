@@ -264,6 +264,7 @@ const byName = new Map(variables.map((variable) => [variable.name, variable]));
 const fontSizeVar = byName.get('primitive/font/size/md');
 const fontWeightVar = byName.get('primitive/font/weight/medium');
 const lineHeightVar = byName.get('primitive/font/lineHeight/md');
+const fontFamilyVar = byName.get('primitive/font/family/base');
 if (!fontSizeVar || !lineHeightVar) throw new Error('Required font variables not found');
 
 const existingStyles = await figma.getLocalTextStylesAsync();
@@ -291,6 +292,16 @@ if (fontWeightVar) {
   }
 }
 
+let fontFamilyBound = false;
+if (fontFamilyVar) {
+  try {
+    style.setBoundVariable('fontFamily', fontFamilyVar);
+    fontFamilyBound = true;
+  } catch (error) {
+    fontFamilyBound = false;
+  }
+}
+
 const buttonSet = figma.currentPage.findOne(
   (node) => node.type === 'COMPONENT_SET' && node.name === 'Button',
 );
@@ -308,7 +319,7 @@ for (const label of labels) {
   appliedTo.push(label.parent ? label.parent.name : label.id);
 }
 
-return { status, styleId: style.id, fontWeightBound, appliedTo };
+return { status, styleId: style.id, fontWeightBound, fontFamilyBound, appliedTo };
 `),
   )
 }
