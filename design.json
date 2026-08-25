@@ -16,11 +16,7 @@
           "bv": {
             "bottomLeftRadius": "Primitives:primitive/radius/md",
             "bottomRightRadius": "Primitives:primitive/radius/md",
-            "fills": [
-              "Semantics:semantic/color/background/primary/default"
-            ],
             "itemSpacing": "Primitives:primitive/space/component/sm",
-            "opacity": "Primitives:primitive/opacity/disabled",
             "paddingBottom": "Primitives:primitive/space/component/sm",
             "paddingLeft": "Primitives:primitive/space/component/md",
             "paddingRight": "Primitives:primitive/space/component/md",
@@ -28,9 +24,6 @@
             "topLeftRadius": "Primitives:primitive/radius/md",
             "topRightRadius": "Primitives:primitive/radius/md"
           },
-          "fills": [
-            "#3b82f6"
-          ],
           "gap": 8,
           "h": 36,
           "lm": "HORIZONTAL",
@@ -44,7 +37,7 @@
           ],
           "r": 6,
           "t": "INSTANCE",
-          "w": 129
+          "w": 106
         },
         {
           "fills": [
