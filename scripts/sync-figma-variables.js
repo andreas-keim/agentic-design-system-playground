@@ -249,6 +249,70 @@ return { semantics: result, count: result.length };
   )
 }
 
+// Figma has no composite "text" variable type — only COLOR/FLOAT/STRING/
+// BOOLEAN. Bundling font-size/weight/line-height into one reusable, named
+// thing requires a Text Style, a separate Figma concept from Variables.
+// This mirrors the same idempotent create-or-update + bind pattern as
+// primitives/semantics above, applied to a style object instead of a node.
+function upsertButtonTextStyle() {
+  return parseEvalResult(
+    runEval(`
+await figma.loadFontAsync({ family: 'Geist', style: 'Medium' });
+
+const variables = await figma.variables.getLocalVariablesAsync();
+const byName = new Map(variables.map((variable) => [variable.name, variable]));
+const fontSizeVar = byName.get('primitive/font/size/md');
+const fontWeightVar = byName.get('primitive/font/weight/medium');
+const lineHeightVar = byName.get('primitive/font/lineHeight/md');
+if (!fontSizeVar || !lineHeightVar) throw new Error('Required font variables not found');
+
+const existingStyles = await figma.getLocalTextStylesAsync();
+let style = existingStyles.find((candidate) => candidate.name === 'Button');
+let status = 'updated';
+if (!style) {
+  style = figma.createTextStyle();
+  style.name = 'Button';
+  status = 'created';
+}
+
+style.fontName = { family: 'Geist', style: 'Medium' };
+style.fontSize = 14;
+style.lineHeight = { value: 20, unit: 'PIXELS' };
+style.setBoundVariable('fontSize', fontSizeVar);
+style.setBoundVariable('lineHeight', lineHeightVar);
+
+let fontWeightBound = false;
+if (fontWeightVar) {
+  try {
+    style.setBoundVariable('fontWeight', fontWeightVar);
+    fontWeightBound = true;
+  } catch (error) {
+    fontWeightBound = false;
+  }
+}
+
+const buttonSet = figma.currentPage.findOne(
+  (node) => node.type === 'COMPONENT_SET' && node.name === 'Button',
+);
+if (!buttonSet) throw new Error('Button component set not found on the current page');
+const labels = buttonSet.findAll((node) => node.type === 'TEXT' && node.name === 'Label');
+if (labels.length === 0) throw new Error('No "Label" text node found inside the Button component set');
+
+const appliedTo = [];
+for (const label of labels) {
+  if (typeof label.setTextStyleIdAsync === 'function') {
+    await label.setTextStyleIdAsync(style.id);
+  } else {
+    label.textStyleId = style.id;
+  }
+  appliedTo.push(label.parent ? label.parent.name : label.id);
+}
+
+return { status, styleId: style.id, fontWeightBound, appliedTo };
+`),
+  )
+}
+
 function verify() {
   return parseEvalResult(
     runEval(`
@@ -310,6 +374,7 @@ function main() {
   const creation = createMissingPrimitives(primitives, inventory)
   const primitiveUpdate = updatePrimitives(primitives)
   const semanticUpdate = upsertSemantics(semantics)
+  const textStyle = upsertButtonTextStyle()
   const verification = verify()
 
   const summary = {
@@ -321,6 +386,7 @@ function main() {
       created: semanticUpdate.semantics.filter((item) => item.status === 'created').length,
       updated: semanticUpdate.semantics.filter((item) => item.status === 'updated').length,
     },
+    textStyle,
     verification,
   }
 
