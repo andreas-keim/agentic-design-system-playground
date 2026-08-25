@@ -16,9 +16,6 @@
           "bv": {
             "bottomLeftRadius": "Primitives:primitive/radius/md",
             "bottomRightRadius": "Primitives:primitive/radius/md",
-            "fills": [
-              "Semantics:semantic/color/background/primary/default"
-            ],
             "itemSpacing": "Primitives:primitive/space/component/sm",
             "paddingBottom": "Primitives:primitive/space/component/sm",
             "paddingLeft": "Primitives:primitive/space/component/md",
@@ -27,9 +24,6 @@
             "topLeftRadius": "Primitives:primitive/radius/md",
             "topRightRadius": "Primitives:primitive/radius/md"
           },
-          "fills": [
-            "#3b82f6"
-          ],
           "gap": 8,
           "h": 36,
           "lm": "HORIZONTAL",
@@ -43,7 +37,7 @@
           ],
           "r": 6,
           "t": "INSTANCE",
-          "w": 129
+          "w": 106
         },
         {
           "fills": [
@@ -52,9 +46,8 @@
           "h": 736,
           "kids": [
             {
-              "gap": 52,
-              "h": 116,
-              "kidCount": 3,
+              "h": 416,
+              "kidCount": 18,
               "kids": [
                 {
                   "bv": {
@@ -112,7 +105,7 @@
                     }
                   ],
                   "lm": "HORIZONTAL",
-                  "n": "State=Default",
+                  "n": "Type=Primary, State=Default",
                   "pad": [
                     8,
                     16,
@@ -124,14 +117,7 @@
                   "w": 129
                 }
               ],
-              "lm": "HORIZONTAL",
               "n": "Button",
-              "pad": [
-                40,
-                0,
-                40,
-                0
-              ],
               "r": 5,
               "t": "COMPONENT_SET",
               "vp": {
@@ -141,9 +127,19 @@
                     "Hover",
                     "Disabled"
                   ]
+                },
+                "Type": {
+                  "values": [
+                    "Primary",
+                    "Outline",
+                    "Secondary",
+                    "Ghost",
+                    "Destructive",
+                    "Link"
+                  ]
                 }
               },
-              "w": 491
+              "w": 493
             }
           ],
           "n": "Buttons",
@@ -157,7 +153,7 @@
         }
       ],
       "name": "Page 1",
-      "nodeCount": 11
+      "nodeCount": 41
     }
   ],
   "variables": [
@@ -207,6 +203,13 @@
           "type": "FLOAT",
           "values": {
             "Value": 500
+          }
+        },
+        {
+          "name": "primitive/opacity/disabled",
+          "type": "FLOAT",
+          "values": {
+            "Value": 50
           }
         },
         {

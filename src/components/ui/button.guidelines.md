@@ -4,8 +4,8 @@ Button löst eine Aktion aus einer Seite oder einem Formular aus. Struktur/Props
 
 ## Varianten — wann welche
 
-- **default**: die eine primäre Aktion in einem Flow (z. B. "Speichern", "Absenden"). Nicht mehr als eine `default`-Instanz gleichzeitig sichtbar — sonst verliert sie ihre Signalwirkung.
-- **outline** / **secondary**: sekundäre Aktion neben einer `default`-Aktion (z. B. "Abbrechen" neben "Speichern"). Beide aktuell visuell sehr ähnlich (kein eigenes Token unterscheidet sie) — Wahl zwischen beiden ist noch keine bewusste Design-Entscheidung, sondern shadcn-Default. Vormerken für eine spätere Abgrenzung.
+- **primary**: die eine primäre Aktion in einem Flow (z. B. "Speichern", "Absenden"). Nicht mehr als eine `primary`-Instanz gleichzeitig sichtbar — sonst verliert sie ihre Signalwirkung.
+- **outline** / **secondary**: sekundäre Aktion neben einer `primary`-Aktion (z. B. "Abbrechen" neben "Speichern"). Beide aktuell visuell sehr ähnlich (kein eigenes Token unterscheidet sie) — Wahl zwischen beiden ist noch keine bewusste Design-Entscheidung, sondern shadcn-Default. Vormerken für eine spätere Abgrenzung.
 - **ghost**: niedrigste Betonung, für Aktionen in dichten Kontexten (Toolbars, Tabellenzeilen), wo ein sichtbarer Rand/Fill zu viel Gewicht hätte.
 - **destructive**: ausschließlich für zerstörerische Aktionen (Löschen, unwiderrufliches Entfernen). Nicht für "Abbrechen" oder andere negative, aber nicht-destruktive Aktionen.
 - **link**: für Aktionen, die sich wie Inline-Text-Navigation verhalten sollen, nicht wie ein "echter" Button-Look (kein Fill/Rand).

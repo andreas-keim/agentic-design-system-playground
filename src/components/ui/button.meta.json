@@ -5,7 +5,7 @@
   "tokensSourceFile": "src/tokens/tokens.json",
   "figmaParityCheck": {
     "file": "rules/button.yaml",
-    "note": "Deckt nur die default-Variante ab (3 Zustände: Default/Hover/Disabled, via `figma-cli check`). Die anderen 5 Varianten (outline/secondary/ghost/destructive/link) und die meisten Sizes haben aktuell KEINE automatisierte Figma-Parität-Prüfung — nur die hier dokumentierten Token-Bindungen."
+    "note": "Seit dem Figma-Rebuild (ein Button-Component-Set mit Type×State-Varianten, 18 Kombinationen) deckt `figma-cli check` alle 6 Typen (Primary/Outline/Secondary/Ghost/Destructive/Link) × 3 Zustände ab, exhaustive. Nur `type: 'primary'` (vormals 'default') hat echte Token-Bindungen (fills.minBound zählt das); die anderen 5 Typen sind bewusst literale Fills, siehe die einzelnen Varianten-Notizen unten. Sizes bleiben weiterhin außerhalb dieses Checks — nur die default-Size ist geometrisch geprüft."
   },
   "base": {
     "note": "Gilt für alle Varianten und Sizes, nicht per Variante/Size wiederholt.",
@@ -21,11 +21,11 @@
   },
   "variants": [
     {
-      "name": "default",
+      "name": "primary",
       "tokens": [
         "--color-background-primary-hover"
       ],
-      "note": "Default-Fill/Text laufen über shadcns --primary/--primary-foreground, die in index.css auf color.background.primary.default/color.text.primary.default umgebogen sind (keine direkten var(--color-...)-Referenzen in button.tsx). Nur der Hover-Zustand referenziert das Token direkt."
+      "note": "Primary-Fill/Text laufen über shadcns --primary/--primary-foreground, die in index.css auf color.background.primary.default/color.text.primary.default umgebogen sind (keine direkten var(--color-...)-Referenzen in button.tsx). Nur der Hover-Zustand referenziert das Token direkt. Umbenannt von 'default' zu 'primary' (Andreas, Figma-Sync-Session) — in Figma existiert dieselbe Variante als Type=Primary."
     },
     {
       "name": "outline",
@@ -50,7 +50,7 @@
     {
       "name": "link",
       "tokens": [],
-      "note": "Nutzt text-primary — indirekt dasselbe --primary wie die default-Variante, also faktisch an color.background.primary.default gebunden, aber ohne direkte var(--color-...)-Referenz im Code."
+      "note": "Nutzt text-primary — indirekt dasselbe --primary wie die primary-Variante, also faktisch an color.background.primary.default gebunden, aber ohne direkte var(--color-...)-Referenz im Code."
     }
   ],
   "sizes": [
@@ -79,7 +79,7 @@
     { "name": "icon-lg", "tokens": [] }
   ],
   "props": [
-    { "name": "variant", "type": "'default' | 'outline' | 'secondary' | 'ghost' | 'destructive' | 'link'", "defaultValue": "'default'" },
+    { "name": "variant", "type": "'primary' | 'outline' | 'secondary' | 'ghost' | 'destructive' | 'link'", "defaultValue": "'primary'" },
     { "name": "size", "type": "'default' | 'xs' | 'sm' | 'lg' | 'icon' | 'icon-xs' | 'icon-sm' | 'icon-lg'", "defaultValue": "'default'" },
     { "name": "className", "type": "string", "description": "Wird über cn() mit den variant/size-Klassen gemerged, überschreibt sie bei Tailwind-Konflikten." }
   ],
