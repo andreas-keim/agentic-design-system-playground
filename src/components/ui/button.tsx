@@ -20,6 +20,10 @@ const buttonVariants = cva(
           "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
         link: "text-primary underline-offset-4 hover:underline",
       },
+      // xs/sm/icon-xs/icon-sm clamp on `--radius-md` — that is shadcn's own Tailwind-derived
+      // theme variable (calc(var(--radius) * 0.8)), NOT this project's `--radii-md` token.
+      // It resolves back to `--radii-md` only via index.css's `--radius` override. Do not
+      // rename it to `--radii-md` for "consistency" — see button.meta.json (base.radius).
       size: {
         default:
           "gap-[var(--space-component-sm)] px-[var(--space-component-md)] py-[var(--space-component-sm)] has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",

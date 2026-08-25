@@ -1,0 +1,90 @@
+{
+  "id": "button",
+  "name": "Button",
+  "importPath": "@/components/ui/button",
+  "tokensSourceFile": "src/tokens/tokens.json",
+  "figmaParityCheck": {
+    "file": "rules/button.yaml",
+    "note": "Deckt nur die default-Variante ab (3 Zustände: Default/Hover/Disabled, via `figma-cli check`). Die anderen 5 Varianten (outline/secondary/ghost/destructive/link) und die meisten Sizes haben aktuell KEINE automatisierte Figma-Parität-Prüfung — nur die hier dokumentierten Token-Bindungen."
+  },
+  "base": {
+    "note": "Gilt für alle Varianten und Sizes, nicht per Variante/Size wiederholt.",
+    "tokens": [
+      "--font-size-md",
+      "--font-line-height-md",
+      "--font-weight-medium"
+    ],
+    "radius": {
+      "cssVar": "--radius-lg",
+      "note": "Nicht direkt in button.tsx referenziert, sondern über die Tailwind-Utility-Klasse `rounded-lg` im Basis-Klassenstring. Kette: --radius-lg (shadcn, @theme inline) = var(--radius) → --radius (überschrieben in index.css) = var(--radii-md) → radii.md in tokens.json. Indirekt, aber real gebunden."
+    }
+  },
+  "variants": [
+    {
+      "name": "default",
+      "tokens": [
+        "--color-background-primary-hover"
+      ],
+      "note": "Default-Fill/Text laufen über shadcns --primary/--primary-foreground, die in index.css auf color.background.primary.default/color.text.primary.default umgebogen sind (keine direkten var(--color-...)-Referenzen in button.tsx). Nur der Hover-Zustand referenziert das Token direkt."
+    },
+    {
+      "name": "outline",
+      "tokens": [],
+      "note": "Nutzt ausschließlich shadcn-eigene Variablen (--border, --background, --muted, --foreground). color.border.primary.default existiert in tokens.json, ist aber hier nicht verdrahtet — anders als die Disabled-Tokens aus Step 2 (die per Prune-Skript gelöscht wurden, siehe FIGMA_SYNC_VALIDATION.md) bisher weder verdrahtet noch entfernt. Offene Aufräum-Entscheidung, keine bewusste 'dokumentiert-ungenutzt bleibt so'-Praxis. Visuell kaum von `secondary` unterschieden, siehe button.guidelines.md."
+    },
+    {
+      "name": "secondary",
+      "tokens": [],
+      "note": "Ausschließlich shadcn-eigene Variablen (--secondary, --secondary-foreground, --foreground). Visuell kaum von `outline` unterschieden, siehe button.guidelines.md."
+    },
+    {
+      "name": "ghost",
+      "tokens": [],
+      "note": "Ausschließlich shadcn-eigene Variablen (--muted, --foreground)."
+    },
+    {
+      "name": "destructive",
+      "tokens": [],
+      "note": "Ausschließlich shadcn-eigene Variable (--destructive). Kein eigenes destructive-Token in tokens.json vorhanden."
+    },
+    {
+      "name": "link",
+      "tokens": [],
+      "note": "Nutzt text-primary — indirekt dasselbe --primary wie die default-Variante, also faktisch an color.background.primary.default gebunden, aber ohne direkte var(--color-...)-Referenz im Code."
+    }
+  ],
+  "sizes": [
+    {
+      "name": "default",
+      "tokens": ["--space-component-sm", "--space-component-md"]
+    },
+    {
+      "name": "xs",
+      "tokens": ["--radius-md"],
+      "note": "--radius-md hier ist die shadcn-abgeleitete Variable (calc(var(--radius) * 0.8)), nicht unser Token direkt — siehe base.radius. Über min(var(--radius-md), 10px) geklemmt."
+    },
+    {
+      "name": "sm",
+      "tokens": ["--radius-md"],
+      "note": "Wie xs, geklemmt auf 12px."
+    },
+    {
+      "name": "lg",
+      "tokens": [],
+      "note": "Kein Size-eigener Radius-Override, erbt den Basis-rounded-lg (siehe base.radius)."
+    },
+    { "name": "icon", "tokens": [] },
+    { "name": "icon-xs", "tokens": ["--radius-md"], "note": "Wie xs." },
+    { "name": "icon-sm", "tokens": ["--radius-md"], "note": "Wie sm." },
+    { "name": "icon-lg", "tokens": [] }
+  ],
+  "props": [
+    { "name": "variant", "type": "'default' | 'outline' | 'secondary' | 'ghost' | 'destructive' | 'link'", "defaultValue": "'default'" },
+    { "name": "size", "type": "'default' | 'xs' | 'sm' | 'lg' | 'icon' | 'icon-xs' | 'icon-sm' | 'icon-lg'", "defaultValue": "'default'" },
+    { "name": "className", "type": "string", "description": "Wird über cn() mit den variant/size-Klassen gemerged, überschreibt sie bei Tailwind-Konflikten." }
+  ],
+  "passthrough": {
+    "component": "@base-ui/react/button",
+    "note": "Alle weiteren Props werden unverändert an ButtonPrimitive durchgereicht (Base UI). Nicht einzeln dokumentiert — siehe Base-UI-eigene Doku."
+  }
+}
