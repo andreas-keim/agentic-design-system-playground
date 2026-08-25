@@ -92,7 +92,18 @@ export default {
     figma: {
       transforms: ['name/pathToFigma'],
       buildPath: 'src/tokens/',
-      files: [{ destination: 'tokens.figma.json', format: 'figma/variables-json' }],
+      files: [
+        {
+          destination: 'tokens.figma.json',
+          format: 'figma/variables-json',
+          // fontFamily tokens hold a platform-specific web value (e.g. "Geist
+          // Variable"); Figma's own font catalog names the same font
+          // differently ("Geist"). There's no single value that's correct
+          // for both, so this token is intentionally excluded here and kept
+          // as a separate, manually-maintained Figma variable instead.
+          filter: (token) => token.$type !== 'fontFamily',
+        },
+      ],
     },
   },
 }
