@@ -2,7 +2,11 @@
   "id": "button",
   "name": "Button",
   "importPath": "@/components/ui/button",
-  "sourceTokens": "src/tokens/tokens.json",
+  "tokensSourceFile": "src/tokens/tokens.json",
+  "figmaParityCheck": {
+    "file": "rules/button.yaml",
+    "note": "Deckt nur die default-Variante ab (3 Zustände: Default/Hover/Disabled, via `figma-cli check`). Die anderen 5 Varianten (outline/secondary/ghost/destructive/link) und die meisten Sizes haben aktuell KEINE automatisierte Figma-Parität-Prüfung — nur die hier dokumentierten Token-Bindungen."
+  },
   "base": {
     "note": "Gilt für alle Varianten und Sizes, nicht per Variante/Size wiederholt.",
     "tokens": [
@@ -26,12 +30,12 @@
     {
       "name": "outline",
       "tokens": [],
-      "note": "Nutzt ausschließlich shadcn-eigene Variablen (--border, --background, --muted, --foreground). color.border.primary.default existiert in tokens.json, ist aber hier nicht verdrahtet — dokumentiert-ungenutzt, analog zu den Disabled-Tokens aus Step 2."
+      "note": "Nutzt ausschließlich shadcn-eigene Variablen (--border, --background, --muted, --foreground). color.border.primary.default existiert in tokens.json, ist aber hier nicht verdrahtet — anders als die Disabled-Tokens aus Step 2 (die per Prune-Skript gelöscht wurden, siehe FIGMA_SYNC_VALIDATION.md) bisher weder verdrahtet noch entfernt. Offene Aufräum-Entscheidung, keine bewusste 'dokumentiert-ungenutzt bleibt so'-Praxis. Visuell kaum von `secondary` unterschieden, siehe button.guidelines.md."
     },
     {
       "name": "secondary",
       "tokens": [],
-      "note": "Ausschließlich shadcn-eigene Variablen (--secondary, --secondary-foreground, --foreground)."
+      "note": "Ausschließlich shadcn-eigene Variablen (--secondary, --secondary-foreground, --foreground). Visuell kaum von `outline` unterschieden, siehe button.guidelines.md."
     },
     {
       "name": "ghost",
