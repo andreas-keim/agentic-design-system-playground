@@ -313,6 +313,50 @@ return { status, styleId: style.id, fontWeightBound, appliedTo };
   )
 }
 
+// Aligns the Figma Button to what the code actually renders, not to what
+// tokens.json happens to define. The code's default-variant Button never
+// shows a border (base classes use border-transparent) and dims the
+// Disabled state via opacity on the *same* Default colors — it never wires
+// color.background.primary.disabled / color.text.primary.disabled at all
+// (a deliberate Step 2 decision, see the playbook). The prior automated sync
+// bound those disabled tokens anyway because they exist in tokens.json,
+// which made Figma's Disabled state diverge from the live app.
+function alignDisabledAndBorderToCode() {
+  return parseEvalResult(
+    runEval(`
+const variables = await figma.variables.getLocalVariablesAsync();
+const byName = new Map(variables.map((variable) => [variable.name, variable]));
+const bgDefault = byName.get('semantic/color/background/primary/default');
+const textDefault = byName.get('semantic/color/text/primary/default');
+if (!bgDefault || !textDefault) throw new Error('Default semantic variables not found');
+
+const buttonSet = figma.currentPage.findOne(
+  (node) => node.type === 'COMPONENT_SET' && node.name === 'Button',
+);
+if (!buttonSet) throw new Error('Button component set not found');
+
+const basePaint = { type: 'SOLID', color: { r: 0, g: 0, b: 0 } };
+const result = [];
+for (const variant of buttonSet.children) {
+  variant.strokes = [];
+
+  if (variant.name === 'State=Disabled') {
+    variant.fills = [figma.variables.setBoundVariableForPaint(basePaint, 'color', bgDefault)];
+    variant.opacity = 0.5;
+    const label = variant.findOne((node) => node.type === 'TEXT' && node.name === 'Label');
+    if (label) {
+      label.fills = [figma.variables.setBoundVariableForPaint(basePaint, 'color', textDefault)];
+    }
+  }
+
+  result.push({ variant: variant.name, opacity: variant.opacity, strokeCount: variant.strokes.length });
+}
+
+return { variants: result };
+`),
+  )
+}
+
 function verify() {
   return parseEvalResult(
     runEval(`
@@ -375,6 +419,7 @@ function main() {
   const primitiveUpdate = updatePrimitives(primitives)
   const semanticUpdate = upsertSemantics(semantics)
   const textStyle = upsertButtonTextStyle()
+  const codeAlignment = alignDisabledAndBorderToCode()
   const verification = verify()
 
   const summary = {
@@ -387,6 +432,7 @@ function main() {
       updated: semanticUpdate.semantics.filter((item) => item.status === 'updated').length,
     },
     textStyle,
+    codeAlignment,
     verification,
   }
 
