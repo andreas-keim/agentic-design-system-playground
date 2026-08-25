@@ -1,0 +1,66 @@
+import { Meta, Markdown } from "@storybook/addon-docs/blocks"
+import * as ButtonStories from "./button.stories"
+import buttonMeta from "./button.meta.json"
+import guidelines from "./button.guidelines.md?raw"
+
+<Meta of={ButtonStories} />
+
+# Button — Metadaten (Step 3)
+
+Diese Seite liest `button.meta.json` und `button.guidelines.md` direkt ein — keine Kopie, keine zweite Quelle. Ändert sich eine der beiden Dateien, ändert sich diese Ansicht automatisch mit.
+
+## Struktur (aus button.meta.json)
+
+### Varianten
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Tokens</th>
+      <th>Notiz</th>
+    </tr>
+  </thead>
+  <tbody>
+    {buttonMeta.variants.map((variant) => (
+      <tr key={variant.name}>
+        <td>
+          <code>{variant.name}</code>
+        </td>
+        <td>{variant.tokens.length > 0 ? variant.tokens.join(", ") : "—"}</td>
+        <td>{variant.note ?? ""}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+### Sizes
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Tokens</th>
+      <th>Notiz</th>
+    </tr>
+  </thead>
+  <tbody>
+    {buttonMeta.sizes.map((size) => (
+      <tr key={size.name}>
+        <td>
+          <code>{size.name}</code>
+        </td>
+        <td>{size.tokens.length > 0 ? size.tokens.join(", ") : "—"}</td>
+        <td>{size.note ?? ""}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+### Figma-Parity-Check
+
+{buttonMeta.figmaParityCheck.note}
+
+## Nutzungsrichtlinien (aus button.guidelines.md)
+
+<Markdown>{guidelines}</Markdown>
