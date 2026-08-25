@@ -45,3 +45,13 @@ The `Button` component set contains `Default`, `Hover`, and `Disabled`. Its back
 ## figma-cli Safe Mode limitation
 
 Safe Mode does not expose `figma.fileKey`; the target is therefore guarded by the exact document name. Its `eval --file` bridge can also parse a multiline, semicolon-free file as a single expression. Sync eval templates use explicit statement terminators so they execute reliably in that bridge.
+
+## Code-side gap found after comparing the synced Button to the live app — 2026-08-25
+
+Comparing the Figma `Button` against `http://localhost:5173` after the sync showed a visible mismatch: Figma's Default state is 38px tall with 8/16px padding and an 8px gap (built from our real token values), while the rendered code Button was 32px tall with 10px padding and a 6px gap (`h-8 gap-1.5 px-2.5`, Tailwind's own spacing scale).
+
+Root cause: Step 2 only bound `--primary` / `--primary-foreground` / `--radius` to our tokens. Padding, gap, height, and font metrics were never wired — the default size's `text-sm`/`font-medium` happened to equal our `font-size-md` (14px) / `font-weight-medium` (500) numerically, and `h-8`/`gap-1.5`/`px-2.5` never matched `space-component-sm/md` (8px/16px) at all. The Figma sync used the real token values (correctly) and made the accidental-vs-real distinction visible for the first time.
+
+Fix: the default size in `src/components/ui/button.tsx` now references `--space-component-sm/md`, `--font-size-md`, `--font-line-height-md`, and `--font-weight-medium` directly instead of Tailwind's scale; the fixed `h-8` was dropped so height is implicit (line-height + padding + border), which now computes to the same 38px Figma already had. No re-sync was needed — the token *values* were already correct in Figma; only the code's binding mechanism changed from coincidental to deliberate. Verified in the browser: computed height/padding/gap/font now read 38px / 8px·16px / 8px / 14px·20px·500, matching `design.json` exactly.
+
+Only the `size: "default"` variant was touched — `xs`/`sm`/`lg`/`icon*` still use Tailwind's own scale and were out of scope for this Figma sync (no matching Figma variants exist for them yet).
