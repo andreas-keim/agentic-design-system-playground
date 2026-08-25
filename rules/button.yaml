@@ -5,17 +5,25 @@ component: Button
 page: Page 1
 require:
   exists: true
-  variants: 3
+  variants: 18
   exhaustive: true
   tokens:
-    fills: bound
+    fills:
+      minBound: 9
     scope: all-variants
   geometry:
-    State=Default:
-      height: 38
+    Type=Primary, State=Default:
+      height: 36
       tolerance: 2
 axes:
   State:
     - Default
     - Disabled
     - Hover
+  Type:
+    - Destructive
+    - Ghost
+    - Link
+    - Outline
+    - Primary
+    - Secondary
