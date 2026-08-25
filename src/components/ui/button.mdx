@@ -3,7 +3,41 @@ import * as ButtonStories from "./button.stories"
 import buttonMeta from "./button.meta.json"
 import guidelines from "./button.guidelines.md?raw"
 
-<Meta of={ButtonStories} />
+export function MetaTable({ rows }) {
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Tokens</th>
+          <th>Notiz</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((row) => (
+          <tr key={row.name}>
+            <td>
+              <code>{row.name}</code>
+            </td>
+            <td>{row.tokens.length > 0 ? row.tokens.join(", ") : "—"}</td>
+            <td>{row.note ?? ""}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
+
+{/*
+  tags: ['!manifest'] schließt diese Seite bewusst aus Storybooks AI-Manifest aus.
+  Grund: das Manifest liest MDX nur per statischer Textanalyse und führt Imports/
+  .map()-Ausdrücke nicht aus (siehe storybook.js.org/docs/ai/best-practices) — ohne
+  den Ausschluss würde ein Agent über MCP rohen, unausgeführten JSX-Quelltext statt
+  echter Daten bekommen. Diese Seite ist für Menschen; ein Agent liest button.meta.json/
+  button.guidelines.md direkt.
+*/}
+
+<Meta of={ButtonStories} tags={["!manifest"]} />
 
 # Button — Metadaten (Step 3)
 
@@ -13,49 +47,11 @@ Diese Seite liest `button.meta.json` und `button.guidelines.md` direkt ein — k
 
 ### Varianten
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Tokens</th>
-      <th>Notiz</th>
-    </tr>
-  </thead>
-  <tbody>
-    {buttonMeta.variants.map((variant) => (
-      <tr key={variant.name}>
-        <td>
-          <code>{variant.name}</code>
-        </td>
-        <td>{variant.tokens.length > 0 ? variant.tokens.join(", ") : "—"}</td>
-        <td>{variant.note ?? ""}</td>
-      </tr>
-    ))}
-  </tbody>
-</table>
+<MetaTable rows={buttonMeta.variants} />
 
 ### Sizes
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Tokens</th>
-      <th>Notiz</th>
-    </tr>
-  </thead>
-  <tbody>
-    {buttonMeta.sizes.map((size) => (
-      <tr key={size.name}>
-        <td>
-          <code>{size.name}</code>
-        </td>
-        <td>{size.tokens.length > 0 ? size.tokens.join(", ") : "—"}</td>
-        <td>{size.note ?? ""}</td>
-      </tr>
-    ))}
-  </tbody>
-</table>
+<MetaTable rows={buttonMeta.sizes} />
 
 ### Figma-Parity-Check
 

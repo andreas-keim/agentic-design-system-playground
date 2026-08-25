@@ -49,7 +49,7 @@ export const Link: Story = {
 
 export const AllSizes: Story = {
   render: () => (
-    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+    <div style={{ display: "flex", alignItems: "center", gap: "var(--space-component-md)" }}>
       <Button size="xs">xs</Button>
       <Button size="sm">sm</Button>
       <Button size="default">default</Button>
