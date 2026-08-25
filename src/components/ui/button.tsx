@@ -45,6 +45,11 @@ const buttonVariants = cva(
   }
 )
 
+/**
+ * Button triggers an action on a page or in a form.
+ * See button.guidelines.md for which variant fits which situation, and
+ * button.meta.json for the exact token bindings per variant/size.
+ */
 function Button({
   className,
   variant = "default",

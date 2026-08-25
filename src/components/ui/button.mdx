@@ -1,0 +1,62 @@
+import { Meta, Markdown } from "@storybook/addon-docs/blocks"
+import * as ButtonStories from "./button.stories"
+import buttonMeta from "./button.meta.json"
+import guidelines from "./button.guidelines.md?raw"
+
+export function MetaTable({ rows }) {
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Tokens</th>
+          <th>Notiz</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((row) => (
+          <tr key={row.name}>
+            <td>
+              <code>{row.name}</code>
+            </td>
+            <td>{row.tokens.length > 0 ? row.tokens.join(", ") : "—"}</td>
+            <td>{row.note ?? ""}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
+
+{/*
+  tags: ['!manifest'] schließt diese Seite bewusst aus Storybooks AI-Manifest aus.
+  Grund: das Manifest liest MDX nur per statischer Textanalyse und führt Imports/
+  .map()-Ausdrücke nicht aus (siehe storybook.js.org/docs/ai/best-practices) — ohne
+  den Ausschluss würde ein Agent über MCP rohen, unausgeführten JSX-Quelltext statt
+  echter Daten bekommen. Diese Seite ist für Menschen; ein Agent liest button.meta.json/
+  button.guidelines.md direkt.
+*/}
+
+<Meta of={ButtonStories} tags={["!manifest"]} />
+
+# Button — Metadaten (Step 3)
+
+Diese Seite liest `button.meta.json` und `button.guidelines.md` direkt ein — keine Kopie, keine zweite Quelle. Ändert sich eine der beiden Dateien, ändert sich diese Ansicht automatisch mit.
+
+## Struktur (aus button.meta.json)
+
+### Varianten
+
+<MetaTable rows={buttonMeta.variants} />
+
+### Sizes
+
+<MetaTable rows={buttonMeta.sizes} />
+
+### Figma-Parity-Check
+
+{buttonMeta.figmaParityCheck.note}
+
+## Nutzungsrichtlinien (aus button.guidelines.md)
+
+<Markdown>{guidelines}</Markdown>
