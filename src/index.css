@@ -134,9 +134,21 @@
  * Eigene Token-Verdrahtung (siehe Playbook Schritt 2 - Token-Integration in shadcn-ui).
  * Nur Namen werden hier verdrahtet, keine Werte dupliziert - die Werte kommen
  * ausschliesslich aus tokens.css (generiert aus src/tokens/tokens.json).
+ *
+ * --radii-md (nicht --radius-md!): eigener Name, damit unser Token nicht mit
+ * shadcns abgeleiteter --radius-md-Variable aus dem @theme-inline-Block kollidiert.
+ *
+ * :root:not(.dark), nicht nur :root: wir haben noch keine Dark-Mode-Tokens
+ * definiert (siehe Step 1, "kein Dark Mode in v1"). Ohne :not(.dark) wuerde
+ * dieser Block auch im Dark Mode gewinnen und dessen eigene --primary-Werte
+ * unerreichbar machen. --radius bleibt bewusst ausserhalb dieser Einschraenkung,
+ * da shadcn den Radius selbst nicht zwischen Light/Dark unterscheidet.
  */
-:root {
+:root:not(.dark) {
   --primary: var(--color-background-primary-default);
   --primary-foreground: var(--color-text-primary-default);
-  --radius: var(--radius-md);
+}
+
+:root {
+  --radius: var(--radii-md);
 }
