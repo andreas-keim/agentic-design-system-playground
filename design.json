@@ -13,39 +13,6 @@
     {
       "frames": [
         {
-          "bv": {
-            "bottomLeftRadius": "Primitives:primitive/radius/md",
-            "bottomRightRadius": "Primitives:primitive/radius/md",
-            "fills": [
-              "Semantics:semantic/color/background/primary/default"
-            ],
-            "itemSpacing": "Primitives:primitive/space/component/sm",
-            "paddingBottom": "Primitives:primitive/space/component/sm",
-            "paddingLeft": "Primitives:primitive/space/component/md",
-            "paddingRight": "Primitives:primitive/space/component/md",
-            "paddingTop": "Primitives:primitive/space/component/sm",
-            "topLeftRadius": "Primitives:primitive/radius/md",
-            "topRightRadius": "Primitives:primitive/radius/md"
-          },
-          "fills": [
-            "#3b82f6"
-          ],
-          "gap": 8,
-          "h": 36,
-          "lm": "HORIZONTAL",
-          "mc": "Button",
-          "n": "Button",
-          "pad": [
-            8,
-            16,
-            8,
-            16
-          ],
-          "r": 6,
-          "t": "INSTANCE",
-          "w": 129
-        },
-        {
           "fills": [
             "#ffffff"
           ],
@@ -144,6 +111,444 @@
                 }
               },
               "w": 491
+            },
+            {
+              "gap": 52,
+              "h": 118,
+              "kidCount": 3,
+              "kids": [
+                {
+                  "bv": {
+                    "bottomLeftRadius": "Primitives:primitive/radius/md",
+                    "bottomRightRadius": "Primitives:primitive/radius/md",
+                    "itemSpacing": "Primitives:primitive/space/component/sm",
+                    "paddingBottom": "Primitives:primitive/space/component/sm",
+                    "paddingLeft": "Primitives:primitive/space/component/md",
+                    "paddingRight": "Primitives:primitive/space/component/md",
+                    "paddingTop": "Primitives:primitive/space/component/sm",
+                    "topLeftRadius": "Primitives:primitive/radius/md",
+                    "topRightRadius": "Primitives:primitive/radius/md"
+                  },
+                  "fills": [
+                    "#ffffff"
+                  ],
+                  "gap": 8,
+                  "h": 38,
+                  "kids": [
+                    {
+                      "bv": {
+                        "fontFamily": [
+                          "Primitives:primitive/font/family/base"
+                        ],
+                        "fontSize": [
+                          "Primitives:primitive/font/size/md"
+                        ],
+                        "fontWeight": [
+                          "Primitives:primitive/font/weight/medium"
+                        ],
+                        "lineHeight": [
+                          "Primitives:primitive/font/lineHeight/md"
+                        ]
+                      },
+                      "fills": [
+                        "#0a0a0a"
+                      ],
+                      "h": 20,
+                      "n": "Label",
+                      "t": "TEXT",
+                      "txt": {
+                        "chars": "Outline button",
+                        "font": "Geist",
+                        "lh": 20,
+                        "size": 14,
+                        "style": "Medium"
+                      },
+                      "w": 94
+                    }
+                  ],
+                  "lm": "HORIZONTAL",
+                  "n": "State=Default",
+                  "pad": [
+                    8,
+                    16,
+                    8,
+                    16
+                  ],
+                  "r": 6,
+                  "strokes": [
+                    "#e5e5e5"
+                  ],
+                  "sw": 1,
+                  "t": "COMPONENT",
+                  "w": 128
+                }
+              ],
+              "lm": "HORIZONTAL",
+              "n": "Button Outline",
+              "pad": [
+                40,
+                0,
+                40,
+                0
+              ],
+              "r": 5,
+              "t": "COMPONENT_SET",
+              "vp": {
+                "State": {
+                  "values": [
+                    "Default",
+                    "Hover",
+                    "Disabled"
+                  ]
+                }
+              },
+              "w": 488
+            },
+            {
+              "gap": 52,
+              "h": 116,
+              "kidCount": 3,
+              "kids": [
+                {
+                  "bv": {
+                    "bottomLeftRadius": "Primitives:primitive/radius/md",
+                    "bottomRightRadius": "Primitives:primitive/radius/md",
+                    "itemSpacing": "Primitives:primitive/space/component/sm",
+                    "paddingBottom": "Primitives:primitive/space/component/sm",
+                    "paddingLeft": "Primitives:primitive/space/component/md",
+                    "paddingRight": "Primitives:primitive/space/component/md",
+                    "paddingTop": "Primitives:primitive/space/component/sm",
+                    "topLeftRadius": "Primitives:primitive/radius/md",
+                    "topRightRadius": "Primitives:primitive/radius/md"
+                  },
+                  "fills": [
+                    "#f5f5f5"
+                  ],
+                  "gap": 8,
+                  "h": 36,
+                  "kids": [
+                    {
+                      "bv": {
+                        "fontFamily": [
+                          "Primitives:primitive/font/family/base"
+                        ],
+                        "fontSize": [
+                          "Primitives:primitive/font/size/md"
+                        ],
+                        "fontWeight": [
+                          "Primitives:primitive/font/weight/medium"
+                        ],
+                        "lineHeight": [
+                          "Primitives:primitive/font/lineHeight/md"
+                        ]
+                      },
+                      "fills": [
+                        "#171717"
+                      ],
+                      "h": 20,
+                      "n": "Label",
+                      "t": "TEXT",
+                      "txt": {
+                        "chars": "Secondary button",
+                        "font": "Geist",
+                        "lh": 20,
+                        "size": 14,
+                        "style": "Medium"
+                      },
+                      "w": 117
+                    }
+                  ],
+                  "lm": "HORIZONTAL",
+                  "n": "State=Default",
+                  "pad": [
+                    8,
+                    16,
+                    8,
+                    16
+                  ],
+                  "r": 6,
+                  "t": "COMPONENT",
+                  "w": 149
+                }
+              ],
+              "lm": "HORIZONTAL",
+              "n": "Button Secondary",
+              "pad": [
+                40,
+                0,
+                40,
+                0
+              ],
+              "r": 5,
+              "t": "COMPONENT_SET",
+              "vp": {
+                "State": {
+                  "values": [
+                    "Default",
+                    "Hover",
+                    "Disabled"
+                  ]
+                }
+              },
+              "w": 551
+            },
+            {
+              "gap": 52,
+              "h": 116,
+              "kidCount": 3,
+              "kids": [
+                {
+                  "bv": {
+                    "bottomLeftRadius": "Primitives:primitive/radius/md",
+                    "bottomRightRadius": "Primitives:primitive/radius/md",
+                    "itemSpacing": "Primitives:primitive/space/component/sm",
+                    "paddingBottom": "Primitives:primitive/space/component/sm",
+                    "paddingLeft": "Primitives:primitive/space/component/md",
+                    "paddingRight": "Primitives:primitive/space/component/md",
+                    "paddingTop": "Primitives:primitive/space/component/sm",
+                    "topLeftRadius": "Primitives:primitive/radius/md",
+                    "topRightRadius": "Primitives:primitive/radius/md"
+                  },
+                  "gap": 8,
+                  "h": 36,
+                  "kids": [
+                    {
+                      "bv": {
+                        "fontFamily": [
+                          "Primitives:primitive/font/family/base"
+                        ],
+                        "fontSize": [
+                          "Primitives:primitive/font/size/md"
+                        ],
+                        "fontWeight": [
+                          "Primitives:primitive/font/weight/medium"
+                        ],
+                        "lineHeight": [
+                          "Primitives:primitive/font/lineHeight/md"
+                        ]
+                      },
+                      "fills": [
+                        "#0a0a0a"
+                      ],
+                      "h": 20,
+                      "n": "Label",
+                      "t": "TEXT",
+                      "txt": {
+                        "chars": "Ghost button",
+                        "font": "Geist",
+                        "lh": 20,
+                        "size": 14,
+                        "style": "Medium"
+                      },
+                      "w": 86
+                    }
+                  ],
+                  "lm": "HORIZONTAL",
+                  "n": "State=Default",
+                  "pad": [
+                    8,
+                    16,
+                    8,
+                    16
+                  ],
+                  "r": 6,
+                  "t": "COMPONENT",
+                  "w": 118
+                }
+              ],
+              "lm": "HORIZONTAL",
+              "n": "Button Ghost",
+              "pad": [
+                40,
+                0,
+                40,
+                0
+              ],
+              "r": 5,
+              "t": "COMPONENT_SET",
+              "vp": {
+                "State": {
+                  "values": [
+                    "Default",
+                    "Hover",
+                    "Disabled"
+                  ]
+                }
+              },
+              "w": 458
+            },
+            {
+              "gap": 52,
+              "h": 116,
+              "kidCount": 3,
+              "kids": [
+                {
+                  "bv": {
+                    "bottomLeftRadius": "Primitives:primitive/radius/md",
+                    "bottomRightRadius": "Primitives:primitive/radius/md",
+                    "itemSpacing": "Primitives:primitive/space/component/sm",
+                    "paddingBottom": "Primitives:primitive/space/component/sm",
+                    "paddingLeft": "Primitives:primitive/space/component/md",
+                    "paddingRight": "Primitives:primitive/space/component/md",
+                    "paddingTop": "Primitives:primitive/space/component/sm",
+                    "topLeftRadius": "Primitives:primitive/radius/md",
+                    "topRightRadius": "Primitives:primitive/radius/md"
+                  },
+                  "fills": [
+                    "#e7000b@10"
+                  ],
+                  "gap": 8,
+                  "h": 36,
+                  "kids": [
+                    {
+                      "bv": {
+                        "fontFamily": [
+                          "Primitives:primitive/font/family/base"
+                        ],
+                        "fontSize": [
+                          "Primitives:primitive/font/size/md"
+                        ],
+                        "fontWeight": [
+                          "Primitives:primitive/font/weight/medium"
+                        ],
+                        "lineHeight": [
+                          "Primitives:primitive/font/lineHeight/md"
+                        ]
+                      },
+                      "fills": [
+                        "#e7000b"
+                      ],
+                      "h": 20,
+                      "n": "Label",
+                      "t": "TEXT",
+                      "txt": {
+                        "chars": "Destructive button",
+                        "font": "Geist",
+                        "lh": 20,
+                        "size": 14,
+                        "style": "Medium"
+                      },
+                      "w": 123
+                    }
+                  ],
+                  "lm": "HORIZONTAL",
+                  "n": "State=Default",
+                  "pad": [
+                    8,
+                    16,
+                    8,
+                    16
+                  ],
+                  "r": 6,
+                  "t": "COMPONENT",
+                  "w": 155
+                }
+              ],
+              "lm": "HORIZONTAL",
+              "n": "Button Destructive",
+              "pad": [
+                40,
+                0,
+                40,
+                0
+              ],
+              "r": 5,
+              "t": "COMPONENT_SET",
+              "vp": {
+                "State": {
+                  "values": [
+                    "Default",
+                    "Hover",
+                    "Disabled"
+                  ]
+                }
+              },
+              "w": 569
+            },
+            {
+              "gap": 52,
+              "h": 116,
+              "kidCount": 3,
+              "kids": [
+                {
+                  "bv": {
+                    "bottomLeftRadius": "Primitives:primitive/radius/md",
+                    "bottomRightRadius": "Primitives:primitive/radius/md",
+                    "itemSpacing": "Primitives:primitive/space/component/sm",
+                    "paddingBottom": "Primitives:primitive/space/component/sm",
+                    "paddingLeft": "Primitives:primitive/space/component/md",
+                    "paddingRight": "Primitives:primitive/space/component/md",
+                    "paddingTop": "Primitives:primitive/space/component/sm",
+                    "topLeftRadius": "Primitives:primitive/radius/md",
+                    "topRightRadius": "Primitives:primitive/radius/md"
+                  },
+                  "gap": 8,
+                  "h": 36,
+                  "kids": [
+                    {
+                      "bv": {
+                        "fontFamily": [
+                          "Primitives:primitive/font/family/base"
+                        ],
+                        "fontSize": [
+                          "Primitives:primitive/font/size/md"
+                        ],
+                        "fontWeight": [
+                          "Primitives:primitive/font/weight/medium"
+                        ],
+                        "lineHeight": [
+                          "Primitives:primitive/font/lineHeight/md"
+                        ]
+                      },
+                      "fills": [
+                        "#3b82f6"
+                      ],
+                      "h": 20,
+                      "n": "Label",
+                      "t": "TEXT",
+                      "txt": {
+                        "chars": "Link button",
+                        "font": "Geist",
+                        "lh": 20,
+                        "size": 14,
+                        "style": "Medium"
+                      },
+                      "w": 74
+                    }
+                  ],
+                  "lm": "HORIZONTAL",
+                  "n": "State=Default",
+                  "pad": [
+                    8,
+                    16,
+                    8,
+                    16
+                  ],
+                  "r": 6,
+                  "t": "COMPONENT",
+                  "w": 106
+                }
+              ],
+              "lm": "HORIZONTAL",
+              "n": "Button Link",
+              "pad": [
+                40,
+                0,
+                40,
+                0
+              ],
+              "r": 5,
+              "t": "COMPONENT_SET",
+              "vp": {
+                "State": {
+                  "values": [
+                    "Default",
+                    "Hover",
+                    "Disabled"
+                  ]
+                }
+              },
+              "w": 422
             }
           ],
           "n": "Buttons",
@@ -157,7 +562,7 @@
         }
       ],
       "name": "Page 1",
-      "nodeCount": 11
+      "nodeCount": 44
     }
   ],
   "variables": [
