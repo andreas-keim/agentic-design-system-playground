@@ -50,7 +50,7 @@
     {
       "name": "link",
       "tokens": [],
-      "note": "Nutzt text-primary — indirekt dasselbe --primary wie die default-Variante, also faktisch an color.background.primary.default gebunden, aber ohne direkte var(--color-...)-Referenz im Code."
+      "note": "Nutzt text-primary — indirekt dasselbe --primary wie die primary-Variante, also faktisch an color.background.primary.default gebunden, aber ohne direkte var(--color-...)-Referenz im Code."
     }
   ],
   "sizes": [
