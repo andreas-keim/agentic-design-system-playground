@@ -26,7 +26,11 @@ jobs:
 
       - name: Run accessibility gate (Playwright + axe-core, modeled on GitHub Primer's aat-reports.yml)
         id: a11y_check
-        run: npm run test:a11y 2>&1 | tee a11y-report.txt
+        # set -o pipefail: without it, this step's exit code is tee's (always 0),
+        # not npm's — the pipe would silently report "success" on real violations.
+        run: |
+          set -o pipefail
+          npm run test:a11y 2>&1 | tee a11y-report.txt
         continue-on-error: true
 
       # File/update a GitHub Issue on failure instead of triggering an agent to

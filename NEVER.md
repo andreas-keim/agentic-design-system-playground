@@ -26,6 +26,10 @@ Explizite "Don't"-Liste nach dem Vorbild von Freya Stockmans (Relevance AI) "Don
 - **Nie einen neuen State/eine neue Variante "auf Vorrat" anlegen, die aktuell nirgends verwendet wird** (CLAUDE.md-Grundregel, mehrfach bestätigt: Step 2b hat genau solche verwaisten Primitives per Prune-Skript wieder entfernt).
 - **Nie eine neue Button-Implementierung bauen, wenn die bestehende `Button`-Komponente das Bedürfnis abdeckt** — auch nicht für einen Testfall oder eine Demo-Komponente. *(Step 5: beide A/B-Testagenten haben das korrekt eingehalten, war aber nie explizit als Regel niedergeschrieben, nur implizit erwartet.)*
 
+## CI
+
+- **Nie in einer GitHub-Actions-`run`-Zeile einen Befehl, dessen Exit-Code über grün/rot entscheidet, ungeschützt durch `| tee ...` (oder eine andere Pipe) schicken.** Ohne `set -o pipefail` liefert die Shell den Exit-Code des letzten Pipe-Glieds (`tee` = immer 0), nicht den des eigentlichen Befehls — ein fehlschlagender Test wird so als "grün" gemeldet. *(Step 6d/e: der Accessibility-Workflow zeigte "success", obwohl der Test intern Violations meldete — `npm run test:a11y 2>&1 | tee a11y-report.txt` ohne `pipefail`.)*
+
 ## Wie diese Liste wächst
 
 Nur Einträge aufnehmen, die auf einen tatsächlichen, im Playbook dokumentierten Fund zurückgehen — keine generischen Best-Practice-Regeln aus Artikeln kopieren, das würde die Liste beliebig lang und damit wirkungslos machen (siehe [[Playbook Step 5c]] im Vault für die Quellenlage). Neuer Fund → neue Regel → hier + im Playbook dokumentiert.
