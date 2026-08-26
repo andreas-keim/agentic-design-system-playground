@@ -27,3 +27,5 @@ Agentic, KI-lesbares Design System: Tokens und Komponenten, die ein AI-Agent kor
 - `ComponentName.guidelines.md` — Prosa: wann welche Variante, Beziehungen zu anderen Elementen/Komponenten. Nur Beziehungen dokumentieren, die im Code tatsächlich existieren (z. B. `data-slot`/`data-icon`-Reaktionen) — nicht zu Komponenten, die es im Projekt noch nicht gibt, auch wenn der Code darauf vorbereitet ist.
 
 Vor dem Anlegen/Ändern dieser Dateien: jeden Token-Namen gegen `src/tokens/tokens.json`/`src/styles/tokens.css` prüfen, nicht aus der Erinnerung übernehmen.
+
+**Negativregeln:** [`NEVER.md`](./NEVER.md) listet explizite Don'ts, jede aus einem tatsächlich in diesem Projekt gefundenen Bug abgeleitet — vor jedem Push gegenlesen (Teil des `.claude/skills/wrap-up`-Ablaufs).

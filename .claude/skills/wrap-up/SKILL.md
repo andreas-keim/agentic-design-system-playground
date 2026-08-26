@@ -21,6 +21,7 @@ Formalisiert den Merge-Ablauf, den dieses Projekt seit Step 2 manuell wiederholt
    - Keine neuen States/Varianten "auf Vorrat" angelegt, die nirgends verwendet werden (CLAUDE.md-Regel).
    - Keine Behauptung in `*.guidelines.md` oder `*.mdx`, die sich nicht 1:1 im aktuellen Code nachvollziehen lässt (Step-3-Fund: erfundene Button-Group-Ecken-Logik, die es im Code nie gab).
    - Bei widersprüchlichen oder unentschiedenen Regeln (z. B. zwei Varianten ohne Abgrenzung): eine explizite Interims-Regel statt stillem Ermessensspielraum festhalten (Step-5b-Lektion, "be consistent"-Prinzip aus dem Miro-Talk).
+   - Diff gegen [`NEVER.md`](../../../NEVER.md) prüfen — keiner der dort gelisteten Fälle wiederholt. Falls ein neuer, vergleichbarer Fund auftaucht: nicht nur fixen, sondern als neue Regel in `NEVER.md` ergänzen (Step-5c-Konvention).
 
 3. **Commit-Message** im Stil der bisherigen Historie: kurzer, deutschsprachiger Titel, der beschreibt was gemacht wurde, bei Funden in Klammern/Doppelpunkt ergänzt (z. B. "Step 5: Validierungsbericht für den A/B-Agententest" oder "Fix: link-Varianten-Notiz referenzierte noch 'default-Variante'"). Kein Conventional-Commits-Prefix, das ist bisher nirgends in der Historie verwendet worden.
 
