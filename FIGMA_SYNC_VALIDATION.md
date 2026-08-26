@@ -58,7 +58,9 @@ Only the `size: "default"` variant was touched — `xs`/`sm`/`lg`/`icon*` still 
 
 ## Text Style — 2026-08-25
 
-Figma has no composite "text" variable type (only `COLOR`/`FLOAT`/`STRING`/`BOOLEAN`); bundling font-size/weight/line-height into one reusable, named thing needs a Text Style, a separate concept from Variables that figma-cli also doesn't support natively. `upsertButtonTextStyle()` creates/updates a Text Style named `Button`, binds it to the existing `primitive/font/size/md`, `primitive/font/weight/medium`, and `primitive/font/lineHeight/md` variables (font-weight binding works because Geist is a variable font), and applies it to the `Label` text node in all three component states via `setTextStyleIdAsync`.
+Figma has no composite "text" variable type (only `COLOR`/`FLOAT`/`STRING`/`BOOLEAN`); bundling font-size/weight/line-height into one reusable, named thing needs a Text Style, a separate concept from Variables that figma-cli also doesn't support natively. `upsertTextStyle()` creates/updates a Text Style named `Button`, binds it to the existing `primitive/font/size/md`, `primitive/font/weight/medium`, and `primitive/font/lineHeight/md` variables (font-weight binding works because Geist is a variable font), and applies it to the `Label` text node in all three component states via the separate `applyTextStyleToComponentSetLabels()` helper (`setTextStyleIdAsync`).
+
+**Generalized, 2026-08-26 (Step 7):** `upsertTextStyle()` is written generic (style name + variable names as params), not Button-specific — proven by a second, independent caller: a `Headline` style (`primitive/font/size/xl`/`weight/bold`/`lineHeight/xl`), created the same way but with no component set to apply it to yet (no Figma node built for Headline). The apply-to-nodes step stayed a separate function precisely because "create/update a style" and "apply it somewhere" are independent concerns — Headline only needs the former for now.
 
 ## Font family — platform-naming mismatch, 2026-08-25
 
