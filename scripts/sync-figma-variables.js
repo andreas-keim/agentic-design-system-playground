@@ -259,31 +259,43 @@ return { semantics: result, count: result.length };
 // thing requires a Text Style, a separate Figma concept from Variables.
 // This mirrors the same idempotent create-or-update + bind pattern as
 // primitives/semantics above, applied to a style object instead of a node.
-function upsertButtonTextStyle() {
+// Generic on purpose: Button was the first caller, Headline (Step 7) is the
+// second — proves this is a reusable helper, not a one-off Button function.
+function upsertTextStyle({
+  styleName,
+  fontFamily,
+  fontStyle,
+  fontSizePx,
+  lineHeightPx,
+  fontSizeVarName,
+  lineHeightVarName,
+  fontWeightVarName,
+  fontFamilyVarName,
+}) {
   return parseEvalResult(
     runEval(`
-await figma.loadFontAsync({ family: 'Geist', style: 'Medium' });
+await figma.loadFontAsync({ family: ${JSON.stringify(fontFamily)}, style: ${JSON.stringify(fontStyle)} });
 
 const variables = await figma.variables.getLocalVariablesAsync();
 const byName = new Map(variables.map((variable) => [variable.name, variable]));
-const fontSizeVar = byName.get('primitive/font/size/md');
-const fontWeightVar = byName.get('primitive/font/weight/medium');
-const lineHeightVar = byName.get('primitive/font/lineHeight/md');
-const fontFamilyVar = byName.get('primitive/font/family/base');
-if (!fontSizeVar || !lineHeightVar) throw new Error('Required font variables not found');
+const fontSizeVar = byName.get(${JSON.stringify(fontSizeVarName)});
+const fontWeightVar = byName.get(${JSON.stringify(fontWeightVarName)});
+const lineHeightVar = byName.get(${JSON.stringify(lineHeightVarName)});
+const fontFamilyVar = byName.get(${JSON.stringify(fontFamilyVarName)});
+if (!fontSizeVar || !lineHeightVar) throw new Error('Required font variables not found for style ${styleName}');
 
 const existingStyles = await figma.getLocalTextStylesAsync();
-let style = existingStyles.find((candidate) => candidate.name === 'Button');
+let style = existingStyles.find((candidate) => candidate.name === ${JSON.stringify(styleName)});
 let status = 'updated';
 if (!style) {
   style = figma.createTextStyle();
-  style.name = 'Button';
+  style.name = ${JSON.stringify(styleName)};
   status = 'created';
 }
 
-style.fontName = { family: 'Geist', style: 'Medium' };
-style.fontSize = 14;
-style.lineHeight = { value: 20, unit: 'PIXELS' };
+style.fontName = { family: ${JSON.stringify(fontFamily)}, style: ${JSON.stringify(fontStyle)} };
+style.fontSize = ${fontSizePx};
+style.lineHeight = { value: ${lineHeightPx}, unit: 'PIXELS' };
 style.setBoundVariable('fontSize', fontSizeVar);
 style.setBoundVariable('lineHeight', lineHeightVar);
 
@@ -307,24 +319,37 @@ if (fontFamilyVar) {
   }
 }
 
-const buttonSet = figma.currentPage.findOne(
-  (node) => node.type === 'COMPONENT_SET' && node.name === 'Button',
+return { status, styleId: style.id, fontWeightBound, fontFamilyBound };
+`),
+  )
+}
+
+// Applies an already-created text style (by id) to every TEXT node with the
+// given name inside a named COMPONENT_SET. Separate from upsertTextStyle
+// because "create/update a style" and "apply it somewhere" are independent
+// concerns -- Headline has no component set to apply to yet (no Figma node
+// built for it), so it only calls upsertTextStyle, not this.
+function applyTextStyleToComponentSetLabels(styleId, componentSetName, textNodeName) {
+  return parseEvalResult(
+    runEval(`
+const set = figma.currentPage.findOne(
+  (node) => node.type === 'COMPONENT_SET' && node.name === ${JSON.stringify(componentSetName)},
 );
-if (!buttonSet) throw new Error('Button component set not found on the current page');
-const labels = buttonSet.findAll((node) => node.type === 'TEXT' && node.name === 'Label');
-if (labels.length === 0) throw new Error('No "Label" text node found inside the Button component set');
+if (!set) throw new Error(${JSON.stringify(`${componentSetName} component set not found on the current page`)});
+const labels = set.findAll((node) => node.type === 'TEXT' && node.name === ${JSON.stringify(textNodeName)});
+if (labels.length === 0) throw new Error(${JSON.stringify(`No "${textNodeName}" text node found inside the ${componentSetName} component set`)});
 
 const appliedTo = [];
 for (const label of labels) {
   if (typeof label.setTextStyleIdAsync === 'function') {
-    await label.setTextStyleIdAsync(style.id);
+    await label.setTextStyleIdAsync(${JSON.stringify(styleId)});
   } else {
-    label.textStyleId = style.id;
+    label.textStyleId = ${JSON.stringify(styleId)};
   }
   appliedTo.push(label.parent ? label.parent.name : label.id);
 }
 
-return { status, styleId: style.id, fontWeightBound, fontFamilyBound, appliedTo };
+return { appliedTo };
 `),
   )
 }
@@ -477,7 +502,33 @@ function main() {
   const creation = createMissingPrimitives(primitives, inventory)
   const primitiveUpdate = updatePrimitives(primitives)
   const semanticUpdate = upsertSemantics(semantics)
-  const textStyle = upsertButtonTextStyle()
+
+  const buttonTextStyle = upsertTextStyle({
+    styleName: 'Button',
+    fontFamily: 'Geist',
+    fontStyle: 'Medium',
+    fontSizePx: 14,
+    lineHeightPx: 20,
+    fontSizeVarName: 'primitive/font/size/md',
+    lineHeightVarName: 'primitive/font/lineHeight/md',
+    fontWeightVarName: 'primitive/font/weight/medium',
+    fontFamilyVarName: 'primitive/font/family/base',
+  })
+  const buttonTextStyleApplied = applyTextStyleToComponentSetLabels(buttonTextStyle.styleId, 'Button', 'Label')
+  const textStyle = { ...buttonTextStyle, appliedTo: buttonTextStyleApplied.appliedTo }
+
+  const headlineTextStyle = upsertTextStyle({
+    styleName: 'Headline',
+    fontFamily: 'Geist',
+    fontStyle: 'Bold',
+    fontSizePx: 24,
+    lineHeightPx: 32,
+    fontSizeVarName: 'primitive/font/size/xl',
+    lineHeightVarName: 'primitive/font/lineHeight/xl',
+    fontWeightVarName: 'primitive/font/weight/bold',
+    fontFamilyVarName: 'primitive/font/family/base',
+  })
+
   const codeAlignment = alignDisabledAndBorderToCode()
   const expectedNames = [...tokens.map((token) => token.name), ...MANUALLY_MAINTAINED_VARIABLES]
   const pruneResult = pruneOrphanedVariables(expectedNames)
@@ -493,6 +544,7 @@ function main() {
       updated: semanticUpdate.semantics.filter((item) => item.status === 'updated').length,
     },
     textStyle,
+    headlineTextStyle,
     codeAlignment,
     prune: pruneResult,
     verification,
