@@ -23,13 +23,13 @@
   "color.background.primary.default": {
     "name": "semantic/color/background/primary/default",
     "type": "COLOR",
-    "resolvedValue": "#3b82f6",
+    "resolvedValue": "#2563eb",
     "scopes": [
       "FRAME_FILL",
       "SHAPE_FILL"
     ],
     "codeSyntax": "var(--color-background-primary-default)",
-    "aliasOf": "primitive/blue/500"
+    "aliasOf": "primitive/blue/600"
   },
   "color.background.primary.hover": {
     "name": "semantic/color/background/primary/hover",
