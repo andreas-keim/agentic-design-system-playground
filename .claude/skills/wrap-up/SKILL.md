@@ -14,6 +14,7 @@ Formalisiert den Merge-Ablauf, den dieses Projekt seit Step 2 manuell wiederholt
    - `npm run lint`
    - Falls `*.stories.tsx`/`*.mdx` in diesem Branch geändert wurden: zusätzlich `npm run build-storybook`
    - Falls `src/tokens/tokens.json` oder eine Komponente mit Figma-Parität (`figmaParityCheck` in der jeweiligen `*.meta.json`) geändert wurde: `npm run tokens:build` und `figma-cli check` (Safe Mode, Plugin muss manuell in Figma laufen — falls das nicht möglich ist, explizit als offen vermerken statt zu überspringen)
+   - Falls ein Farb-Token oder eine Komponenten-Story geändert wurde: `npm run test:a11y` (läuft seit Step 6c auch automatisch in CI, siehe `ACCESSIBILITY.md`) — ein roter Lauf wegen eines bereits bekannten, dokumentierten Verstoßes ist kein Blocker, ein neuer, bisher unbekannter Verstoß schon.
 
 2. **Projekt-spezifische Konsistenz-Checkliste** (aus tatsächlich in diesem Projekt gefundenen Bugs abgeleitet, nicht generisch):
    - Jeder neue/geänderte Farb-/Spacing-/Radius-/Typography-Wert kommt aus `src/tokens/tokens.json` — keine erfundenen/geschätzten Werte, keine Hex-Farben, keine willkürlichen Tailwind-Arbitrary-Values außerhalb bestehender CSS-Variablen (Step-2-Bug: Button war nie vollständig tokenisiert).

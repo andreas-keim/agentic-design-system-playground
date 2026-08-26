@@ -2,6 +2,17 @@
 
 Übersicht der über `@storybook/addon-a11y` (axe-core) gefundenen Verstöße, chronologisch. Geprüft: alle sechs Button-Varianten (Primary, Outline, Secondary, Ghost, Destructive, Link), Größe `default`.
 
+## Automatisiertes Gate (seit 2026-08-26)
+
+`npm run test:a11y` (`scripts/check-accessibility.mjs`) baut Storybook statisch, serviert es, und prüft jede Story per Playwright + `@axe-core/playwright` — läuft automatisch in CI (`.github/workflows/accessibility.yml`) bei jedem Push/PR. Modelliert nach GitHub Primers echtem `aat-reports.yml` (Playwright direkt gegen eine gebaute Storybook-Instanz), **nicht** über `@storybook/addon-vitest` (kaputt, siehe Playbook Step 6 — Rolldown/aria-query-Bug).
+
+Zwei Stolperfallen beim Bau des Skripts, beide primärquellenbasiert gefunden, nicht geraten:
+- `serve`s Default-"Clean URLs" leitet `/iframe.html?id=...` auf `/iframe` um und wirft dabei die Story-ID weg — per `serve.json` (`cleanUrls: false`) deaktiviert.
+- `networkidle` allein ist kein verlässliches "Story fertig gerendert"-Signal — `#storybook-root` bleibt bis dahin `hidden` und leer. Fix: explizit auf befüllten, sichtbaren Root warten.
+- Zwei zusätzliche axe-Regeln deaktiviert (`landmark-one-main`, `page-has-heading-one`) — Seitenstruktur-Regeln, die für eine isolierte Komponente strukturell nie erfüllbar sind, dieselbe Logik wie Storybooks eigener `region`-Ausschluss.
+
+**Bekannter Zustand:** CI zeigt aktuell **rot** — der offene Destructive-Kontrast-Fund unten ist ein echter, noch nicht behobener Verstoß, keine Fehlkonfiguration des Gates.
+
 **Wichtiger Kontext-Hinweis:** Dieses Dokument entstand in einem Solo-Lernprojekt — Farbanpassungen wurden hier direkt vorgenommen. **In einem echten Team-/Kundenprojekt gehört eine Kontrast-Korrektur nicht in eine stille Code-Änderung**, sondern zurück an den Brand-/Design-Owner oder die für Barrierefreiheit verantwortliche Stelle (CI-Verantwortlicher, Kunde) — eine Markenfarbe zu verändern ist eine Entscheidung, die über reine Technik hinausgeht.
 
 ## 2026-08-26 — Primary-Button: Farbkontrast
