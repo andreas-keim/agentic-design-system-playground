@@ -50,23 +50,54 @@ jobs:
       # cheap static-file hosting via raw.githubusercontent.com) instead of
       # polluting main's history with binary PNGs on every run.
       - name: Publish screenshots
+        id: publish_screenshots
         if: steps.a11y_check.outcome == 'failure' && github.event_name == 'push'
+        continue-on-error: true # a screenshot-hosting hiccup shouldn't also swallow the issue notification below
         run: |
           mkdir -p /tmp/a11y-screenshots-branch
           cd /tmp/a11y-screenshots-branch
           git init -q
           git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
-          if git fetch -q origin a11y-screenshots 2>/dev/null; then
-            git checkout -q a11y-screenshots
-          else
-            git checkout -q --orphan a11y-screenshots
-          fi
-          mkdir -p "run-${{ github.run_id }}"
-          cp "$GITHUB_WORKSPACE"/a11y-screenshots/*.png "run-${{ github.run_id }}/"
-          git add .
-          git -c user.name="github-actions" -c user.email="github-actions@github.com" commit -q -m "a11y screenshots for run ${{ github.run_id }}"
-          git push -q origin a11y-screenshots
-        continue-on-error: true # a screenshot-hosting hiccup shouldn't also swallow the issue notification below
+
+          # Two runs finishing close together race for the same branch tip —
+          # our own commit only ever adds a new run-<id>/ folder, never touches
+          # an existing one, so on a rejected push it's always safe to just
+          # fetch the latest tip and recommit on top of it. A few retries turn
+          # a same-minute race into a brief delay instead of a silently lost
+          # screenshot upload.
+          attempt=1
+          max_attempts=5
+          while [ "$attempt" -le "$max_attempts" ]; do
+            if git fetch -q origin a11y-screenshots 2>/dev/null; then
+              git checkout -q a11y-screenshots
+            else
+              git checkout -q --orphan a11y-screenshots
+            fi
+            rm -rf "run-${{ github.run_id }}"
+            mkdir -p "run-${{ github.run_id }}"
+            cp "$GITHUB_WORKSPACE"/a11y-screenshots/*.png "run-${{ github.run_id }}/"
+            git add .
+            git -c user.name="github-actions" -c user.email="github-actions@github.com" commit -q -m "a11y screenshots for run ${{ github.run_id }}"
+            if git push -q origin a11y-screenshots; then
+              exit 0
+            fi
+            echo "Push rejected (attempt $attempt/$max_attempts), retrying..."
+            attempt=$((attempt + 1))
+            sleep $((RANDOM % 5 + 1))
+          done
+          echo "::error::Could not publish screenshots after $max_attempts attempts."
+          exit 1
+
+      # `gh issue create --label` fails outright if the label doesn't exist yet
+      # (verified live: exit 1, "could not add label ... not found", no issue
+      # created at all) — provision it here so this workflow is reproducible on
+      # a fresh fork/clone instead of silently depending on a one-off manual
+      # `gh label create` someone ran once outside the pipeline.
+      - name: Ensure the a11y-violation label exists
+        if: steps.a11y_check.outcome == 'failure' && github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh label create a11y-violation --repo "$GITHUB_REPOSITORY" --description "Automatisch vom Accessibility-CI-Gate erstellt" --color "d93f0b" --force
 
       # File/update a GitHub Issue on failure instead of triggering an agent to
       # auto-fix — deliberate choice, no LLM call = no cost. See Playbook Step 6d
@@ -79,8 +110,13 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           EXISTING=$(gh issue list --repo "$GITHUB_REPOSITORY" --label a11y-violation --state open --json number --jq '.[0].number')
-          BODY=$(printf '%s\n\n---\n\nAutomatisch erstellt vom Accessibility-Workflow (Run: %s).' \
+          SCREENSHOT_NOTE=""
+          if [ "${{ steps.publish_screenshots.outcome }}" = "failure" ]; then
+            SCREENSHOT_NOTE=$'\n\n⚠️ Screenshots konnten diesmal nicht veröffentlicht werden — Bild-Links unten sind möglicherweise tot.'
+          fi
+          BODY=$(printf '%s%s\n\n---\n\nAutomatisch erstellt vom Accessibility-Workflow (Run: %s).' \
             "$(cat a11y-summary.md)" \
+            "$SCREENSHOT_NOTE" \
             "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID")
           if [ -n "$EXISTING" ]; then
             gh issue comment "$EXISTING" --repo "$GITHUB_REPOSITORY" --body "$BODY"
