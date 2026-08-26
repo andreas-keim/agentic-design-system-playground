@@ -82,69 +82,79 @@ async function main() {
     stdio: 'ignore',
   });
 
-  let exitCode = 0;
   const failures = [];
+  const crashed = [];
+  let browser;
 
   try {
     await waitForServer(`http://localhost:${PORT}`);
 
-    const browser = await chromium.launch();
+    browser = await chromium.launch();
     const context = await browser.newContext();
     const page = await context.newPage();
 
     console.log(`Checking ${stories.length} stories...\n`);
 
     for (const story of stories) {
-      const url = `http://localhost:${PORT}/iframe.html?id=${story.id}&viewMode=story`;
-      await page.goto(url, { waitUntil: 'networkidle' });
-      // #storybook-root stays `hidden` with no children until the story has
-      // actually rendered — networkidle alone is not a reliable ready signal.
-      await page.waitForFunction(
-        () => {
-          const root = document.querySelector('#storybook-root');
-          return root && !root.hidden && root.childElementCount > 0;
-        },
-        { timeout: 10000 }
-      );
+      // One story's failure (render timeout, navigation error, axe crash) must
+      // not abort the whole run — it would skip every remaining story, leak
+      // the browser, and (previously) skip writing a11y-summary.md entirely,
+      // leaving the CI issue-filing step with no report to read.
+      try {
+        const url = `http://localhost:${PORT}/iframe.html?id=${story.id}&viewMode=story`;
+        await page.goto(url, { waitUntil: 'domcontentloaded' });
+        // #storybook-root stays `hidden` with no children until the story has
+        // actually rendered — domcontentloaded alone is not a reliable ready
+        // signal, so wait for that explicitly instead of the slower and, for
+        // this purpose, equally unreliable 'networkidle'.
+        await page.waitForFunction(
+          () => {
+            const root = document.querySelector('#storybook-root');
+            return root && !root.hidden && root.childElementCount > 0;
+          },
+          { timeout: 10000 }
+        );
 
-      const results = await new AxeBuilder({ page })
-        .disableRules([
-          'region', // matches Storybook addon-a11y's own default (region rule doesn't apply to isolated story fragments)
-          'landmark-one-main', // page-structure rule — a single component can never have a <main>, that's the page's job, not the component's
-          'page-has-heading-one', // same reasoning — no isolated component fragment has (or should have) an <h1>
-        ])
-        .analyze();
+        const results = await new AxeBuilder({ page })
+          .disableRules([
+            'region', // matches Storybook addon-a11y's own default (region rule doesn't apply to isolated story fragments)
+            'landmark-one-main', // page-structure rule — a single component can never have a <main>, that's the page's job, not the component's
+            'page-has-heading-one', // same reasoning — no isolated component fragment has (or should have) an <h1>
+          ])
+          .analyze();
 
-      if (results.violations.length > 0) {
-        exitCode = 1;
-        const screenshotPath = `${SCREENSHOT_DIR}/${story.id}.png`;
-        // Screenshot just the rendered component, not the whole (mostly blank)
-        // page or its full-width root container — a tight crop of the actual
-        // element makes the problem visible at a glance instead of buried in
-        // whitespace.
-        const target = page.locator('#storybook-root > *').first();
-        if (await target.count() > 0) {
-          await target.screenshot({ path: screenshotPath });
-        } else {
-          await page.screenshot({ path: screenshotPath });
-        }
-
-        console.log(`✖ ${story.title} — ${story.name} (${story.id})`);
-        for (const violation of results.violations) {
-          console.log(`  [${violation.impact}] ${violation.id}: ${violation.description}`);
-          for (const node of violation.nodes) {
-            console.log(`    ${node.failureSummary}`);
+        if (results.violations.length > 0) {
+          const screenshotPath = `${SCREENSHOT_DIR}/${story.id}.png`;
+          // Screenshot just the rendered component, not the whole (mostly blank)
+          // page or its full-width root container — a tight crop of the actual
+          // element makes the problem visible at a glance instead of buried in
+          // whitespace.
+          const target = page.locator('#storybook-root > *').first();
+          if (await target.count() > 0) {
+            await target.screenshot({ path: screenshotPath });
+          } else {
+            await page.screenshot({ path: screenshotPath });
           }
-        }
 
-        failures.push({ story, violations: results.violations, screenshotPath });
-      } else {
-        console.log(`✔ ${story.title} — ${story.name}`);
+          console.log(`✖ ${story.title} — ${story.name} (${story.id})`);
+          for (const violation of results.violations) {
+            console.log(`  [${violation.impact}] ${violation.id}: ${violation.description}`);
+            for (const node of violation.nodes) {
+              console.log(`    ${node.failureSummary}`);
+            }
+          }
+
+          failures.push({ story, violations: results.violations });
+        } else {
+          console.log(`✔ ${story.title} — ${story.name}`);
+        }
+      } catch (error) {
+        console.log(`✖ ${story.title} — ${story.name} (${story.id}) — check itself crashed: ${error.message}`);
+        crashed.push({ story, error });
       }
     }
-
-    await browser.close();
   } finally {
+    if (browser) await browser.close();
     server.kill();
     await rm(serveConfigPath, { force: true });
   }
@@ -153,12 +163,15 @@ async function main() {
   // GitHub Issue, not a machine parsing a log — headline first, one screenshot
   // per finding (a contrast problem is instantly obvious in a picture, not in
   // four hex codes), plain-language explanation before the raw axe output.
+  // Written unconditionally (finally already ran) so a crashed story never
+  // leaves the downstream CI step with no report file to read.
   const lines = [];
-  if (failures.length === 0) {
+  if (failures.length === 0 && crashed.length === 0) {
     lines.push('## ✅ Accessibility-Check bestanden', '', `Alle ${stories.length} Stories ohne Verstoß.`);
   } else {
     lines.push(
-      `## ❌ Accessibility-Check: ${failures.length} von ${stories.length} Stories mit Verstoß`,
+      `## ❌ Accessibility-Check: ${failures.length} von ${stories.length} Stories mit Verstoß` +
+        (crashed.length > 0 ? `, ${crashed.length} Story-Check(s) abgebrochen` : ''),
       ''
     );
     for (const { story, violations } of failures) {
@@ -184,18 +197,36 @@ async function main() {
         ''
       );
     }
+    for (const { story, error } of crashed) {
+      lines.push(
+        `### ⚠️ ${story.title} — ${story.name}: Check konnte nicht durchgeführt werden`,
+        '',
+        `Fehler: \`${error.message}\``,
+        '',
+        '---',
+        ''
+      );
+    }
   }
   await writeFile('a11y-summary.md', lines.join('\n'));
 
+  const exitCode = failures.length > 0 || crashed.length > 0 ? 1 : 0;
   if (exitCode !== 0) {
-    console.log('\nAccessibility violations found — see above and a11y-summary.md.');
+    console.log('\nAccessibility violations or crashed checks found — see above and a11y-summary.md.');
   } else {
     console.log('\nNo accessibility violations found.');
   }
   process.exit(exitCode);
 }
 
-main().catch((error) => {
+main().catch(async (error) => {
+  // Only unrecoverable setup failures land here now (missing storybook-static,
+  // the local static server never coming up, etc.) — per-story failures are
+  // caught above and folded into the report instead of crashing the process.
   console.error(error);
+  await writeFile(
+    'a11y-summary.md',
+    `## ❌ Accessibility-Check konnte nicht ausgeführt werden\n\nFehler: \`${error.message}\`\n`
+  ).catch(() => {});
   process.exit(1);
 });
