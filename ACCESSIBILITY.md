@@ -8,7 +8,7 @@
 
 - **Fund:** `color.background.primary.default` (`colors.blue.500`, `#3b82f6`) mit weißem Text ergab ein Kontrastverhältnis von 3,67:1 — WCAG AA verlangt bei 14px normal 4,5:1.
 - **Fix:** `color.background.primary.default` referenziert jetzt `colors.blue.600` (`#2563eb`, bereits als Primitive vorhanden, vorher nur für den Hover-Zustand genutzt) — Kontrastverhältnis jetzt 5,17:1. Kein neuer, erfundener Farbwert — Wiederverwendung eines bestehenden, bereits geprüften Tokens.
-- **Bekannter Nebeneffekt:** `color.background.primary.hover` referenziert ebenfalls `colors.blue.600` — Default und Hover sind dadurch aktuell farblich identisch, der Hover-Zustand hat keine sichtbare Farbänderung mehr. Nicht behoben (würde einen neuen Farbwert für Hover erfordern) — offene Folgefrage, siehe unten.
+- **Nebeneffekt behoben (2026-08-26, Nachtrag):** `color.background.primary.hover` referenzierte danach ebenfalls `colors.blue.600` — Default und Hover waren kurzzeitig farblich identisch. Fix: neue Primitive `colors.blue.700` (`#1d4ed8`, Tailwinds offizieller Wert — dieselbe Quelle wie 500/600, kein erfundener Ton) für Hover, Kontrast gegen Weiß 6,7:1.
 - **Verifiziert:** live über `@storybook/addon-a11y`, Primary-Story: 0 Violations, 6 Passes (vorher: 1 Violation).
 
 ## 2026-08-26 — Destructive-Button: Farbkontrast (offen, nicht behoben)
@@ -19,4 +19,3 @@
 ## Offene Folgefragen
 
 - Destructive-Kontrast: eigenes Token anlegen oder shadcn-Wert direkt anpassen?
-- Primary-Hover: neuer, dritter Blauton nötig (z. B. `colors.blue.700`), um Default und Hover wieder visuell zu unterscheiden?

@@ -5,9 +5,10 @@
 :root {
   --colors-blue-500: #3b82f6;
   --colors-blue-600: #2563eb;
+  --colors-blue-700: #1d4ed8;
   --colors-white: #ffffff;
   --color-background-primary-default: #2563eb;
-  --color-background-primary-hover: #2563eb;
+  --color-background-primary-hover: #1d4ed8;
   --color-text-primary-default: #ffffff;
   --color-border-primary-default: #3b82f6;
   --space-component-sm: 8px;
