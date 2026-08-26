@@ -17,7 +17,10 @@
   --space-component-md: 16px;
   --radii-md: 6px;
   --font-size-md: 14px;
+  --font-size-xl: 24px;
   --font-weight-medium: 500;
+  --font-weight-bold: 700;
   --font-line-height-md: 20px;
+  --font-line-height-xl: 32px;
   --font-family-base: 'Geist Variable';
 }

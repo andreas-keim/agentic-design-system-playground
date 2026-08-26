@@ -199,10 +199,31 @@
           }
         },
         {
+          "name": "primitive/font/lineHeight/xl",
+          "type": "FLOAT",
+          "values": {
+            "Value": 32
+          }
+        },
+        {
           "name": "primitive/font/size/md",
           "type": "FLOAT",
           "values": {
             "Value": 14
+          }
+        },
+        {
+          "name": "primitive/font/size/xl",
+          "type": "FLOAT",
+          "values": {
+            "Value": 24
+          }
+        },
+        {
+          "name": "primitive/font/weight/bold",
+          "type": "FLOAT",
+          "values": {
+            "Value": 700
           }
         },
         {
