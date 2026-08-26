@@ -1,6 +1,6 @@
 {
   "meta": {
-    "extractedAt": "2026-08-25",
+    "extractedAt": "2026-08-26",
     "file": "agentic-design-system-playground",
     "scope": {
       "pages": null,
@@ -65,7 +65,7 @@
                     "topRightRadius": "Primitives:primitive/radius/md"
                   },
                   "fills": [
-                    "#3b82f6"
+                    "#2563eb"
                   ],
                   "gap": 8,
                   "h": 36,
@@ -178,6 +178,13 @@
           }
         },
         {
+          "name": "primitive/blue/700",
+          "type": "COLOR",
+          "values": {
+            "Value": "#1d4ed8"
+          }
+        },
+        {
           "name": "primitive/font/family/base",
           "type": "STRING",
           "values": {
@@ -220,6 +227,13 @@
           }
         },
         {
+          "name": "primitive/red/700",
+          "type": "COLOR",
+          "values": {
+            "Value": "#b91c1c"
+          }
+        },
+        {
           "name": "primitive/space/component/md",
           "type": "FLOAT",
           "values": {
@@ -253,7 +267,7 @@
           "type": "COLOR",
           "values": {
             "Value": {
-              "alias": "primitive/blue/500",
+              "alias": "primitive/blue/600",
               "collection": "Primitives"
             }
           }
@@ -263,7 +277,7 @@
           "type": "COLOR",
           "values": {
             "Value": {
-              "alias": "primitive/blue/600",
+              "alias": "primitive/blue/700",
               "collection": "Primitives"
             }
           }
@@ -274,6 +288,16 @@
           "values": {
             "Value": {
               "alias": "primitive/blue/500",
+              "collection": "Primitives"
+            }
+          }
+        },
+        {
+          "name": "semantic/color/text/destructive/default",
+          "type": "COLOR",
+          "values": {
+            "Value": {
+              "alias": "primitive/red/700",
               "collection": "Primitives"
             }
           }

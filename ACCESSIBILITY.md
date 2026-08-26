@@ -39,9 +39,9 @@ Die Issue-Variante bildet trotzdem den vollständigen Loop ab — erkennen → m
 - **Entscheidung (2026-08-26):** eigenes Token angelegt, nicht shadcns `--destructive` global geändert — Begründung: `--destructive` treibt auch Ränder/Ringe an anderen Stellen (`aria-invalid:border-destructive`, Fokus-Ringe), die eine andere Kontrastanforderung haben (3:1 statt 4,5:1 für Text); eine globale Änderung hätte mehr als das eigentliche Problem angefasst und wäre zudem am getönten Hintergrund gescheitert, der proportional mitgewandert wäre.
 - **Fix:** neue Primitive `colors.red.700` (`#b91c1c`, Tailwinds offizieller v3-Wert, dieselbe Namenskonvention wie `colors.blue.*`) → neues Semantic-Token `color.text.destructive.default`, nur für die Textfarbe der Destructive-Button-Variante gebunden (`text-[var(--color-text-destructive-default)]`), Hintergrund unverändert. Kontrastverhältnis jetzt 5,4:1 gegen den getönten Hintergrund — live verifiziert (`getComputedStyle` im Browser: `rgb(185, 28, 28)`).
 - **Dark Mode bewusst unverändert** (`dark:text-destructive` explizit erhalten): Dieses Token-System hat noch keinen Dark-Mode-Support (siehe Step 1), Primary wurde aus demselben Grund nur für Light Mode korrigiert. Kein Dark-Mode-Audit vorhanden, also auch keine Aussage über dessen Kontrast.
-- **Figma noch nicht nachsynchronisiert** — bräuchte einen manuellen Figma-Sync-Lauf (Safe-Mode-Plugin muss laufen), analog zum offen vorgemerkten `blue.500`→`blue.600`-Sync-Rückstand aus Step 6.
 - **Verifiziert:** `npm run test:a11y` — 0 Violations über alle 7 Storys (vorher: 1 Violation bei Destructive).
+- **Figma nachsynchronisiert (2026-08-26, Nachtrag):** `npm run tokens:sync:figma` gelaufen (Safe-Mode-Plugin) — `primitive/blue/700` und `primitive/red/700` neu angelegt, `semantic/color/background/primary/default`+`hover` sowie das neue `semantic/color/text/destructive/default` korrekt gebunden. `figma-cli check` danach grün (`design.json`-Snapshot aktualisiert).
 
 ## Offene Folgefragen
 
-- Figma-Sync für den Destructive-Text-Fix nachziehen (Safe-Mode-Plugin-Lauf).
+- Keine offenen — Figma-Sync ist nachgezogen.
