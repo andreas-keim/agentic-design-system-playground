@@ -29,3 +29,5 @@ Agentic, KI-lesbares Design System: Tokens und Komponenten, die ein AI-Agent kor
 Vor dem Anlegen/Ändern dieser Dateien: jeden Token-Namen gegen `src/tokens/tokens.json`/`src/styles/tokens.css` prüfen, nicht aus der Erinnerung übernehmen.
 
 **Negativregeln:** [`NEVER.md`](./NEVER.md) listet explizite Don'ts, jede aus einem tatsächlich in diesem Projekt gefundenen Bug abgeleitet — vor jedem Push gegenlesen (Teil des `.claude/skills/wrap-up`-Ablaufs).
+
+**Accessibility-Audit:** [`ACCESSIBILITY.md`](./ACCESSIBILITY.md) protokolliert über `@storybook/addon-a11y` gefundene Kontrast-/A11y-Verstöße, behoben und offen. Nach jeder Komponenten-/Token-Änderung mit sichtbarem Farbeinfluss: Accessibility-Tab in Storybook prüfen, Funde dort eintragen.
