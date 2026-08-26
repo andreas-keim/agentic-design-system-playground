@@ -11,7 +11,7 @@ Zwei Stolperfallen beim Bau des Skripts, beide primärquellenbasiert gefunden, n
 - `networkidle` allein ist kein verlässliches "Story fertig gerendert"-Signal — `#storybook-root` bleibt bis dahin `hidden` und leer. Fix: explizit auf befüllten, sichtbaren Root warten.
 - Zwei zusätzliche axe-Regeln deaktiviert (`landmark-one-main`, `page-has-heading-one`) — Seitenstruktur-Regeln, die für eine isolierte Komponente strukturell nie erfüllbar sind, dieselbe Logik wie Storybooks eigener `region`-Ausschluss.
 
-**Bekannter Zustand:** CI zeigt aktuell **rot** — der offene Destructive-Kontrast-Fund unten ist ein echter, noch nicht behobener Verstoß, keine Fehlkonfiguration des Gates.
+**Bekannter Zustand (2026-08-26, Nachtrag):** CI ist wieder **grün** — der Destructive-Kontrast-Fund unten ist behoben, `npm run test:a11y` zeigt 0 Violations über alle 7 Storys.
 
 ## Entscheidung: Issue-Automatisierung statt Agent-Auto-Fix (2026-08-26)
 
@@ -32,11 +32,16 @@ Die Issue-Variante bildet trotzdem den vollständigen Loop ab — erkennen → m
 - **Nebeneffekt behoben (2026-08-26, Nachtrag):** `color.background.primary.hover` referenzierte danach ebenfalls `colors.blue.600` — Default und Hover waren kurzzeitig farblich identisch. Fix: neue Primitive `colors.blue.700` (`#1d4ed8`, Tailwinds offizieller Wert — dieselbe Quelle wie 500/600, kein erfundener Ton) für Hover, Kontrast gegen Weiß 6,7:1.
 - **Verifiziert:** live über `@storybook/addon-a11y`, Primary-Story: 0 Violations, 6 Passes (vorher: 1 Violation).
 
-## 2026-08-26 — Destructive-Button: Farbkontrast (offen, nicht behoben)
+## 2026-08-26 — Destructive-Button: Farbkontrast
 
-- **Fund:** `variant="destructive"` nutzt ausschließlich shadcns eigene `--destructive`-Variable (`oklch(0.577 0.245 27.325)`, kompiliert zu `#e7000b` auf `#fde6e7`-Hintergrund) — **kein eigenes Token in `tokens.json`**, siehe `button.meta.json`. Kontrastverhältnis 4,0:1, WCAG AA verlangt 4,5:1.
-- **Bewusst nicht gefixt:** Anders als beim Primary-Button gibt es hier keinen bereits vorhandenen, geprüften Alternativ-Wert in unserem eigenen Token-System — ein Fix würde entweder shadcns eigenen Default-Wert ändern (nicht unser Wert, keine eigene Quelle dafür) oder ein neues, eigenes `color.background.destructive`-Token anlegen (von Step 3 bewusst offengelassen). Beides eine echte Design-Entscheidung, kein reiner Bugfix.
+- **Fund:** `variant="destructive"` nutzt ausschließlich shadcns eigene `--destructive`-Variable (`oklch(0.577 0.245 27.325)`, kompiliert zu `#e7000b` auf `#fde5e7`-Hintergrund) — **kein eigenes Token in `tokens.json`**, siehe `button.meta.json`. Automatisiert per `npm run test:a11y` gemessen: Kontrastverhältnis 3,98:1, WCAG AA verlangt 4,5:1.
+- **Ursprünglich bewusst nicht gefixt:** Anders als beim Primary-Button gab es hier keinen bereits vorhandenen, geprüften Alternativ-Wert in unserem eigenen Token-System — ein Fix würde entweder shadcns eigenen Default-Wert ändern (nicht unser Wert, keine eigene Quelle dafür) oder ein neues, eigenes Token anlegen. Beides eine echte Design-Entscheidung, kein reiner Bugfix.
+- **Entscheidung (2026-08-26):** eigenes Token angelegt, nicht shadcns `--destructive` global geändert — Begründung: `--destructive` treibt auch Ränder/Ringe an anderen Stellen (`aria-invalid:border-destructive`, Fokus-Ringe), die eine andere Kontrastanforderung haben (3:1 statt 4,5:1 für Text); eine globale Änderung hätte mehr als das eigentliche Problem angefasst und wäre zudem am getönten Hintergrund gescheitert, der proportional mitgewandert wäre.
+- **Fix:** neue Primitive `colors.red.700` (`#b91c1c`, Tailwinds offizieller v3-Wert, dieselbe Namenskonvention wie `colors.blue.*`) → neues Semantic-Token `color.text.destructive.default`, nur für die Textfarbe der Destructive-Button-Variante gebunden (`text-[var(--color-text-destructive-default)]`), Hintergrund unverändert. Kontrastverhältnis jetzt 5,4:1 gegen den getönten Hintergrund — live verifiziert (`getComputedStyle` im Browser: `rgb(185, 28, 28)`).
+- **Dark Mode bewusst unverändert** (`dark:text-destructive` explizit erhalten): Dieses Token-System hat noch keinen Dark-Mode-Support (siehe Step 1), Primary wurde aus demselben Grund nur für Light Mode korrigiert. Kein Dark-Mode-Audit vorhanden, also auch keine Aussage über dessen Kontrast.
+- **Figma noch nicht nachsynchronisiert** — bräuchte einen manuellen Figma-Sync-Lauf (Safe-Mode-Plugin muss laufen), analog zum offen vorgemerkten `blue.500`→`blue.600`-Sync-Rückstand aus Step 6.
+- **Verifiziert:** `npm run test:a11y` — 0 Violations über alle 7 Storys (vorher: 1 Violation bei Destructive).
 
 ## Offene Folgefragen
 
-- Destructive-Kontrast: eigenes Token anlegen oder shadcn-Wert direkt anpassen?
+- Figma-Sync für den Destructive-Text-Fix nachziehen (Safe-Mode-Plugin-Lauf).

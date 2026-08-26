@@ -6,10 +6,12 @@
   --colors-blue-500: #3b82f6;
   --colors-blue-600: #2563eb;
   --colors-blue-700: #1d4ed8;
+  --colors-red-700: #b91c1c;
   --colors-white: #ffffff;
   --color-background-primary-default: #2563eb;
   --color-background-primary-hover: #1d4ed8;
   --color-text-primary-default: #ffffff;
+  --color-text-destructive-default: #b91c1c;
   --color-border-primary-default: #3b82f6;
   --space-component-sm: 8px;
   --space-component-md: 16px;
