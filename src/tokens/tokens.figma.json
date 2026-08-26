@@ -13,6 +13,13 @@
     "scopes": [],
     "codeSyntax": "var(--colors-blue-600)"
   },
+  "colors.blue.700": {
+    "name": "primitive/blue/700",
+    "type": "COLOR",
+    "resolvedValue": "#1d4ed8",
+    "scopes": [],
+    "codeSyntax": "var(--colors-blue-700)"
+  },
   "colors.white": {
     "name": "primitive/white",
     "type": "COLOR",
@@ -34,13 +41,13 @@
   "color.background.primary.hover": {
     "name": "semantic/color/background/primary/hover",
     "type": "COLOR",
-    "resolvedValue": "#2563eb",
+    "resolvedValue": "#1d4ed8",
     "scopes": [
       "FRAME_FILL",
       "SHAPE_FILL"
     ],
     "codeSyntax": "var(--color-background-primary-hover)",
-    "aliasOf": "primitive/blue/600"
+    "aliasOf": "primitive/blue/700"
   },
   "color.text.primary.default": {
     "name": "semantic/color/text/primary/default",
