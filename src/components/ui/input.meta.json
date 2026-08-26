@@ -1,0 +1,44 @@
+{
+  "id": "input",
+  "name": "Input",
+  "importPath": "@/components/ui/input",
+  "tokensSourceFile": "src/tokens/tokens.json",
+  "base": {
+    "note": "Genau eine Größe, keine Varianten -- anders als Button. Höhe/Rhythmus bewusst an Button.default angeglichen (gleiche px/py-Tokens), damit beide in einem Formular dieselbe Zeilenhöhe haben.",
+    "tokens": [
+      "--space-component-md",
+      "--space-component-sm",
+      "--font-size-md",
+      "--font-line-height-md"
+    ],
+    "radius": {
+      "cssVar": "--radius-lg",
+      "note": "Gleiche Kette wie Button, siehe button.meta.json base.radius."
+    }
+  },
+  "states": [
+    {
+      "name": "default",
+      "tokens": [],
+      "note": "Rand (--border/--input) und Fokus-Ring (--ring) bleiben shadcns eigene, neutrale Variablen, ungetokened -- gleiches Muster wie Button.outline/secondary. Kein eigenes Border-Token, weil ein neutraler Formular-Rand keine Markenfarbe transportiert."
+    },
+    {
+      "name": "disabled",
+      "tokens": [],
+      "note": "Ausschließlich shadcn-eigene Variablen (--input/50, opacity-50)."
+    },
+    {
+      "name": "invalid (aria-invalid)",
+      "tokens": [],
+      "note": "Teilt sich exakt dieselbe shadcn --destructive-Konvention wie Button (aria-invalid:border-destructive, ring-destructive/20) -- keine eigene Fehlerfarbe, kein eigenes Token. Nicht verwechseln mit color.text.destructive.default (Button-Text-Fix) -- das ist eine andere Anwendung (Text auf getöntem Hintergrund, nicht Rand/Ring)."
+    }
+  ],
+  "props": [
+    { "name": "type", "type": "HTMLInputTypeAttribute", "description": "Wird 1:1 durchgereicht (z.B. 'email', 'password', 'text')." },
+    { "name": "className", "type": "string", "description": "Wird über cn() mit den Basis-Klassen gemerged." }
+  ],
+  "passthrough": {
+    "component": "@base-ui/react/input",
+    "note": "Alle weiteren Props werden unverändert an InputPrimitive durchgereicht (Base UI)."
+  }
+}
