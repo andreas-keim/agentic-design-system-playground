@@ -20,7 +20,7 @@ Agentic, KI-lesbares Design System: Tokens und Komponenten, die ein AI-Agent kor
 
 **Intent-Metadaten:** Rollen-/Farb-Tokens mit echtem Verwechslungsrisiko tragen zusätzlich `useFor`/`avoidFor` als kurzes Freitextfeld im Token-Objekt (nicht im Namen). Vor Verwendung eines solchen Tokens gegen `useFor`/`avoidFor` prüfen. Nicht bei jedem Spacing-/Radius-Token nötig — nur wo Verwechslung plausibel ist (primär Farb-/Rollen-Tokens).
 
-**Komponenten:** Basis ist shadcn/ui (headless/unstyled), nicht from-scratch gebaut. Code wird von Andreas selbst geschrieben, der Agent ist Pair-Programming-Partner und Reviewer, nicht alleiniger Autor.
+**Komponenten:** Basis ist shadcn/ui (headless/unstyled), nicht from-scratch gebaut. Code wird vom Agenten geschrieben (seit 2026-08-24 Standard, revidiert wegen Zeitdrucks in der parallelen Jobsuche) — Andreas lernt durch anschließende Code-Erklärung, nicht durch Selbstschreiben. Vor größeren Merges: Code-Review-Durchlauf statt laufender Pair-Programming-Kontrolle.
 
 **Komponenten-Metadaten:** Jede Komponente bekommt zwei co-located Dateien (Vorbild: GitHub Primer, `ComponentName.docs.json` — bewusst nicht eine einzige Datei, siehe Spotify-Encore-Lektion zu monolithischen Component-Definitionen im Vault-Playbook):
 - `ComponentName.meta.json` — Struktur: Props, Varianten/Sizes, tatsächlich gebundene Tokens (nur echte `var(--...)`-Referenzen aus dem Code, nichts erfinden). Von Hand gepflegt, kein Generator.
