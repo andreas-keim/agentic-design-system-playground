@@ -45,7 +45,7 @@
     {
       "name": "destructive",
       "tokens": ["--color-text-destructive-default"],
-      "note": "Hintergrund (bg-destructive/10, hover:bg-destructive/20) bleibt shadcns eigene --destructive-Variable, ungetokened. Textfarbe seit dem Accessibility-Fix (2026-08-26) an ein eigenes Token gebunden: shadcns --destructive lag als Text auf dem getönten Hintergrund bei 3.98:1 statt WCAG-AA-4.5:1 (siehe ACCESSIBILITY.md). color.text.destructive.default (colors.red.700, #b91c1c) löst das auf 5.4:1, nur in Light Mode (dark:text-destructive bleibt bewusst unverändert — kein Dark-Mode-Support in diesem Token-System, siehe Step 1). Figma noch nicht nachsynchronisiert (Safe-Mode-Plugin-Lauf nötig, offen)."
+      "note": "Hintergrund (bg-destructive/10, hover:bg-destructive/20) bleibt shadcns eigene --destructive-Variable, ungetokened. Textfarbe seit dem Accessibility-Fix (2026-08-26) an ein eigenes Token gebunden: shadcns --destructive lag als Text auf dem getönten Hintergrund bei 3.98:1 statt WCAG-AA-4.5:1 (siehe ACCESSIBILITY.md). color.text.destructive.default (colors.red.700, #b91c1c) löst das auf 5.4:1, nur in Light Mode (dark:text-destructive bleibt bewusst unverändert — kein Dark-Mode-Support in diesem Token-System, siehe Step 1). Figma nachsynchronisiert (2026-08-26), figma-cli check gruen."
     },
     {
       "name": "link",
