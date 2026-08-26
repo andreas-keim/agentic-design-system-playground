@@ -24,13 +24,23 @@ jobs:
 
       - run: npx playwright install --with-deps chromium
 
+      - name: Build Storybook
+        run: npm run build-storybook
+
       - name: Run accessibility gate (Playwright + axe-core, modeled on GitHub Primer's aat-reports.yml)
         id: a11y_check
         # set -o pipefail: without it, this step's exit code is tee's (always 0),
-        # not npm's — the pipe would silently report "success" on real violations.
+        # not node's — the pipe would silently report "success" on real violations.
+        # NO_COLOR/FORCE_COLOR=0: keeps a11y-report.txt free of ANSI escape codes —
+        # they render as garbage once pasted into a plain-text GitHub issue body.
+        # Only this script's own output is captured, not the (much noisier,
+        # colorized) Storybook build log above.
+        env:
+          NO_COLOR: '1'
+          FORCE_COLOR: '0'
         run: |
           set -o pipefail
-          npm run test:a11y 2>&1 | tee a11y-report.txt
+          node scripts/check-accessibility.mjs 2>&1 | tee a11y-report.txt
         continue-on-error: true
 
       # File/update a GitHub Issue on failure instead of triggering an agent to
