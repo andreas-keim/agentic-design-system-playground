@@ -26,6 +26,11 @@ const PORT = 6007;
 const STATIC_DIR = 'storybook-static';
 const SCREENSHOT_DIR = 'a11y-screenshots';
 const SCREENSHOT_BASE_URL = process.env.SCREENSHOT_BASE_URL ?? null;
+// Each story gets its own page, but pages share one browser process — running
+// too many at once would overwhelm a CI runner's CPU/memory for no benefit
+// (the wait is network/render time, not CPU time, so a handful in flight is
+// enough to hide that latency without fighting each other for resources).
+const CONCURRENCY = 4;
 
 function waitForServer(url, timeoutMs = 20000) {
   const start = Date.now();
@@ -53,6 +58,73 @@ function severityLabel(impact) {
 
 function screenshotRef(storyId) {
   return SCREENSHOT_BASE_URL ? `${SCREENSHOT_BASE_URL}/${storyId}.png` : `${SCREENSHOT_DIR}/${storyId}.png`;
+}
+
+// Checks one story in its own page. Never throws — a story that fails to
+// render or crashes axe is reported as a `crashed` result instead of aborting
+// the whole run (see NEVER.md: one story's failure must not take down every
+// other story's check).
+async function checkStory(context, story) {
+  const page = await context.newPage();
+  try {
+    const url = `http://localhost:${PORT}/iframe.html?id=${story.id}&viewMode=story`;
+    await page.goto(url, { waitUntil: 'domcontentloaded' });
+    // #storybook-root stays `hidden` with no children until the story has
+    // actually rendered — domcontentloaded alone is not a reliable ready
+    // signal, so wait for that explicitly instead of the slower and, for
+    // this purpose, equally unreliable 'networkidle'.
+    await page.waitForFunction(
+      () => {
+        const root = document.querySelector('#storybook-root');
+        return root && !root.hidden && root.childElementCount > 0;
+      },
+      { timeout: 10000 }
+    );
+
+    const results = await new AxeBuilder({ page })
+      .disableRules([
+        'region', // matches Storybook addon-a11y's own default (region rule doesn't apply to isolated story fragments)
+        'landmark-one-main', // page-structure rule — a single component can never have a <main>, that's the page's job, not the component's
+        'page-has-heading-one', // same reasoning — no isolated component fragment has (or should have) an <h1>
+      ])
+      .analyze();
+
+    if (results.violations.length > 0) {
+      const screenshotPath = `${SCREENSHOT_DIR}/${story.id}.png`;
+      // Screenshot just the rendered component, not the whole (mostly blank)
+      // page or its full-width root container — a tight crop of the actual
+      // element makes the problem visible at a glance instead of buried in
+      // whitespace.
+      const target = page.locator('#storybook-root > *').first();
+      if (await target.count() > 0) {
+        await target.screenshot({ path: screenshotPath });
+      } else {
+        await page.screenshot({ path: screenshotPath });
+      }
+      return { story, status: 'violation', violations: results.violations };
+    }
+    return { story, status: 'pass' };
+  } catch (error) {
+    return { story, status: 'crash', error };
+  } finally {
+    await page.close();
+  }
+}
+
+// Runs `items` through `worker` with at most `limit` in flight at once —
+// stories are network/render-bound, not CPU-bound, so a small worker pool
+// hides their latency instead of paying it one story at a time.
+async function runWithConcurrency(items, limit, worker) {
+  const results = new Array(items.length);
+  let next = 0;
+  async function runNext() {
+    const i = next++;
+    if (i >= items.length) return;
+    results[i] = await worker(items[i]);
+    await runNext();
+  }
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, runNext));
+  return results;
 }
 
 async function main() {
@@ -90,67 +162,33 @@ async function main() {
     await waitForServer(`http://localhost:${PORT}`);
 
     browser = await chromium.launch();
+    // One shared context, one page per story — AxeBuilder needs an explicit
+    // context (a bare browser.newPage() implicitly creates a throwaway one
+    // it can't attach to; verified live, see the commit this comment landed
+    // in), and reusing one context across concurrent pages is exactly what
+    // Playwright's model expects for parallel checks in a single browser.
     const context = await browser.newContext();
-    const page = await context.newPage();
 
-    console.log(`Checking ${stories.length} stories...\n`);
+    console.log(`Checking ${stories.length} stories (up to ${CONCURRENCY} at a time)...\n`);
 
-    for (const story of stories) {
-      // One story's failure (render timeout, navigation error, axe crash) must
-      // not abort the whole run — it would skip every remaining story, leak
-      // the browser, and (previously) skip writing a11y-summary.md entirely,
-      // leaving the CI issue-filing step with no report to read.
-      try {
-        const url = `http://localhost:${PORT}/iframe.html?id=${story.id}&viewMode=story`;
-        await page.goto(url, { waitUntil: 'domcontentloaded' });
-        // #storybook-root stays `hidden` with no children until the story has
-        // actually rendered — domcontentloaded alone is not a reliable ready
-        // signal, so wait for that explicitly instead of the slower and, for
-        // this purpose, equally unreliable 'networkidle'.
-        await page.waitForFunction(
-          () => {
-            const root = document.querySelector('#storybook-root');
-            return root && !root.hidden && root.childElementCount > 0;
-          },
-          { timeout: 10000 }
-        );
+    const results = await runWithConcurrency(stories, CONCURRENCY, (story) => checkStory(context, story));
 
-        const results = await new AxeBuilder({ page })
-          .disableRules([
-            'region', // matches Storybook addon-a11y's own default (region rule doesn't apply to isolated story fragments)
-            'landmark-one-main', // page-structure rule — a single component can never have a <main>, that's the page's job, not the component's
-            'page-has-heading-one', // same reasoning — no isolated component fragment has (or should have) an <h1>
-          ])
-          .analyze();
-
-        if (results.violations.length > 0) {
-          const screenshotPath = `${SCREENSHOT_DIR}/${story.id}.png`;
-          // Screenshot just the rendered component, not the whole (mostly blank)
-          // page or its full-width root container — a tight crop of the actual
-          // element makes the problem visible at a glance instead of buried in
-          // whitespace.
-          const target = page.locator('#storybook-root > *').first();
-          if (await target.count() > 0) {
-            await target.screenshot({ path: screenshotPath });
-          } else {
-            await page.screenshot({ path: screenshotPath });
+    for (const result of results) {
+      const { story } = result;
+      if (result.status === 'violation') {
+        console.log(`✖ ${story.title} — ${story.name} (${story.id})`);
+        for (const violation of result.violations) {
+          console.log(`  [${violation.impact}] ${violation.id}: ${violation.description}`);
+          for (const node of violation.nodes) {
+            console.log(`    ${node.failureSummary}`);
           }
-
-          console.log(`✖ ${story.title} — ${story.name} (${story.id})`);
-          for (const violation of results.violations) {
-            console.log(`  [${violation.impact}] ${violation.id}: ${violation.description}`);
-            for (const node of violation.nodes) {
-              console.log(`    ${node.failureSummary}`);
-            }
-          }
-
-          failures.push({ story, violations: results.violations });
-        } else {
-          console.log(`✔ ${story.title} — ${story.name}`);
         }
-      } catch (error) {
-        console.log(`✖ ${story.title} — ${story.name} (${story.id}) — check itself crashed: ${error.message}`);
-        crashed.push({ story, error });
+        failures.push({ story, violations: result.violations });
+      } else if (result.status === 'crash') {
+        console.log(`✖ ${story.title} — ${story.name} (${story.id}) — check itself crashed: ${result.error.message}`);
+        crashed.push({ story, error: result.error });
+      } else {
+        console.log(`✔ ${story.title} — ${story.name}`);
       }
     }
   } finally {

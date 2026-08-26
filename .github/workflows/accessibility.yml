@@ -65,6 +65,11 @@ jobs:
           # fetch the latest tip and recommit on top of it. A few retries turn
           # a same-minute race into a brief delay instead of a silently lost
           # screenshot upload.
+          # Keep only the most recent KEEP_RUNS run-<id>/ folders — otherwise
+          # this branch (and every future `git fetch` of it) grows forever,
+          # one PNG folder per failing run, with nothing ever removed.
+          KEEP_RUNS=30
+
           attempt=1
           max_attempts=5
           while [ "$attempt" -le "$max_attempts" ]; do
@@ -76,8 +81,15 @@ jobs:
             rm -rf "run-${{ github.run_id }}"
             mkdir -p "run-${{ github.run_id }}"
             cp "$GITHUB_WORKSPACE"/a11y-screenshots/*.png "run-${{ github.run_id }}/"
-            git add .
-            git -c user.name="github-actions" -c user.email="github-actions@github.com" commit -q -m "a11y screenshots for run ${{ github.run_id }}"
+
+            ls -d run-*/ 2>/dev/null \
+              | sed -e 's#^run-##' -e 's#/$##' \
+              | sort -n \
+              | head -n "-$KEEP_RUNS" \
+              | while read -r old_run_id; do rm -rf "run-$old_run_id"; done
+
+            git add -A
+            git -c user.name="github-actions" -c user.email="github-actions@github.com" commit -q -m "a11y screenshots for run ${{ github.run_id }} (prune old runs beyond $KEEP_RUNS)"
             if git push -q origin a11y-screenshots; then
               exit 0
             fi
