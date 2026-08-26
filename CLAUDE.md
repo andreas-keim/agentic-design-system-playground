@@ -30,4 +30,4 @@ Vor dem Anlegen/Ändern dieser Dateien: jeden Token-Namen gegen `src/tokens/toke
 
 **Negativregeln:** [`NEVER.md`](./NEVER.md) listet explizite Don'ts, jede aus einem tatsächlich in diesem Projekt gefundenen Bug abgeleitet — vor jedem Push gegenlesen (Teil des `.claude/skills/wrap-up`-Ablaufs).
 
-**Accessibility-Audit:** [`ACCESSIBILITY.md`](./ACCESSIBILITY.md) protokolliert über `@storybook/addon-a11y` gefundene Kontrast-/A11y-Verstöße, behoben und offen. Nach jeder Komponenten-/Token-Änderung mit sichtbarem Farbeinfluss: Accessibility-Tab in Storybook prüfen, Funde dort eintragen.
+**Accessibility-Audit:** [`ACCESSIBILITY.md`](./ACCESSIBILITY.md) protokolliert über `@storybook/addon-a11y` gefundene Kontrast-/A11y-Verstöße, behoben und offen. Nach jeder Komponenten-/Token-Änderung mit sichtbarem Farbeinfluss: Accessibility-Tab in Storybook prüfen, Funde dort eintragen. **Automatisiert seit Step 6c:** `npm run test:a11y` (Playwright + axe-core gegen die gebaute Storybook-Instanz, umgeht den kaputten `addon-vitest`-Pfad) läuft auch automatisch in CI (`.github/workflows/accessibility.yml`) bei jedem Push/PR.
