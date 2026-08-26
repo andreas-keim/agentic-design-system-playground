@@ -20,6 +20,13 @@
     "scopes": [],
     "codeSyntax": "var(--colors-blue-700)"
   },
+  "colors.red.700": {
+    "name": "primitive/red/700",
+    "type": "COLOR",
+    "resolvedValue": "#b91c1c",
+    "scopes": [],
+    "codeSyntax": "var(--colors-red-700)"
+  },
   "colors.white": {
     "name": "primitive/white",
     "type": "COLOR",
@@ -58,6 +65,16 @@
     ],
     "codeSyntax": "var(--color-text-primary-default)",
     "aliasOf": "primitive/white"
+  },
+  "color.text.destructive.default": {
+    "name": "semantic/color/text/destructive/default",
+    "type": "COLOR",
+    "resolvedValue": "#b91c1c",
+    "scopes": [
+      "TEXT_FILL"
+    ],
+    "codeSyntax": "var(--color-text-destructive-default)",
+    "aliasOf": "primitive/red/700"
   },
   "color.border.primary.default": {
     "name": "semantic/color/border/primary/default",
