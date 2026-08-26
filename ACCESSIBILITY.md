@@ -13,6 +13,16 @@ Zwei Stolperfallen beim Bau des Skripts, beide primärquellenbasiert gefunden, n
 
 **Bekannter Zustand:** CI zeigt aktuell **rot** — der offene Destructive-Kontrast-Fund unten ist ein echter, noch nicht behobener Verstoß, keine Fehlkonfiguration des Gates.
 
+## Entscheidung: Issue-Automatisierung statt Agent-Auto-Fix (2026-08-26)
+
+Bei einem Fehlschlag legt der Workflow automatisch ein GitHub Issue an (Label `a11y-violation`) bzw. kommentiert ein bestehendes offenes Issue nach — reines Scripting über den eingebauten, kostenlosen `GITHUB_TOKEN`, kein LLM-Aufruf.
+
+**Bewusst nicht umgesetzt:** ein Agent, der bei einem Fehlschlag automatisch live aufgerufen wird, selbst einen Fix-Commit schreibt und einen PR öffnet. Das wäre technisch die konsequente Fortsetzung von Stufe 1 (automatisches Erkennen) zu "automatisch fixen mit Freigabe" gewesen — bewusst dagegen entschieden, aus zwei Gründen:
+1. **Kosten:** ein echter Agent-Aufruf braucht einen API-Key und verursacht bei jedem Fehlschlag echte Kosten — explizit nicht gewollt für dieses Lernprojekt.
+2. **Sicherheitsfläche:** ein Agent mit Schreibrechten, der automatisiert PRs öffnet, ist eine andere Kategorie als alles bisher in diesem Solo-Repo Gebaute.
+
+Die Issue-Variante bildet trotzdem den vollständigen Loop ab — erkennen → melden → (manuell oder durch eine bewusst gestartete Claude-Code-Session) fixen → freigeben —, nur dass der letzte Schritt bewusst außerhalb der automatisierten Pipeline bleibt. Deckt sich mit dem, was auch bei Primer real gefunden wurde: selbst deren "Safe Outputs"-Mechanismus braucht einen manuellen Freigabe-/Auslöseschritt, kein System im gesamten Vergleich fixt sich vollautomatisch selbst.
+
 **Wichtiger Kontext-Hinweis:** Dieses Dokument entstand in einem Solo-Lernprojekt — Farbanpassungen wurden hier direkt vorgenommen. **In einem echten Team-/Kundenprojekt gehört eine Kontrast-Korrektur nicht in eine stille Code-Änderung**, sondern zurück an den Brand-/Design-Owner oder die für Barrierefreiheit verantwortliche Stelle (CI-Verantwortlicher, Kunde) — eine Markenfarbe zu verändern ist eine Entscheidung, die über reine Technik hinausgeht.
 
 ## 2026-08-26 — Primary-Button: Farbkontrast
