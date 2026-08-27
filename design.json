@@ -1,6 +1,6 @@
 {
   "meta": {
-    "extractedAt": "2026-08-26",
+    "extractedAt": "2026-08-27",
     "file": "agentic-design-system-playground",
     "scope": {
       "pages": null,
@@ -123,10 +123,116 @@
           "sw": 1,
           "t": "SECTION",
           "w": 1593
+        },
+        {
+          "fills": [
+            "#ffffff"
+          ],
+          "h": 300,
+          "kids": [
+            {
+              "bv": {
+                "bottomLeftRadius": "Primitives:primitive/radius/md",
+                "bottomRightRadius": "Primitives:primitive/radius/md",
+                "paddingBottom": "Primitives:primitive/space/component/sm",
+                "paddingLeft": "Primitives:primitive/space/component/md",
+                "paddingRight": "Primitives:primitive/space/component/md",
+                "paddingTop": "Primitives:primitive/space/component/sm",
+                "topLeftRadius": "Primitives:primitive/radius/md",
+                "topRightRadius": "Primitives:primitive/radius/md"
+              },
+              "fills": [
+                "#ffffff"
+              ],
+              "h": 38,
+              "kids": [
+                {
+                  "bv": {
+                    "fontFamily": [
+                      "Primitives:primitive/font/family/base"
+                    ],
+                    "fontSize": [
+                      "Primitives:primitive/font/size/md"
+                    ],
+                    "lineHeight": [
+                      "Primitives:primitive/font/lineHeight/md"
+                    ]
+                  },
+                  "fills": [
+                    "#737373"
+                  ],
+                  "h": 20,
+                  "n": "Placeholder",
+                  "t": "TEXT",
+                  "txt": {
+                    "chars": "you@example.com",
+                    "font": "Geist",
+                    "lh": 20,
+                    "size": 14,
+                    "style": "Regular"
+                  },
+                  "w": 121
+                }
+              ],
+              "lm": "HORIZONTAL",
+              "n": "Input",
+              "pad": [
+                8,
+                16,
+                8,
+                16
+              ],
+              "r": 6,
+              "strokes": [
+                "#e5e5e5"
+              ],
+              "sw": 1,
+              "t": "FRAME",
+              "w": 280
+            },
+            {
+              "bv": {
+                "fontFamily": [
+                  "Primitives:primitive/font/family/base"
+                ],
+                "fontSize": [
+                  "Primitives:primitive/font/size/xl"
+                ],
+                "fontWeight": [
+                  "Primitives:primitive/font/weight/bold"
+                ],
+                "lineHeight": [
+                  "Primitives:primitive/font/lineHeight/xl"
+                ]
+              },
+              "fills": [
+                "#000000"
+              ],
+              "h": 32,
+              "n": "Headline",
+              "t": "TEXT",
+              "txt": {
+                "chars": "Welcome back",
+                "font": "Geist",
+                "lh": 32,
+                "size": 24,
+                "style": "Bold"
+              },
+              "w": 174
+            }
+          ],
+          "n": "Form Fields",
+          "r": 2,
+          "strokes": [
+            "#000000@10"
+          ],
+          "sw": 1,
+          "t": "SECTION",
+          "w": 500
         }
       ],
       "name": "Page 1",
-      "nodeCount": 39
+      "nodeCount": 43
     }
   ],
   "variables": [
