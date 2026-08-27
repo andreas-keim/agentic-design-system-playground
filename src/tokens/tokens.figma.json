@@ -113,6 +113,15 @@
     ],
     "codeSyntax": "var(--radii-md)"
   },
+  "font.size.sm": {
+    "name": "primitive/font/size/sm",
+    "type": "FLOAT",
+    "resolvedValue": 12,
+    "scopes": [
+      "FONT_SIZE"
+    ],
+    "codeSyntax": "var(--font-size-sm)"
+  },
   "font.size.md": {
     "name": "primitive/font/size/md",
     "type": "FLOAT",
@@ -148,6 +157,15 @@
       "FONT_WEIGHT"
     ],
     "codeSyntax": "var(--font-weight-bold)"
+  },
+  "font.lineHeight.sm": {
+    "name": "primitive/font/lineHeight/sm",
+    "type": "FLOAT",
+    "resolvedValue": 16,
+    "scopes": [
+      "LINE_HEIGHT"
+    ],
+    "codeSyntax": "var(--font-line-height-sm)"
   },
   "font.lineHeight.md": {
     "name": "primitive/font/lineHeight/md",

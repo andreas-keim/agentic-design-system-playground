@@ -46,14 +46,16 @@ function FormField({
         aria-describedby={error ? errorId : undefined}
         {...props}
       />
-      {error && (
-        <p
-          id={errorId}
-          className="text-[length:var(--font-size-md)] leading-[var(--font-line-height-md)] text-destructive"
-        >
-          {error}
-        </p>
-      )}
+      <p
+        id={errorId}
+        aria-hidden={!error}
+        className={cn(
+          "text-[length:var(--font-size-sm)] leading-[var(--font-line-height-sm)] text-destructive",
+          !error && "invisible",
+        )}
+      >
+        {error || " "}
+      </p>
     </div>
   )
 }

@@ -21,14 +21,11 @@ if (!EXPECTED_FIGMA_DOCUMENT) {
 // Variables that intentionally live only in Figma (see FIGMA_SYNC_VALIDATION.md
 // "Font family" section) — never flagged as orphaned even though they have
 // no corresponding entry in tokens.figma.json.
-// primitive/font/size/sm and primitive/font/lineHeight/sm are Figma-ahead-of-code
-// (see FIGMA_SYNC_VALIDATION.md "Third pass" — form-field.tsx's error message
-// still uses --font-size-md, not a smaller size; add here once code catches up).
-const MANUALLY_MAINTAINED_VARIABLES = [
-  'primitive/font/family/base',
-  'primitive/font/size/sm',
-  'primitive/font/lineHeight/sm',
-]
+// primitive/font/size/sm and primitive/font/lineHeight/sm no longer belong here:
+// code caught up (see FIGMA_SYNC_VALIDATION.md "Code caught up to Figma") and
+// they now exist in tokens.figma.json too, so the normal primitive sync path
+// covers them like any other token.
+const MANUALLY_MAINTAINED_VARIABLES = ['primitive/font/family/base']
 
 function resolveCli() {
   const configured = process.env.FIGMA_CLI_BIN
