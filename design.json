@@ -128,7 +128,7 @@
           "fills": [
             "#ffffff"
           ],
-          "h": 300,
+          "h": 114,
           "kids": [
             {
               "h": 40,
@@ -207,66 +207,42 @@
                 }
               },
               "w": 600
-            }
-          ],
-          "n": "Form Fields",
-          "r": 2,
-          "strokes": [
-            "#000000@10"
-          ],
-          "sw": 1,
-          "t": "SECTION",
-          "w": 500
-        },
-        {
-          "fills": [
-            "#ffffff"
-          ],
-          "h": 120,
-          "kids": [
+            },
             {
               "bv": {
-                "fontFamily": [
-                  "Primitives:primitive/font/family/base"
+                "fills": [
+                  "Semantics:semantic/color/text/destructive/default"
                 ],
                 "fontSize": [
-                  "Primitives:primitive/font/size/xl"
-                ],
-                "fontWeight": [
-                  "Primitives:primitive/font/weight/bold"
+                  "Primitives:primitive/font/size/md"
                 ],
                 "lineHeight": [
-                  "Primitives:primitive/font/lineHeight/xl"
+                  "Primitives:primitive/font/lineHeight/md"
                 ]
               },
               "fills": [
-                "#000000"
+                "#b91c1c"
               ],
-              "h": 32,
-              "n": "Headline",
+              "h": 20,
+              "n": "This field is required.",
               "t": "TEXT",
               "txt": {
-                "chars": "Welcome back",
+                "chars": "This field is required.",
                 "font": "Geist",
-                "lh": 32,
-                "size": 24,
-                "style": "Bold"
+                "lh": 20,
+                "size": 14,
+                "style": "Regular"
               },
-              "w": 174
+              "w": 132
             }
           ],
-          "n": "Headline",
-          "r": 2,
-          "strokes": [
-            "#000000@10"
-          ],
-          "sw": 1,
-          "t": "SECTION",
-          "w": 300
+          "n": "Form Fields",
+          "t": "FRAME",
+          "w": 648
         }
       ],
       "name": "Components",
-      "nodeCount": 47
+      "nodeCount": 46
     },
     {
       "frames": [
