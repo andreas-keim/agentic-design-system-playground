@@ -113,6 +113,21 @@
                 }
               },
               "w": 493
+            },
+            {
+              "fills": [
+                "#000000"
+              ],
+              "h": 21,
+              "n": "Buttons",
+              "t": "TEXT",
+              "txt": {
+                "chars": "Buttons",
+                "font": "Geist",
+                "size": 16,
+                "style": "Medium"
+              },
+              "w": 59
             }
           ],
           "n": "Buttons",
@@ -128,71 +143,108 @@
           "fills": [
             "#ffffff"
           ],
-          "h": 114,
+          "h": 142,
           "kids": [
             {
-              "h": 40,
+              "h": 62,
               "kidCount": 2,
               "kids": [
                 {
-                  "bv": {
-                    "bottomLeftRadius": "Primitives:primitive/radius/md",
-                    "bottomRightRadius": "Primitives:primitive/radius/md",
-                    "paddingBottom": "Primitives:primitive/space/component/sm",
-                    "paddingLeft": "Primitives:primitive/space/component/md",
-                    "paddingRight": "Primitives:primitive/space/component/md",
-                    "paddingTop": "Primitives:primitive/space/component/sm",
-                    "topLeftRadius": "Primitives:primitive/radius/md",
-                    "topRightRadius": "Primitives:primitive/radius/md"
-                  },
-                  "fills": [
-                    "#ffffff"
-                  ],
-                  "h": 38,
+                  "gap": 8,
+                  "h": 62,
                   "kids": [
                     {
                       "bv": {
-                        "fontFamily": [
-                          "Primitives:primitive/font/family/base"
+                        "bottomLeftRadius": "Primitives:primitive/radius/md",
+                        "bottomRightRadius": "Primitives:primitive/radius/md",
+                        "paddingBottom": "Primitives:primitive/space/component/sm",
+                        "paddingLeft": "Primitives:primitive/space/component/md",
+                        "paddingRight": "Primitives:primitive/space/component/md",
+                        "paddingTop": "Primitives:primitive/space/component/sm",
+                        "topLeftRadius": "Primitives:primitive/radius/md",
+                        "topRightRadius": "Primitives:primitive/radius/md"
+                      },
+                      "fills": [
+                        "#ffffff"
+                      ],
+                      "h": 38,
+                      "kids": [
+                        {
+                          "bv": {
+                            "fontFamily": [
+                              "Primitives:primitive/font/family/base"
+                            ],
+                            "fontSize": [
+                              "Primitives:primitive/font/size/md"
+                            ],
+                            "lineHeight": [
+                              "Primitives:primitive/font/lineHeight/md"
+                            ]
+                          },
+                          "fills": [
+                            "#737373"
+                          ],
+                          "h": 20,
+                          "n": "Placeholder",
+                          "t": "TEXT",
+                          "txt": {
+                            "chars": "you@example.com",
+                            "font": "Geist",
+                            "lh": 20,
+                            "size": 14,
+                            "style": "Regular"
+                          },
+                          "w": 121
+                        }
+                      ],
+                      "lm": "HORIZONTAL",
+                      "n": "Field",
+                      "pad": [
+                        8,
+                        16,
+                        8,
+                        16
+                      ],
+                      "r": 6,
+                      "strokes": [
+                        "#e5e5e5"
+                      ],
+                      "sw": 1,
+                      "t": "FRAME",
+                      "w": 155
+                    },
+                    {
+                      "bv": {
+                        "fills": [
+                          "Semantics:semantic/color/text/destructive/default"
                         ],
                         "fontSize": [
-                          "Primitives:primitive/font/size/md"
+                          "Primitives:primitive/font/size/sm"
                         ],
                         "lineHeight": [
-                          "Primitives:primitive/font/lineHeight/md"
+                          "Primitives:primitive/font/lineHeight/sm"
                         ]
                       },
                       "fills": [
-                        "#737373"
+                        "#b91c1c"
                       ],
-                      "h": 20,
-                      "n": "Placeholder",
+                      "h": 16,
+                      "n": "This field is required.",
                       "t": "TEXT",
                       "txt": {
-                        "chars": "you@example.com",
+                        "chars": "This field is required.",
                         "font": "Geist",
-                        "lh": 20,
-                        "size": 14,
+                        "lh": 16,
+                        "size": 12,
                         "style": "Regular"
                       },
-                      "w": 121
+                      "w": 113
                     }
                   ],
-                  "lm": "HORIZONTAL",
+                  "lm": "VERTICAL",
                   "n": "State=Default",
-                  "pad": [
-                    8,
-                    16,
-                    8,
-                    16
-                  ],
-                  "r": 6,
-                  "strokes": [
-                    "#e5e5e5"
-                  ],
-                  "sw": 1,
                   "t": "COMPONENT",
-                  "w": 280
+                  "w": 155
                 }
               ],
               "n": "Input",
@@ -206,43 +258,31 @@
                   ]
                 }
               },
-              "w": 600
+              "w": 350
             },
             {
-              "bv": {
-                "fills": [
-                  "Semantics:semantic/color/text/destructive/default"
-                ],
-                "fontSize": [
-                  "Primitives:primitive/font/size/md"
-                ],
-                "lineHeight": [
-                  "Primitives:primitive/font/lineHeight/md"
-                ]
-              },
               "fills": [
-                "#b91c1c"
+                "#000000"
               ],
-              "h": 20,
-              "n": "This field is required.",
+              "h": 21,
+              "n": "Form Fields",
               "t": "TEXT",
               "txt": {
-                "chars": "This field is required.",
+                "chars": "Form Fields",
                 "font": "Geist",
-                "lh": 20,
-                "size": 14,
-                "style": "Regular"
+                "size": 16,
+                "style": "Medium"
               },
-              "w": 132
+              "w": 88
             }
           ],
           "n": "Form Fields",
           "t": "FRAME",
-          "w": 648
+          "w": 398
         }
       ],
       "name": "Components",
-      "nodeCount": 46
+      "nodeCount": 51
     },
     {
       "frames": [
@@ -653,6 +693,13 @@
           }
         },
         {
+          "name": "primitive/font/lineHeight/sm",
+          "type": "FLOAT",
+          "values": {
+            "Value": 16
+          }
+        },
+        {
           "name": "primitive/font/lineHeight/xl",
           "type": "FLOAT",
           "values": {
@@ -664,6 +711,13 @@
           "type": "FLOAT",
           "values": {
             "Value": 14
+          }
+        },
+        {
+          "name": "primitive/font/size/sm",
+          "type": "FLOAT",
+          "values": {
+            "Value": 12
           }
         },
         {
