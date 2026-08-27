@@ -4,6 +4,8 @@ A design system built from the ground up to be **correctly usable by AI agents, 
 
 This is a learning project (React + shadcn/ui + Base UI + Tailwind v4 + Style Dictionary + Storybook + Figma), documented and iterated in the open. It's also a GitHub template — clone it to start a new code-first, agentic-ready design system without rebuilding the pipeline from scratch.
 
+**[View the Figma file →](https://www.figma.com/design/AKa1S8AMAH1IQqZXhR8s4k/agentic-design-system-playground)** — code is the source of truth (see below), Figma is synced from it via `scripts/sync-figma-variables.js`.
+
 ## Why this exists
 
 Most "AI-ready design system" claims are untested. This project tests the claim directly: can an agent — with **no memory of any prior session, no hints beyond what's in the repo** — read a component's documentation and use it correctly, without inventing new colors, spacing, or components? And does that still hold once the task requires combining *multiple* components into a real page, not just using one in isolation?
