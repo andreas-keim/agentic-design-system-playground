@@ -14,9 +14,9 @@ In einem Formular (z. B. Login) haben Input und `Button` (Size `default`) diesel
 
 `aria-invalid="true"` setzen, keinen eigenen roten Rand per `className` erzwingen — die Fehlerdarstellung ist bereits über `aria-invalid:*` gebunden (siehe `input.meta.json`).
 
-## Bekannte Lücke: `onValueChange` (gefunden durch einen Agenten-Testlauf, Step 7)
+## Behobene Lücke: `onValueChange` (Step 7, 2026-08-26)
 
-`Input` ist als `React.ComponentProps<"input">` typisiert — das deckt Base UIs eigenes `onValueChange` nicht ab, nur natives `value`/`onChange`. `src/components/edit-entry-panel.tsx` umgeht das bereits, indem es `Input` direkt aus `@base-ui/react/input` importiert statt aus diesem Wrapper — unterläuft den in `input.meta.json` dokumentierten "ein Importpfad"-Zweck. Bis das behoben ist: natives `value`/`onChange` reicht für die allermeisten Fälle (siehe `login-page.tsx`); nur bei echtem Bedarf für Base UIs `onValueChange`-API bewusst den Wrapper umgehen, nicht den Typ mit `as any` erzwingen.
+`Input` war als `React.ComponentProps<"input">` typisiert und deckte Base UIs eigenes `onValueChange` nicht ab — jetzt auf Base UIs eigenen `InputProps`-Typ umgestellt (`import { type InputProps } from "@base-ui/react/input"`), reine Typ-Änderung, kein Laufzeit-Unterschied. Natives `value`/`onChange` funktioniert weiterhin genau wie vorher (siehe `login-page.tsx`/`sign-up-page.tsx`), `onValueChange`/`defaultValue` sind jetzt zusätzlich korrekt typisiert nutzbar. `src/components/edit-entry-panel.tsx` importiert historisch noch direkt aus `@base-ui/react/input` statt aus diesem Wrapper (entstand, als die Lücke noch da war) — nicht rückwirkend angepasst, aber ab jetzt nicht mehr nötig für neuen Code.
 
 ## Nicht (fälschlich) annehmen
 
