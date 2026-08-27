@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react"
 
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { FormField } from "@/components/ui/form-field"
 import { cn } from "@/lib/utils"
 
 export interface SignUpValues {
@@ -66,78 +66,43 @@ function SignUpPage({ onSubmit, onSignInClick, className }: SignUpPageProps) {
           className="flex flex-col gap-[var(--space-component-md)]"
           onSubmit={handleSubmit}
         >
-          <div className="flex flex-col gap-[var(--space-component-sm)]">
-            <label
-              htmlFor="sign-up-email"
-              className="text-[length:var(--font-size-md)] leading-[var(--font-line-height-md)] font-[var(--font-weight-medium)]"
-            >
-              Email
-            </label>
-            <Input
-              id="sign-up-email"
-              type="email"
-              autoComplete="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              required
-            />
-          </div>
+          <FormField
+            label="Email"
+            type="email"
+            autoComplete="email"
+            placeholder="you@example.com"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            required
+          />
 
-          <div className="flex flex-col gap-[var(--space-component-sm)]">
-            <label
-              htmlFor="sign-up-password"
-              className="text-[length:var(--font-size-md)] leading-[var(--font-line-height-md)] font-[var(--font-weight-medium)]"
-            >
-              Password
-            </label>
-            <Input
-              id="sign-up-password"
-              type="password"
-              autoComplete="new-password"
-              placeholder="Enter password"
-              value={password}
-              onChange={(event) => {
-                setPassword(event.target.value)
-                setPasswordMismatch(false)
-              }}
-              required
-              minLength={8}
-            />
-          </div>
+          <FormField
+            label="Password"
+            type="password"
+            autoComplete="new-password"
+            placeholder="Enter password"
+            value={password}
+            onChange={(event) => {
+              setPassword(event.target.value)
+              setPasswordMismatch(false)
+            }}
+            required
+            minLength={8}
+          />
 
-          <div className="flex flex-col gap-[var(--space-component-sm)]">
-            <label
-              htmlFor="sign-up-confirm-password"
-              className="text-[length:var(--font-size-md)] leading-[var(--font-line-height-md)] font-[var(--font-weight-medium)]"
-            >
-              Confirm password
-            </label>
-            <Input
-              id="sign-up-confirm-password"
-              type="password"
-              autoComplete="new-password"
-              placeholder="Repeat password"
-              value={confirmPassword}
-              onChange={(event) => {
-                setConfirmPassword(event.target.value)
-                setPasswordMismatch(false)
-              }}
-              aria-invalid={passwordMismatch}
-              aria-describedby={
-                passwordMismatch ? "sign-up-confirm-password-error" : undefined
-              }
-              required
-            />
-            {passwordMismatch && (
-              <p
-                id="sign-up-confirm-password-error"
-                className="text-[length:var(--font-size-md)] leading-[var(--font-line-height-md)] text-destructive"
-              >
-                Passwords do not match.
-              </p>
-            )}
-          </div>
+          <FormField
+            label="Confirm password"
+            error={passwordMismatch ? "Passwords do not match." : undefined}
+            type="password"
+            autoComplete="new-password"
+            placeholder="Repeat password"
+            value={confirmPassword}
+            onChange={(event) => {
+              setConfirmPassword(event.target.value)
+              setPasswordMismatch(false)
+            }}
+            required
+          />
 
           <Button type="submit" variant="primary" className="w-full">
             Sign up

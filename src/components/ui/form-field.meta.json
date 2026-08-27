@@ -1,0 +1,28 @@
+{
+  "id": "form-field",
+  "name": "FormField",
+  "importPath": "@/components/ui/form-field",
+  "tokensSourceFile": "src/tokens/tokens.json",
+  "base": {
+    "note": "Reine Komposition aus Label + Input + optionalem Fehlertext -- keine eigenen neuen Tokens, keine eigenen Farb-/Radius-Entscheidungen. Übernimmt Rhythmus/Typografie 1:1 von den bestehenden Bausteinen (Label-Zeile: font-weight-medium, gleiche font-size/line-height wie Input-Text; vertikaler Abstand: --space-component-sm zwischen Label/Input/Fehlertext).",
+    "tokens": [
+      "--space-component-sm",
+      "--font-size-md",
+      "--font-line-height-md",
+      "--font-weight-medium"
+    ]
+  },
+  "figmaNote": "Bewusst kein Figma-Node/Component für FormField gebaut (Scope-Entscheidung, 2026-08-27) -- reine Code-Struktur-Entlastung (Login/Sign-up rollten dasselbe Label+Input+Fehlertext-Pattern zuvor jeweils selbst aus, siehe Step 7 Agent-Test 3), kein neues visuelles Ding, das eine eigene Figma-Repräsentation bräuchte. Input/Label/Error-Farbe sind in Figma bereits über Input und den Headline-Text-Style abgedeckt.",
+  "composedOf": ["input", "button (optional, via labelAction)"],
+  "props": [
+    { "name": "label", "type": "ReactNode", "description": "Pflicht. Text/Inhalt des <label>, per htmlFor mit dem Input verknüpft." },
+    { "name": "labelAction", "type": "ReactNode", "description": "Optionales Element rechts neben dem Label, z.B. ein Button variant=\"link\" (siehe login-page.tsx, 'Forgot password?'). Nicht Teil der Fehlerlogik." },
+    { "name": "error", "type": "string", "description": "Vorhanden = Feld gilt als ungültig. Setzt intern aria-invalid + aria-describedby auf dem Input und rendert den Text unter dem Feld. Kein separates 'invalid'-Prop -- die Anwesenheit von error ist die einzige Quelle der Wahrheit (vermeidet den Fall, dass invalid=true gesetzt ist, aber error fehlt oder umgekehrt)." },
+    { "name": "id", "type": "string", "description": "Optional. Ohne Angabe generiert FormField selbst eine stabile ID per useId() -- Aufrufer muss keine manuellen IDs mehr vergeben (Unterschied zu login-page.tsx vor Step 7g, das eigene useId()-Aufrufe hatte, und sign-up-page.tsx, das feste String-IDs hatte)." },
+    { "name": "className", "type": "string", "description": "Wird auf den äußeren Wrapper (Label+Input+Error-Block) angewendet, nicht auf das Input selbst." }
+  ],
+  "passthrough": {
+    "component": "@/components/ui/input",
+    "note": "Alle weiteren Props (type, value, onChange, placeholder, required, autoComplete, minLength, ...) werden unverändert an Input durchgereicht. id/aria-invalid/aria-describedby sind von FormField selbst verwaltet und lassen sich nicht von außen überschreiben (Omit im Prop-Typ)."
+  }
+}

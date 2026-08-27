@@ -1,7 +1,7 @@
-import { useId, useState } from "react"
+import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { FormField } from "@/components/ui/form-field"
 import { cn } from "@/lib/utils"
 
 export interface LoginPageProps {
@@ -28,8 +28,6 @@ function LoginPage({
 }: LoginPageProps) {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const emailId = useId()
-  const passwordId = useId()
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -53,32 +51,19 @@ function LoginPage({
           onSubmit={handleSubmit}
           className="flex flex-col gap-[var(--space-component-md)]"
         >
-          <div className="flex flex-col gap-[var(--space-component-sm)]">
-            <label
-              htmlFor={emailId}
-              className="text-[length:var(--font-size-md)] leading-[var(--font-line-height-md)] text-foreground"
-            >
-              Email
-            </label>
-            <Input
-              id={emailId}
-              type="email"
-              autoComplete="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              required
-            />
-          </div>
+          <FormField
+            label="Email"
+            type="email"
+            autoComplete="email"
+            placeholder="you@example.com"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            required
+          />
 
-          <div className="flex flex-col gap-[var(--space-component-sm)]">
-            <div className="flex items-baseline justify-between gap-[var(--space-component-sm)]">
-              <label
-                htmlFor={passwordId}
-                className="text-[length:var(--font-size-md)] leading-[var(--font-line-height-md)] text-foreground"
-              >
-                Password
-              </label>
+          <FormField
+            label="Password"
+            labelAction={
               <Button
                 type="button"
                 variant="link"
@@ -87,17 +72,14 @@ function LoginPage({
               >
                 Forgot password?
               </Button>
-            </div>
-            <Input
-              id={passwordId}
-              type="password"
-              autoComplete="current-password"
-              placeholder="Enter password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              required
-            />
-          </div>
+            }
+            type="password"
+            autoComplete="current-password"
+            placeholder="Enter password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            required
+          />
 
           <Button type="submit" variant="primary" className="w-full">
             Sign in
