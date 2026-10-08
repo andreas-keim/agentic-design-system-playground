@@ -6,13 +6,21 @@ import { A2uiSurface } from "@a2ui/react/v0_9"
 import { playgroundCatalog } from "./catalog"
 import { fixtures } from "./fixtures"
 
-function Demo({ fixtureName }: { fixtureName: string }) {
+type Msg = Record<string, unknown>
+function withDestructiveLoginLink(messages: Msg[]): Msg[] {
+  const copy = structuredClone(messages) as { updateComponents?: { components: { id: string; variant?: string }[] } }[]
+  copy.forEach((m) => m.updateComponents?.components.forEach((c) => { if (c.id === "login") c.variant = "destructive" }))
+  return copy as Msg[]
+}
+
+function Demo({ fixtureName, destructiveLoginLink }: { fixtureName: string; destructiveLoginLink?: boolean }) {
   const [log, setLog] = useState<string[]>([])
   const [processor] = useState(() => {
     const p = new MessageProcessor([playgroundCatalog], (action) =>
       setLog((l) => [...l, JSON.stringify(action).slice(0, 160)]),
     )
-    p.processMessages(fixtures.find((f) => f.name === fixtureName)!.messages as never)
+    const base = fixtures.find((f) => f.name === fixtureName)!.messages
+    p.processMessages((destructiveLoginLink ? withDestructiveLoginLink(base) : base) as never)
     return p
   })
   const surfaces = Array.from(processor.model.surfacesMap.values())
@@ -29,3 +37,7 @@ function Demo({ fixtureName }: { fixtureName: string }) {
 const meta = { title: "A2UI/Sign-up aus Agent-Nachrichten", component: Demo } satisfies Meta<typeof Demo>
 export default meta
 export const GueltigerSignUp: StoryObj<typeof meta> = { args: { fixtureName: "01 gültiger Sign-up" } }
+// Gültig laut Schema und Regeln, aber der Login-Link ist rot: die Lücke aus README und Post.
+export const DestructiveLoginLink: StoryObj<typeof meta> = {
+  args: { fixtureName: "01 gültiger Sign-up", destructiveLoginLink: true },
+}
