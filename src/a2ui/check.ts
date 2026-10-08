@@ -5,6 +5,7 @@ import { Catalog, MessageProcessor, STRICT_VALIDATION } from "@a2ui/web_core/v0_
 import { catalogApis, PLAYGROUND_CATALOG_ID } from "./catalog.api.ts"
 import { fixtures } from "./fixtures.ts"
 import { designRules } from "./design-rules.ts"
+import { explain } from "./explain.ts"
 
 function runSchemaLayer(messages: unknown[]): string | null {
   const catalog = new Catalog(PLAYGROUND_CATALOG_ID, "v0.9", catalogApis as never, [])
@@ -13,7 +14,7 @@ function runSchemaLayer(messages: unknown[]): string | null {
     processor.processMessages(messages as never)
     return null
   } catch (e) {
-    return (e as Error).message.split("\n")[0].slice(0, 110)
+    return (e as Error).message.split("\n")[0].slice(0, 400)
   }
 }
 
@@ -25,7 +26,12 @@ for (const f of fixtures) {
   const ok = (f.shouldBe === "rejected") === (verdict !== "durchgelassen")
   rows.push([f.name, f.shouldBe === "rejected" ? "ablehnen" : "annehmen", verdict, ok ? "ok" : "LÜCKE", schemaErr ?? ruleErr ?? ""])
 }
-for (const r of rows) console.log(r[3].padEnd(6), r[0].padEnd(42), "soll:", r[1].padEnd(9), "→", r[2].padEnd(14), r[4])
+for (const r of rows) {
+  console.log(r[3].padEnd(6), r[0].padEnd(42), "soll:", r[1].padEnd(9), "→", r[2].padEnd(14), r[4])
+  const e = r[4] ? explain(r[4]) : null
+  if (e) console.log("      ".padEnd(8), "Warum:", e.why, "\n".padEnd(9), "Statt dessen:", e.fix)
+  else if (r[4]) console.log("      ".padEnd(8), "(keine Erklärung hinterlegt)")
+}
 const gaps = rows.filter((r) => r[3] === "LÜCKE")
 console.log(`\n${rows.length - gaps.length}/${rows.length} wie erwartet, ${gaps.length} Lücken`)
 process.exit(0)
