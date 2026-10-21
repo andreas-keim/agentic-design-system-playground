@@ -18,8 +18,8 @@ export function AppShell() {
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col font-sans antialiased selection:bg-foreground selection:text-background">
-      {/* Apple-Style Navigation Bar: 44px (h-11), Translucent, Perfectly Balanced */}
-      <header className="sticky top-0 z-50 h-11 w-full border-b border-border/70 bg-background/80 backdrop-blur-xl backdrop-saturate-150 transition-colors">
+      {/* Apple-Style Navigation Bar: 44px (h-11), Pure White, No Border */}
+      <header className="sticky top-0 z-50 h-11 w-full bg-white dark:bg-card transition-colors">
         <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-6">
           {/* Left: Distinct Brand Mark & Identity */}
           <div className="flex items-center gap-2.5">
@@ -106,7 +106,7 @@ export function AppShell() {
         </div>
 
         {/* Mobile Navigation */}
-        <div className="flex sm:hidden border-t border-border/70 px-4 py-1.5 gap-3 bg-background/95 overflow-x-auto">
+        <div className="flex sm:hidden px-4 py-1.5 gap-3 bg-white dark:bg-card overflow-x-auto">
           {navItems.map((item) => (
             <button
               key={item.id}
