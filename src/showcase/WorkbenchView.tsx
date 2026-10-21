@@ -29,16 +29,16 @@ export function WorkbenchView() {
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-8">
-      {/* 2-Column Clean Workspace: Both Cards Start at the Exact Same Height */}
+      {/* 2-Column Clean Workspace: Exact Top Alignment, 2-Tier Surface Hierarchy */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-        {/* Left: The Component Stage Card (Unified with Integrated Toolbar) */}
+        {/* Left: The Component Stage Card */}
         <div
           className={`lg:col-span-8 rounded-2xl border border-border/80 bg-card shadow-xs flex flex-col overflow-hidden transition-all ${
             xrayMode ? "ring-1 ring-blue-500/40" : ""
           }`}
         >
-          {/* Integrated Stage Header / Toolbar: Exactly Aligned with Inspector Top */}
-          <div className="flex items-center justify-between border-b border-border/60 px-5 py-3.5 bg-muted/20">
+          {/* Stage Header / Toolbar */}
+          <div className="flex items-center justify-between border-b border-border/60 px-5 py-3.5 bg-card">
             {/* Apple-Style Segmented Component Selector */}
             <div className="inline-flex p-0.5 bg-muted/80 rounded-lg gap-1 border border-border/60">
               {[
@@ -73,21 +73,21 @@ export function WorkbenchView() {
             </div>
           </div>
 
-          {/* The Canvas Area: Generous Padding & Clean Presentation */}
-          <div className="relative flex-1 min-h-[460px] p-10 flex items-center justify-center">
+          {/* The Viewport Canvas (Subtle Recessed Surface where the Object Lives) */}
+          <div className="relative flex-1 min-h-[460px] p-12 flex items-center justify-center bg-muted/25 dark:bg-muted/10">
             {/* Subtle Saved Toast */}
             {recordSavedNotice && (
-              <div className="absolute top-4 right-4 z-20 flex items-center gap-1.5 rounded-full bg-muted border border-border/80 px-3 py-1 text-xs text-foreground font-mono shadow-xs">
+              <div className="absolute top-4 right-4 z-20 flex items-center gap-1.5 rounded-full bg-card border border-border/80 px-3 py-1 text-xs text-foreground font-mono shadow-xs">
                 <CheckCircle2 className="h-3 w-3 text-emerald-500" />
                 {recordSavedNotice}
               </div>
             )}
 
-            {/* 1. EditEntryPanel View */}
+            {/* 1. EditEntryPanel View: Pure White Card with Real Elevation */}
             {activeComponent === "edit-panel" && (
               <div className="w-full max-w-lg">
                 {systemRecord === null ? (
-                  <div className="rounded-xl border border-dashed border-border/80 p-8 text-center">
+                  <div className="rounded-xl border border-dashed border-border/80 bg-card p-8 text-center shadow-xs">
                     <p className="text-xs text-muted-foreground mb-3">Record removed from cluster.</p>
                     <Button
                       variant="outline"
@@ -122,9 +122,9 @@ export function WorkbenchView() {
               </div>
             )}
 
-            {/* 2. Button View */}
+            {/* 2. Button View: Floating cleanly on the Canvas */}
             {activeComponent === "button" && (
-              <div className="flex flex-col gap-6 items-center w-full max-w-md">
+              <div className="flex flex-col gap-6 items-center w-full max-w-md bg-card p-8 rounded-xl border border-border/80 shadow-xs">
                 <div className="flex flex-wrap gap-3 justify-center items-center">
                   <div className="relative">
                     {xrayMode && (
@@ -146,7 +146,7 @@ export function WorkbenchView() {
                   </Button>
                 </div>
 
-                <div className="flex flex-wrap gap-2 justify-center items-center">
+                <div className="flex flex-wrap gap-2 justify-center items-center pt-2 border-t border-border/50 w-full">
                   <Button variant="secondary" disabled={pinnedState === "disabled"}>
                     Secondary
                   </Button>
@@ -162,7 +162,7 @@ export function WorkbenchView() {
 
             {/* 3. FormField View */}
             {activeComponent === "form-field" && (
-              <div className="w-full max-w-sm flex flex-col gap-4">
+              <div className="w-full max-w-sm flex flex-col gap-4 bg-card p-6 rounded-xl border border-border/80 shadow-xs">
                 <FormField
                   label="System Identifier"
                   placeholder="e.g. k8s-eu-central-1"
@@ -183,7 +183,7 @@ export function WorkbenchView() {
 
             {/* 4. LoginPage View */}
             {activeComponent === "login-page" && (
-              <div className="w-full max-w-sm">
+              <div className="w-full max-w-sm bg-card p-6 rounded-xl border border-border/80 shadow-xs">
                 <LoginPage
                   onSubmit={({ email }) => {
                     alert(`SSO invoked for: ${email}`)

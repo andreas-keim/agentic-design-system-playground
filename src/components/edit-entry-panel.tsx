@@ -23,7 +23,7 @@ export interface EditEntryPanelProps {
 
 /**
  * Enterprise Record Configuration Panel:
- * Bearbeiten eines Datensatzes mit sauberer Typografie, Labeling und Button-Hierarchie.
+ * Ein eigenständiges, klares Bauteil (White Card Surface) ohne verschachtelte Sub-Cards.
  */
 function EditEntryPanel({
   value,
@@ -48,7 +48,7 @@ function EditEntryPanel({
     <div
       data-slot="edit-entry-panel"
       className={cn(
-        "flex flex-col gap-4 rounded-xl border border-border/80 bg-background/60 p-6 text-card-foreground shadow-xs",
+        "flex flex-col gap-5 rounded-xl border border-border/90 bg-card p-6 text-card-foreground shadow-sm transition-shadow",
         className
       )}
     >
@@ -57,7 +57,7 @@ function EditEntryPanel({
           <h4 className="text-xs font-semibold tracking-tight text-foreground">
             {title}
           </h4>
-          <span className="font-mono text-[10px] text-muted-foreground uppercase">
+          <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider">
             Live Record
           </span>
         </div>
@@ -73,11 +73,11 @@ function EditEntryPanel({
           value={draft}
           onValueChange={(nextValue) => setDraft(nextValue)}
           aria-label={inputLabel}
-          className="w-full rounded-lg border border-border/80 bg-card px-3.5 py-2 text-xs leading-relaxed text-foreground outline-none transition-colors focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20"
+          className="w-full rounded-lg border border-border/80 bg-muted/20 px-3.5 py-2 text-xs leading-relaxed text-foreground outline-none transition-colors focus-visible:bg-card focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20"
         />
       </div>
 
-      <div className="flex items-center justify-between gap-3 pt-2">
+      <div className="flex items-center justify-between gap-3 pt-1">
         <Button
           variant="destructive"
           onClick={onDelete}
