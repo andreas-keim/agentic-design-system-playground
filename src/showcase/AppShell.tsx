@@ -1,12 +1,4 @@
-import {
-  Layers,
-  Cpu,
-  Braces,
-  FileCode,
-  Sun,
-  Moon,
-  Crosshair,
-} from "lucide-react"
+import { Sun, Moon, Crosshair } from "lucide-react"
 
 import { useShowcase, type ShowcaseTab } from "./ShowcaseContext"
 import { WorkbenchView } from "./WorkbenchView"
@@ -17,80 +9,93 @@ import { SpecsView } from "./SpecsView"
 export function AppShell() {
   const { activeTab, setActiveTab, theme, toggleTheme, xrayMode, toggleXray } = useShowcase()
 
-  const tabs: { id: ShowcaseTab; label: string; icon: typeof Layers }[] = [
-    { id: "workbench", label: "Workbench", icon: Layers },
-    { id: "agentic-lab", label: "Agentic Lab", icon: Cpu },
-    { id: "tokens", label: "Tokens", icon: Braces },
-    { id: "specs", label: "Specs", icon: FileCode },
+  const navItems: { id: ShowcaseTab; label: string }[] = [
+    { id: "workbench", label: "Workbench" },
+    { id: "agentic-lab", label: "Agentic Lab" },
+    { id: "tokens", label: "W3C Tokens" },
+    { id: "specs", label: "Architecture Specs" },
   ]
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans transition-colors duration-150">
-      {/* Calm, Minimal Header */}
-      <header className="border-b border-border/80 bg-background/95 sticky top-0 z-50 backdrop-blur-xs">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
-          {/* Logo: Understated & Clean */}
-          <div className="flex items-baseline gap-2">
-            <span className="font-semibold text-sm tracking-tight text-foreground">
-              Agentic DS
-            </span>
-            <span className="text-xs text-muted-foreground font-normal">
-              by Andreas Keim
-            </span>
+    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans antialiased selection:bg-foreground selection:text-background">
+      {/* Apple-Style Navigation Bar: 44px (h-11), Translucent, Perfectly Balanced */}
+      <header className="sticky top-0 z-50 h-11 w-full border-b border-border/70 bg-background/80 backdrop-blur-xl backdrop-saturate-150 transition-colors">
+        <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-6">
+          {/* Left: Distinct Brand Mark & Identity */}
+          <div className="flex items-center gap-2.5">
+            {/* Custom Geometric Token Icon */}
+            <div className="flex h-6 w-6 items-center justify-center rounded-md bg-foreground text-background transition-transform hover:scale-105 shadow-2xs">
+              <svg
+                className="h-3.5 w-3.5 fill-current"
+                viewBox="0 0 24 24"
+              >
+                {/* Isometric Token Node / Faceted Cube */}
+                <path d="M12 2L4 7v10l8 5 8-5V7l-8-5zm0 2.4l5.6 3.5L12 11.4 6.4 7.9 12 4.4zM6 9.6l5 3.1v6.2l-5-3.1V9.6zm12 0v6.2l-5 3.1v-6.2l5-3.1z" />
+              </svg>
+            </div>
+
+            <div className="flex items-baseline gap-1.5">
+              <span className="font-semibold text-xs tracking-tight text-foreground">
+                Agentic DS
+              </span>
+              <span className="hidden md:inline text-[11px] text-muted-foreground font-normal">
+                by Andreas Keim
+              </span>
+            </div>
           </div>
 
-          {/* Navigation Tabs */}
-          <nav className="hidden sm:flex items-center gap-1">
-            {tabs.map((tab) => {
-              const isActive = activeTab === tab.id
+          {/* Center: Apple-style Text Navigation */}
+          <nav className="hidden sm:flex items-center gap-6">
+            {navItems.map((item) => {
+              const isActive = activeTab === item.id
               return (
                 <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`rounded-md px-3 py-1.5 text-xs transition-colors ${
+                  key={item.id}
+                  onClick={() => setActiveTab(item.id)}
+                  className={`text-[12px] tracking-tight transition-colors ${
                     isActive
-                      ? "bg-muted text-foreground font-medium"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                      ? "text-foreground font-medium"
+                      : "text-muted-foreground/80 hover:text-foreground"
                   }`}
                 >
-                  {tab.label}
+                  {item.label}
                 </button>
               )
             })}
           </nav>
 
           {/* Right Controls: X-Ray, Theme, GitHub */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             {/* Token X-Ray Toggle */}
             <button
               onClick={toggleXray}
-              className={`flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-mono transition-all ${
+              className={`flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-mono transition-all ${
                 xrayMode
-                  ? "border-blue-500/60 bg-blue-500/10 text-blue-500 font-medium"
-                  : "border-border/80 text-muted-foreground hover:text-foreground hover:bg-muted/30"
+                  ? "bg-blue-600 text-white font-medium shadow-xs"
+                  : "bg-muted/60 text-muted-foreground hover:text-foreground hover:bg-muted"
               }`}
-              title="Token X-Ray"
+              title="Toggle Token X-Ray"
             >
               <Crosshair className="h-3 w-3" />
-              <span>X-Ray: {xrayMode ? "ON" : "OFF"}</span>
+              <span>X-Ray</span>
             </button>
 
-            {/* Theme Toggle */}
+            {/* Theme Switcher */}
             <button
               onClick={toggleTheme}
-              className="rounded-md border border-border/80 p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted/30 transition-colors"
+              className="rounded-full p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
               title={`Switch to ${theme === "dark" ? "Light" : "Dark"} Mode`}
               aria-label="Toggle theme"
             >
               {theme === "dark" ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
             </button>
 
-            {/* GitHub Link */}
+            {/* GitHub */}
             <a
               href="https://github.com/andreas-keim/agentic-design-system-playground"
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-md border border-border/80 p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted/30 transition-colors"
+              className="rounded-full p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
               title="GitHub Repository"
             >
               <svg className="h-3.5 w-3.5 fill-current" viewBox="0 0 24 24">
@@ -100,23 +105,23 @@ export function AppShell() {
           </div>
         </div>
 
-        {/* Mobile Nav */}
-        <div className="flex sm:hidden border-t border-border/80 px-4 py-1.5 gap-1 bg-muted/10">
-          {tabs.map((tab) => (
+        {/* Mobile Navigation */}
+        <div className="flex sm:hidden border-t border-border/70 px-4 py-1.5 gap-3 bg-background/95 overflow-x-auto">
+          {navItems.map((item) => (
             <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`rounded px-2.5 py-1 text-xs transition-colors ${
-                activeTab === tab.id ? "bg-muted text-foreground font-medium" : "text-muted-foreground"
+              key={item.id}
+              onClick={() => setActiveTab(item.id)}
+              className={`shrink-0 text-[11px] tracking-tight ${
+                activeTab === item.id ? "text-foreground font-medium" : "text-muted-foreground"
               }`}
             >
-              {tab.label}
+              {item.label}
             </button>
           ))}
         </div>
       </header>
 
-      {/* Main Content Area */}
+      {/* Main Content Viewport */}
       <main className="flex-1">
         {activeTab === "workbench" && <WorkbenchView />}
         {activeTab === "agentic-lab" && <AgenticLabView />}
@@ -124,11 +129,11 @@ export function AppShell() {
         {activeTab === "specs" && <SpecsView />}
       </main>
 
-      {/* Quiet, Minimal Footer */}
-      <footer className="border-t border-border/60 py-4 px-6 text-xs text-muted-foreground">
+      {/* Minimal Apple-Style Footer */}
+      <footer className="border-t border-border/60 py-6 px-6 text-[11px] text-muted-foreground">
         <div className="mx-auto max-w-7xl flex flex-col sm:flex-row items-center justify-between gap-2">
-          <span>Agentic Design System • W3C DTCG Tokens & A2UI Engine</span>
-          <span>100% Client-Side • Vercel</span>
+          <span>Agentic Design System • Built with W3C DTCG Tokens & React 19 by Andreas Keim</span>
+          <span>100% Client-Side • Deployed on Vercel</span>
         </div>
       </footer>
     </div>
