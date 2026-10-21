@@ -183,12 +183,11 @@ export function WorkbenchView() {
 
             {/* 4. LoginPage View */}
             {activeComponent === "login-page" && (
-              <div className="w-full max-w-sm bg-card p-6 rounded-xl border border-border/80 shadow-xs">
+              <div className="w-full max-w-sm bg-card p-8 rounded-2xl border border-border/90 shadow-sm">
                 <LoginPage
                   onSubmit={({ email }) => {
                     alert(`SSO invoked for: ${email}`)
                   }}
-                  className="min-h-0 p-0"
                 />
               </div>
             )}
@@ -247,7 +246,7 @@ export function WorkbenchView() {
                 </div>
                 <div className="flex items-center justify-between py-1 text-muted-foreground">
                   <span className="text-foreground">--color-primary</span>
-                  <span className="text-[11px]">action.primary</span>
+                  <span className="text-[11px] text-purple-600 dark:text-purple-400 font-semibold">#6d28d9 (violet)</span>
                 </div>
                 <div className="flex items-center justify-between py-1 text-muted-foreground">
                   <span className="text-foreground">--space-component-md</span>

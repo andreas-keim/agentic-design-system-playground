@@ -5,26 +5,28 @@ import { FormField } from "@/components/ui/form-field"
 import { cn } from "@/lib/utils"
 
 export interface LoginPageProps {
-  /** Wird beim Absenden des Formulars mit den aktuellen Feldwerten aufgerufen. Keine echte Auth-Logik hier. */
+  /** Wird beim Absenden des Formulars mit den aktuellen Feldwerten aufgerufen. */
   onSubmit?: (values: { email: string; password: string }) => void
   /** Klick auf "Forgot password?". */
   onForgotPassword?: () => void
   /** Klick auf "Sign up" im Footer-Link. */
   onSignUp?: () => void
   className?: string
+  title?: string
+  subtitle?: string
 }
 
 /**
- * Login-Seite: E-Mail + Passwort, primäre Sign-in-Aktion, Forgot-Password-Link
- * und Sign-up-Link. Reine UI-Komposition aus bestehenden `Button`/`Input`-
- * Komponenten und bestehenden Tokens -- keine neuen Varianten, keine neuen
- * Rohwerte. Kein Illustrations-/Bildbereich, ein einzelner zentrierter Block.
+ * Enterprise Workspace SSO Login View:
+ * Saubere B2B-Anmeldung mit SSO-Fokus, konsistenten Paddings und ohne doppelte Background-Schichten.
  */
 function LoginPage({
   onSubmit,
   onForgotPassword,
   onSignUp,
   className,
+  title = "Enterprise Workspace SSO",
+  subtitle = "Authenticate with your organization account to access clusters.",
 }: LoginPageProps) {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -37,66 +39,68 @@ function LoginPage({
   return (
     <div
       data-slot="login-page"
-      className={cn(
-        "flex min-h-svh w-full items-center justify-center bg-background p-[var(--space-component-md)]",
-        className
-      )}
+      className={cn("w-full flex flex-col gap-6", className)}
     >
-      <div className="flex w-full max-w-sm flex-col gap-[var(--space-component-md)]">
-        <h1 className="text-center text-[length:var(--font-size-xl)] leading-[var(--font-line-height-xl)] font-[var(--font-weight-bold)] text-foreground">
-          Welcome back
-        </h1>
+      <div className="flex flex-col gap-1 text-center">
+        <h3 className="text-base font-bold tracking-tight text-foreground">
+          {title}
+        </h3>
+        {subtitle && (
+          <p className="text-xs text-muted-foreground leading-normal">
+            {subtitle}
+          </p>
+        )}
+      </div>
 
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col gap-[var(--space-component-md)]"
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-4"
+      >
+        <FormField
+          label="Corporate Email"
+          type="email"
+          autoComplete="email"
+          placeholder="admin@enterprise.internal"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          required
+        />
+
+        <FormField
+          label="Security Token / Password"
+          labelAction={
+            <Button
+              type="button"
+              variant="link"
+              className="h-auto p-0 text-xs"
+              onClick={onForgotPassword}
+            >
+              Forgot?
+            </Button>
+          }
+          type="password"
+          autoComplete="current-password"
+          placeholder="••••••••••••"
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
+          required
+        />
+
+        <Button type="submit" variant="primary" className="w-full mt-1">
+          Authenticate & Sign In
+        </Button>
+      </form>
+
+      <div className="pt-2 border-t border-border/50 text-center text-xs text-muted-foreground">
+        Need access?{" "}
+        <Button
+          type="button"
+          variant="link"
+          className="h-auto p-0 text-xs font-medium"
+          onClick={onSignUp}
         >
-          <FormField
-            label="Email"
-            type="email"
-            autoComplete="email"
-            placeholder="you@example.com"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            required
-          />
-
-          <FormField
-            label="Password"
-            labelAction={
-              <Button
-                type="button"
-                variant="link"
-                className="h-auto p-0"
-                onClick={onForgotPassword}
-              >
-                Forgot password?
-              </Button>
-            }
-            type="password"
-            autoComplete="current-password"
-            placeholder="Enter password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            required
-          />
-
-          <Button type="submit" variant="primary" className="w-full">
-            Sign in
-          </Button>
-        </form>
-
-        <p className="text-center text-[length:var(--font-size-md)] leading-[var(--font-line-height-md)] text-muted-foreground">
-          Don&apos;t have an account?{" "}
-          <Button
-            type="button"
-            variant="link"
-            className="h-auto p-0"
-            onClick={onSignUp}
-          >
-            Sign up
-          </Button>
-        </p>
+          Request Provisioning
+        </Button>
       </div>
     </div>
   )

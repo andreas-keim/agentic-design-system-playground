@@ -1,4 +1,32 @@
 {
+  "colors.violet.500": {
+    "name": "primitive/violet/500",
+    "type": "COLOR",
+    "resolvedValue": "#8b5cf6",
+    "scopes": [],
+    "codeSyntax": "var(--colors-violet-500)"
+  },
+  "colors.violet.600": {
+    "name": "primitive/violet/600",
+    "type": "COLOR",
+    "resolvedValue": "#7c3aed",
+    "scopes": [],
+    "codeSyntax": "var(--colors-violet-600)"
+  },
+  "colors.violet.700": {
+    "name": "primitive/violet/700",
+    "type": "COLOR",
+    "resolvedValue": "#6d28d9",
+    "scopes": [],
+    "codeSyntax": "var(--colors-violet-700)"
+  },
+  "colors.violet.800": {
+    "name": "primitive/violet/800",
+    "type": "COLOR",
+    "resolvedValue": "#5b21b6",
+    "scopes": [],
+    "codeSyntax": "var(--colors-violet-800)"
+  },
   "colors.blue.500": {
     "name": "primitive/blue/500",
     "type": "COLOR",
@@ -37,24 +65,24 @@
   "color.background.primary.default": {
     "name": "semantic/color/background/primary/default",
     "type": "COLOR",
-    "resolvedValue": "#2563eb",
+    "resolvedValue": "#6d28d9",
     "scopes": [
       "FRAME_FILL",
       "SHAPE_FILL"
     ],
     "codeSyntax": "var(--color-background-primary-default)",
-    "aliasOf": "primitive/blue/600"
+    "aliasOf": "primitive/violet/700"
   },
   "color.background.primary.hover": {
     "name": "semantic/color/background/primary/hover",
     "type": "COLOR",
-    "resolvedValue": "#1d4ed8",
+    "resolvedValue": "#5b21b6",
     "scopes": [
       "FRAME_FILL",
       "SHAPE_FILL"
     ],
     "codeSyntax": "var(--color-background-primary-hover)",
-    "aliasOf": "primitive/blue/700"
+    "aliasOf": "primitive/violet/800"
   },
   "color.text.primary.default": {
     "name": "semantic/color/text/primary/default",
@@ -79,12 +107,12 @@
   "color.border.primary.default": {
     "name": "semantic/color/border/primary/default",
     "type": "COLOR",
-    "resolvedValue": "#3b82f6",
+    "resolvedValue": "#7c3aed",
     "scopes": [
       "STROKE_COLOR"
     ],
     "codeSyntax": "var(--color-border-primary-default)",
-    "aliasOf": "primitive/blue/500"
+    "aliasOf": "primitive/violet/600"
   },
   "space.component.sm": {
     "name": "primitive/space/component/sm",

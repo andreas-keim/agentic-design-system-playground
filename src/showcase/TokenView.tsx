@@ -2,11 +2,11 @@ import { Braces, Download } from "lucide-react"
 
 export function TokenView() {
   const sampleTokens = [
-    { name: "--color-background-primary-default", value: "#2563eb", role: "action.primary.default", type: "color" },
-    { name: "--color-background-primary-hover", value: "#1d4ed8", role: "action.primary.hover", type: "color" },
+    { name: "--color-background-primary-default", value: "#6d28d9", role: "action.primary.default", type: "color" },
+    { name: "--color-background-primary-hover", value: "#5b21b6", role: "action.primary.hover", type: "color" },
     { name: "--color-text-primary-default", value: "#ffffff", role: "text.primary.default", type: "color" },
     { name: "--color-text-destructive-default", value: "#b91c1c", role: "text.destructive.default", type: "color" },
-    { name: "--color-border-primary-default", value: "#3b82f6", role: "border.primary.default", type: "color" },
+    { name: "--color-border-primary-default", value: "#7c3aed", role: "border.primary.default", type: "color" },
     { name: "--space-component-sm", value: "8px", role: "space.component.sm", type: "dimension" },
     { name: "--space-component-md", value: "16px", role: "space.component.md", type: "dimension" },
     { name: "--radii-md", value: "6px", role: "radii.md", type: "dimension" },
