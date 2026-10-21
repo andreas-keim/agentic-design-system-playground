@@ -24,21 +24,20 @@ export function AppShell() {
           {/* Left: Distinct Brand Mark & Identity */}
           <div className="flex items-center gap-2.5">
             {/* Custom Geometric Token Icon */}
-            <div className="flex h-6 w-6 items-center justify-center rounded-md bg-foreground text-background transition-transform hover:scale-105 shadow-2xs">
+            <div className="flex h-6 w-6 items-center justify-center rounded-md bg-foreground text-background shadow-2xs">
               <svg
                 className="h-3.5 w-3.5 fill-current"
                 viewBox="0 0 24 24"
               >
-                {/* Isometric Token Node / Faceted Cube */}
                 <path d="M12 2L4 7v10l8 5 8-5V7l-8-5zm0 2.4l5.6 3.5L12 11.4 6.4 7.9 12 4.4zM6 9.6l5 3.1v6.2l-5-3.1V9.6zm12 0v6.2l-5 3.1v-6.2l5-3.1z" />
               </svg>
             </div>
 
-            <div className="flex items-baseline gap-1.5">
-              <span className="font-semibold text-xs tracking-tight text-foreground">
+            <div className="flex flex-col justify-center">
+              <span className="font-semibold text-xs tracking-tight text-foreground leading-tight">
                 Agentic DS
               </span>
-              <span className="hidden md:inline text-[11px] text-muted-foreground font-normal">
+              <span className="text-[10px] text-muted-foreground font-normal leading-tight">
                 by Andreas Keim
               </span>
             </div>

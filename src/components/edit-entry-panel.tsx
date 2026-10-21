@@ -14,15 +14,16 @@ export interface EditEntryPanelProps {
   /** Entfernt den Eintrag komplett. Keine Rückgängig-Funktion — siehe Button-Variante `destructive`. */
   onDelete: () => void
   className?: string
+  title?: string
+  inputLabel?: string
+  deleteLabel?: string
+  cancelLabel?: string
+  saveLabel?: string
 }
 
 /**
- * Kleines Panel zum Bearbeiten eines einzelnen Text-Eintrags: ein Eingabefeld
- * plus die drei Aktionen Speichern / Abbrechen / endgültig löschen.
- *
- * Variantenwahl folgt button.guidelines.md: genau eine `primary`-Aktion
- * (Speichern), `outline` für die nicht-destruktive Alternative (Abbrechen),
- * `destructive` ausschließlich für die unwiderrufliche Löschaktion.
+ * Enterprise Record Configuration Panel:
+ * Bearbeiten eines Datensatzes mit sauberer Typografie, Labeling und Button-Hierarchie.
  */
 function EditEntryPanel({
   value,
@@ -30,6 +31,11 @@ function EditEntryPanel({
   onCancel,
   onDelete,
   className,
+  title = "System Access & Role Configuration",
+  inputLabel = "Record Identifier & Clearance Level",
+  deleteLabel = "Delete Record",
+  cancelLabel = "Cancel",
+  saveLabel = "Save Changes",
 }: EditEntryPanelProps) {
   const [draft, setDraft] = useState(value)
 
@@ -42,26 +48,57 @@ function EditEntryPanel({
     <div
       data-slot="edit-entry-panel"
       className={cn(
-        "flex flex-col gap-[var(--space-component-md)] rounded-lg border border-border bg-card p-[var(--space-component-md)] text-card-foreground",
+        "flex flex-col gap-4 rounded-xl border border-border/80 bg-background/60 p-6 text-card-foreground shadow-xs",
         className
       )}
     >
-      <Input
-        value={draft}
-        onValueChange={(nextValue) => setDraft(nextValue)}
-        aria-label="Eintragstext"
-        className="w-full rounded-lg border border-border bg-background px-[var(--space-component-md)] py-[var(--space-component-sm)] text-[length:var(--font-size-md)] leading-[var(--font-line-height-md)] text-foreground outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-      />
-      <div className="flex items-center justify-between gap-[var(--space-component-md)]">
-        <Button variant="destructive" onClick={onDelete}>
-          Eintrag endgültig löschen
+      {title && (
+        <div className="flex items-center justify-between border-b border-border/50 pb-3">
+          <h4 className="text-xs font-semibold tracking-tight text-foreground">
+            {title}
+          </h4>
+          <span className="font-mono text-[10px] text-muted-foreground uppercase">
+            Live Record
+          </span>
+        </div>
+      )}
+
+      <div className="flex flex-col gap-1.5">
+        {inputLabel && (
+          <label className="text-xs font-medium text-foreground">
+            {inputLabel}
+          </label>
+        )}
+        <Input
+          value={draft}
+          onValueChange={(nextValue) => setDraft(nextValue)}
+          aria-label={inputLabel}
+          className="w-full rounded-lg border border-border/80 bg-card px-3.5 py-2 text-xs leading-relaxed text-foreground outline-none transition-colors focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20"
+        />
+      </div>
+
+      <div className="flex items-center justify-between gap-3 pt-2">
+        <Button
+          variant="destructive"
+          onClick={onDelete}
+          className="text-xs h-8 px-3"
+        >
+          {deleteLabel}
         </Button>
-        <div className="flex gap-[var(--space-component-sm)]">
-          <Button variant="outline" onClick={handleCancel}>
-            Abbrechen
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            onClick={handleCancel}
+            className="text-xs h-8 px-3"
+          >
+            {cancelLabel}
           </Button>
-          <Button variant="primary" onClick={() => onSave(draft)}>
-            Speichern
+          <Button
+            variant="primary"
+            onClick={() => onSave(draft)}
+            className="text-xs h-8 px-3.5"
+          >
+            {saveLabel}
           </Button>
         </div>
       </div>
