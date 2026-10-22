@@ -267,9 +267,9 @@ export function AgenticLabView() {
             <span className="text-foreground font-semibold"> Unser System fängt den Code deterministisch ab.</span>
           </p>
 
-          {/* Großes Terminal-Promptfeld (exakt so breit wie der Text darüber: max-w-3xl) */}
+          {/* Großes Terminal-Promptfeld (volle Container-Breite: max-w-5xl) */}
           <div
-            className={`mt-10 w-full max-w-3xl transition-all duration-500 ease-out ${
+            className={`mt-10 w-full max-w-5xl transition-all duration-500 ease-out ${
               phase === "typing-prompt" || phase === "fading-out"
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-6 pointer-events-none"
