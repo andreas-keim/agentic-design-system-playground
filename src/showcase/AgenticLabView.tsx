@@ -66,7 +66,7 @@ export function AgenticLabView() {
     } else if (target === "problem-revealed") {
       setTypedPrompt("")
     } else if (target === "typing-prompt") {
-      setTypedPrompt("Erstelle ein B2B System-Access Panel...")
+      setTypedPrompt(PROMPT_TEXT)
     } else {
       setTypedPrompt(PROMPT_TEXT)
     }
@@ -267,8 +267,9 @@ export function AgenticLabView() {
             <span className="text-foreground font-semibold"> Unser System fängt den Code deterministisch ab.</span>
           </p>
 
+          {/* Großes Terminal-Promptfeld (exakt so breit wie der Text darüber: max-w-3xl) */}
           <div
-            className={`mt-10 w-full max-w-2xl transition-all duration-500 ease-out ${
+            className={`mt-10 w-full max-w-3xl transition-all duration-500 ease-out ${
               phase === "typing-prompt" || phase === "fading-out"
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-6 pointer-events-none"
@@ -285,10 +286,10 @@ export function AgenticLabView() {
                 </span>
               </div>
 
-              <div className="flex items-center text-foreground font-mono text-sm sm:text-base py-1">
-                <span className="text-primary font-bold mr-2.5">❯</span>
+              <div className="flex items-center text-foreground font-mono text-xs sm:text-sm md:text-base py-1 whitespace-nowrap overflow-hidden">
+                <span className="text-primary font-bold mr-2.5 shrink-0">❯</span>
                 <span className="tracking-tight">{typedPrompt}</span>
-                <span className="inline-block w-2.5 h-5 bg-primary ml-1.5 animate-pulse" />
+                <span className="inline-block w-2.5 h-4 sm:h-5 bg-primary ml-1.5 shrink-0 animate-pulse" />
               </div>
             </div>
           </div>
