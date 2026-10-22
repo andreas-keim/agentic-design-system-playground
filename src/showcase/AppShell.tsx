@@ -18,13 +18,17 @@ export function AppShell() {
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col font-sans antialiased selection:bg-foreground selection:text-background">
-      {/* Apple-Style Navigation Bar: 44px (h-11), Pure White, No Border */}
-      <header className="sticky top-0 z-50 h-11 w-full bg-white dark:bg-card transition-colors">
+      {/* Apple-Style Navigation Bar: 44px (h-11) */}
+      <header className="sticky top-0 z-50 h-11 w-full bg-white dark:bg-black/85 dark:backdrop-blur-xl dark:border-b dark:border-white/[0.09] dark:shadow-sm dark:shadow-black/50 transition-colors">
         <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-6">
-          {/* Left: Distinct Brand Mark & Identity */}
-          <div className="flex items-center gap-2.5">
+          {/* Left: Distinct Brand Mark & Identity (Clickable to Home) */}
+          <button
+            onClick={() => setActiveTab("workbench")}
+            className="flex items-center gap-2.5 text-left group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 rounded-md py-0.5 transition-opacity hover:opacity-85 cursor-pointer"
+            title="Go to Home / Workbench"
+          >
             {/* Custom Geometric Token Icon */}
-            <div className="flex h-6 w-6 items-center justify-center rounded-md bg-foreground text-background shadow-2xs">
+            <div className="flex h-6 w-6 items-center justify-center rounded-md bg-foreground text-background shadow-2xs group-hover:scale-105 transition-transform">
               <svg
                 className="h-3.5 w-3.5 fill-current"
                 viewBox="0 0 24 24"
@@ -41,7 +45,7 @@ export function AppShell() {
                 by Andreas Keim
               </span>
             </div>
-          </div>
+          </button>
 
           {/* Center: Apple-style Text Navigation */}
           <nav className="hidden sm:flex items-center gap-6">
