@@ -390,35 +390,34 @@ export function AgenticLabView() {
                   )}
                 </div>
 
-                {/* 3. Button Actions: Fehler 3 in voller Breite bündig über den Buttons */}
+                {/* 3. Button Actions: Fehler 3 wieder zwischen den Buttons */}
                 <div
-                  className={`pt-3 border-t border-border/60 space-y-3 transition-all rounded-lg ${
+                  className={`pt-4 border-t border-border/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all rounded-lg ${
                     highlighted === "color" ? "ring-2 ring-primary/50 bg-primary/5" : ""
                   }`}
                 >
-                  {/* Fehler 3: Exakt gleicher visueller Banner wie Fehler 1 & 2 */}
-                  {isColorBroken && (
-                    <div className="flex items-center justify-between rounded-lg border border-rose-500/30 bg-rose-500/5 px-3.5 py-1.5 text-xs text-rose-500 font-mono">
-                      <span className="font-semibold">Fehler 3: Hardcoded Hex #ef4444</span>
-                      <span className="text-[11px] opacity-80 hidden sm:inline">Ignoriert Dark Mode &amp; Theme-Tokens</span>
-                    </div>
-                  )}
+                  <Button variant="outline" size="sm" className="order-2 sm:order-1 self-start sm:self-auto">
+                    Datensatz löschen
+                  </Button>
 
-                  <div className="flex items-center justify-between">
-                    <Button variant="outline" size="sm">
-                      Datensatz löschen
-                    </Button>
+                  <div className="order-1 sm:order-2 flex flex-col sm:flex-row sm:items-center gap-2.5">
+                    {/* Fehler 3: Im gleichen Look wie Fehler 1 & 2 */}
+                    {isColorBroken && (
+                      <div className="flex items-center rounded-lg border border-rose-500/30 bg-rose-500/5 px-3 py-1.5 text-xs text-rose-500 font-mono">
+                        <span className="font-semibold">Fehler 3: Hardcoded Hex #ef4444</span>
+                      </div>
+                    )}
 
                     {isColorBroken ? (
                       <button
                         type="button"
-                        className="rounded-md px-4 py-2 text-xs sm:text-sm font-semibold text-white shadow-xs transition-colors"
+                        className="rounded-md px-4 py-1.5 text-xs sm:text-sm font-semibold text-white shadow-xs transition-colors self-start sm:self-auto"
                         style={{ backgroundColor: "#ef4444" }}
                       >
                         Änderungen speichern
                       </button>
                     ) : (
-                      <Button variant="primary" size="sm">
+                      <Button variant="primary" size="sm" className="self-start sm:self-auto">
                         Änderungen speichern
                       </Button>
                     )}
