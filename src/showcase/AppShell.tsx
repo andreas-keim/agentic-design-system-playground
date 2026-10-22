@@ -19,7 +19,7 @@ export function AppShell() {
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col font-sans antialiased selection:bg-foreground selection:text-background">
       {/* Apple-Style Navigation Bar: 44px (h-11) */}
-      <header className="sticky top-0 z-50 h-11 w-full bg-white dark:bg-black/85 dark:backdrop-blur-xl dark:border-b dark:border-white/[0.09] dark:shadow-sm dark:shadow-black/50 transition-colors">
+      <header className="sticky top-0 z-50 h-11 w-full bg-white dark:bg-card/75 dark:backdrop-blur-xl border-b border-transparent dark:border-border/80 dark:shadow-sm dark:shadow-black/40 transition-colors">
         <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-6">
           {/* Left: Distinct Brand Mark & Identity (Clickable to Home) */}
           <button
