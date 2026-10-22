@@ -133,7 +133,6 @@ export function AgenticLabView() {
     timeoutsRef.current.push(tClash, tScan, tInteractive)
   }
 
-  // Start on initial mount
   useEffect(() => {
     runCinematicFromCurrent()
     return () => clearAllTimers()
@@ -169,7 +168,7 @@ export function AgenticLabView() {
     <div className="relative min-h-[calc(100vh-120px)] flex flex-col justify-between px-4 py-4 sm:px-8 max-w-6xl mx-auto">
       
       {/* ========================================================================= */}
-      {/* DEV TIMELINE TOOLBAR (Zum Testen & schnellen Hin- und Herspringen)         */}
+      {/* DEV TIMELINE TOOLBAR                                                      */}
       {/* ========================================================================= */}
       <div className="w-full mb-6 z-50">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 rounded-2xl border border-border/80 bg-card/90 backdrop-blur-md p-2.5 sm:px-4 shadow-sm">
@@ -180,7 +179,6 @@ export function AgenticLabView() {
               <span>Director Timeline</span>
             </span>
 
-            {/* Play/Pause Toggle */}
             <button
               onClick={() => {
                 if (isPlaying) {
@@ -215,7 +213,6 @@ export function AgenticLabView() {
             </button>
           </div>
 
-          {/* Scrubber Steps */}
           <div className="flex items-center gap-1 overflow-x-auto w-full sm:w-auto p-0.5 bg-muted/60 rounded-xl border border-border/60">
             {TIMELINE_STEPS.map((s) => (
               <button
@@ -233,7 +230,6 @@ export function AgenticLabView() {
             ))}
           </div>
 
-          {/* Quick Skip to Final */}
           <button
             onClick={() => jumpToPhase("interactive", false)}
             className="hidden lg:flex items-center gap-1 text-[11px] font-mono text-muted-foreground hover:text-foreground transition-colors"
@@ -246,7 +242,7 @@ export function AgenticLabView() {
       </div>
 
       {/* ========================================================================= */}
-      {/* 1. CINEMATIC INTRO: GROSS & BILDSHIRM-ZENTRIERT (Content Width erhöht)    */}
+      {/* 1. CINEMATIC INTRO: GROSS & BILDSHIRM-ZENTRIERT                           */}
       {/* ========================================================================= */}
       {isIntroActive && (
         <div
@@ -256,12 +252,10 @@ export function AgenticLabView() {
               : "opacity-100 translate-y-0 scale-100"
           }`}
         >
-          {/* Großes Kinoleinwand-Typografie (bis zu text-7xl) */}
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-foreground leading-[1.1] max-w-5xl">
             Was passiert, wenn KI ohne Design System codet?
           </h1>
 
-          {/* Subtext: Ruhig & Klar */}
           <p
             className={`mt-8 text-lg sm:text-2xl text-muted-foreground max-w-3xl leading-relaxed transition-all duration-700 ease-out ${
               phase !== "title-only"
@@ -273,7 +267,6 @@ export function AgenticLabView() {
             <span className="text-foreground font-semibold"> Unser System fängt den Code deterministisch ab.</span>
           </p>
 
-          {/* Großes Terminal-Promptfeld (max-w-2xl) */}
           <div
             className={`mt-10 w-full max-w-2xl transition-all duration-500 ease-out ${
               phase === "typing-prompt" || phase === "fading-out"
@@ -303,20 +296,20 @@ export function AgenticLabView() {
       )}
 
       {/* ========================================================================= */}
-      {/* 2. DIE KOMPONENTEN-BÜHNE: 100% FOKUS (Breiter & Zentrierter)              */}
+      {/* 2. DIE KOMPONENTEN-BÜHNE: BREITES CANVAS & RUHIGE, KLARE ANNOTATIONEN     */}
       {/* ========================================================================= */}
       {isComponentStageActive && (
-        <div className="flex-1 flex flex-col justify-center max-w-4xl mx-auto w-full animate-in fade-in zoom-in-95 duration-700">
+        <div className="flex-1 flex flex-col justify-center max-w-5xl mx-auto w-full animate-in fade-in zoom-in-95 duration-700">
           
-          {/* Status Label */}
-          <div className="flex items-center justify-between mb-3 px-2">
+          {/* Sprechende Status-Zeile über dem Canvas */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 px-2 gap-2">
             <div className="flex items-center gap-2">
               <span
-                className={`h-2.5 w-2.5 rounded-full ${
+                className={`h-2.5 w-2.5 rounded-full shrink-0 ${
                   phase === "component-scan"
                     ? "bg-amber-500 animate-ping"
                     : isBrokenUI
-                    ? "bg-rose-500 animate-pulse"
+                    ? "bg-rose-500"
                     : "bg-emerald-500"
                 }`}
               />
@@ -324,21 +317,21 @@ export function AgenticLabView() {
                 {phase === "component-scan"
                   ? "🛡️ Design System Guardrail greift ein: AST wird revalidiert..."
                   : isBrokenUI
-                  ? "⚠️ Ungoverned LLM Output (KI-Halluzinationen aktiv)"
-                  : "✓ W3C Token Governed (Produktionsreifes Design System)"}
+                  ? "❌ Ohne Guardrails: 3 kritische Fehler im generierten Code"
+                  : "✓ Mit Guardrails: Automatisch auf Design System begradigt"}
               </span>
             </div>
 
-            <span className="font-mono text-xs text-muted-foreground hidden sm:inline">
+            <span className="font-mono text-xs text-muted-foreground">
               {phase === "component-scan"
-                ? "Latenz: < 2ms"
+                ? "Latenz: < 2ms Client AST"
                 : phase === "interactive" && !sabotageColor && !sabotageLabel
                 ? "100% WCAG AA • 0% Design Debt"
-                : "3 Schema-Verstöße"}
+                : "3 Regelverstöße erkannt"}
             </span>
           </div>
 
-          {/* Der Zentrale Stage Canvas */}
+          {/* Der Zentrale Stage Canvas: Breiter & Großzügiger */}
           <div className="relative rounded-2xl border border-border/80 bg-card shadow-2xl overflow-hidden">
             
             {/* Glowing Scan Ray während der Heilung */}
@@ -346,35 +339,42 @@ export function AgenticLabView() {
               <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-transparent via-primary to-transparent z-40 animate-pulse shadow-[0_0_25px_#7c3aed]" />
             )}
 
-            <div className="p-8 sm:p-14 flex flex-col items-center justify-center bg-muted/15 dark:bg-muted/5 min-h-[380px]">
+            <div className="p-6 sm:p-12 lg:p-16 flex flex-col items-center justify-center bg-muted/15 dark:bg-muted/5 min-h-[420px]">
               
-              {/* Die eigentliche Komponente (Breite erhöht auf max-w-lg) */}
+              {/* Die eigentliche Enterprise-Komponente (Großzügig auf max-w-2xl erweitert) */}
               <div
-                className={`w-full max-w-lg bg-card rounded-xl border p-6 sm:p-8 shadow-sm relative transition-all duration-500 ${
+                className={`w-full max-w-2xl bg-card rounded-2xl border p-6 sm:p-8 shadow-sm relative transition-all duration-500 ${
                   isBrokenUI
-                    ? "border-rose-500/80 shadow-rose-500/10 ring-2 ring-rose-500/30"
+                    ? "border-rose-500/80 shadow-rose-500/10 ring-1 ring-rose-500/30"
                     : "border-border/80"
                 }`}
               >
-                {/* Header */}
-                <div className="border-b border-border/60 pb-3.5 mb-4">
-                  <h2 className="text-sm sm:text-base font-bold text-foreground tracking-tight">
-                    System Access &amp; Role Configuration
-                  </h2>
-                  <p className="text-xs text-muted-foreground">
-                    Cluster node: <code className="font-mono text-[11px]">k8s-prod-eu-central-1</code>
-                  </p>
+                {/* Header mit klarer, sprechender Headline */}
+                <div className="border-b border-border/60 pb-4 mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div>
+                    <h2 className="text-base sm:text-lg font-bold text-foreground tracking-tight">
+                      Rollen- &amp; Rechteverwaltung
+                    </h2>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      Sicherheitsfreigaben und Zugriffslevel für Workspace-Cluster
+                    </p>
+                  </div>
+                  <span className="font-mono text-[11px] bg-muted px-2.5 py-1 rounded-md text-muted-foreground self-start sm:self-auto">
+                    k8s-prod-eu-central-1
+                  </span>
                 </div>
 
-                {/* 1. Input Area */}
+                {/* 1. Input Area: Klares, kollisionsfreies Layout */}
                 <div
-                  className={`relative transition-all rounded-lg p-1 ${
+                  className={`relative transition-all rounded-lg p-1.5 ${
                     highlighted === "a11y" ? "ring-2 ring-primary/50 bg-primary/5" : ""
                   }`}
                 >
+                  {/* Ruhiger, statischer Hinweis ohne wackelnde Animation */}
                   {isLabelBroken && (
-                    <div className="absolute -top-3.5 right-2 z-20 rounded bg-rose-600 text-white font-mono text-[10px] px-2 py-0.5 shadow-sm font-semibold flex items-center gap-1 animate-bounce">
-                      <span>🔴 A11y: Nacktes Input (kein Label)</span>
+                    <div className="mb-2 flex items-center justify-between rounded-md border border-rose-500/40 bg-rose-500/10 px-3 py-1 text-xs text-rose-500 font-mono font-medium">
+                      <span>🔴 Fehler 1: Nacktes &lt;input&gt; ohne Label</span>
+                      <span className="text-[10px] opacity-80 hidden sm:inline">Screenreader bleiben stumm (WCAG 3.3.2)</span>
                     </div>
                   )}
 
@@ -382,68 +382,64 @@ export function AgenticLabView() {
                     <div>
                       <input
                         type="text"
-                        defaultValue="SYS-REC-84920 (Cluster Security Officer)"
-                        className="w-full rounded border border-rose-400 dark:border-rose-600/60 bg-background px-3 py-2 text-xs sm:text-sm text-foreground outline-none"
-                        placeholder="Enter record clearance..."
+                        defaultValue="SYS-REC-84920 (Cluster Security Officer // Level 3 Restricted)"
+                        className="w-full rounded-md border border-rose-400 dark:border-rose-600/70 bg-background px-3.5 py-2.5 text-xs sm:text-sm text-foreground outline-none font-sans"
+                        placeholder="Freigabe-Schlüssel eingeben..."
                       />
-                      <span className="text-[10px] text-rose-500 mt-1 block font-mono">
-                        Screenreader melden nur "Textfeld ohne Namen" (WCAG 3.3.2 Verstoß)
-                      </span>
                     </div>
                   ) : (
                     <FormField
-                      label="Record Identifier & Clearance Level"
-                      defaultValue="SYS-REC-84920 (Cluster Security Officer)"
+                      label="Sicherheits-Schlüssel & Berechtigungsstufe"
+                      defaultValue="SYS-REC-84920 (Cluster Security Officer // Level 3 Restricted)"
                       disabled={false}
                     />
                   )}
                 </div>
 
-                {/* 2. Grid Margin */}
-                <div
-                  className={`relative transition-all ${
-                    highlighted === "grid" ? "bg-amber-500/10 rounded" : ""
-                  }`}
-                  style={{ height: isGridBroken ? "13px" : "16px" }}
-                >
-                  {isGridBroken && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="bg-rose-500 text-white font-mono text-[9px] px-1.5 py-0.2 rounded font-bold">
-                        13px (Zerschlägt 8px-Raster)
-                      </span>
+                {/* 2. Grid Margin: Klarer, eigenständiger Annotation-Marker ohne Überlappung */}
+                <div className="relative my-2">
+                  {isGridBroken ? (
+                    <div className="my-1 py-1 px-3 rounded-md border border-dashed border-rose-500/40 bg-rose-500/5 flex items-center justify-between text-xs font-mono text-rose-500">
+                      <span>🔴 Fehler 2: 13px Willkür-Abstand</span>
+                      <span className="text-[10px] opacity-80">Zerschlägt 8px DTCG-Raster</span>
                     </div>
+                  ) : (
+                    <div className="h-4" />
                   )}
                 </div>
 
-                {/* 3. Button Actions */}
+                {/* 3. Button Actions: Sauber getrennte Buttons und fester Hinweis */}
                 <div
-                  className={`relative pt-3 border-t border-border/60 flex items-center justify-between transition-all rounded-lg p-1 ${
+                  className={`relative pt-4 border-t border-border/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all rounded-lg p-1.5 ${
                     highlighted === "color" ? "ring-2 ring-primary/50 bg-primary/5" : ""
                   }`}
                 >
-                  {isColorBroken && (
-                    <div className="absolute -top-3 left-2 z-20 rounded bg-rose-600 text-white font-mono text-[10px] px-2 py-0.5 shadow-sm font-semibold flex items-center gap-1">
-                      <span>🔴 Hardcoded Hex #ef4444</span>
-                    </div>
-                  )}
-
-                  <Button variant="outline" size="sm">
-                    Delete Record
+                  <Button variant="outline" size="sm" className="order-2 sm:order-1">
+                    Datensatz löschen
                   </Button>
 
-                  {isColorBroken ? (
-                    <button
-                      type="button"
-                      className="rounded-md px-4 py-1.5 text-xs sm:text-sm font-semibold text-white shadow-xs transition-colors"
-                      style={{ backgroundColor: "#ef4444" }}
-                    >
-                      Save Changes
-                    </button>
-                  ) : (
-                    <Button variant="primary" size="sm">
-                      Save Changes
-                    </Button>
-                  )}
+                  <div className="order-1 sm:order-2 flex flex-col sm:flex-row sm:items-center gap-2.5">
+                    {/* Statischer, ruhiger Hinweis für Farbe */}
+                    {isColorBroken && (
+                      <span className="rounded-md border border-rose-500/40 bg-rose-500/10 px-2.5 py-1 text-xs text-rose-500 font-mono font-medium self-start sm:self-auto">
+                        🔴 Fehler 3: Hardcoded Hex #ef4444
+                      </span>
+                    )}
+
+                    {isColorBroken ? (
+                      <button
+                        type="button"
+                        className="rounded-md px-4 py-2 text-xs sm:text-sm font-semibold text-white shadow-xs transition-colors"
+                        style={{ backgroundColor: "#ef4444" }}
+                      >
+                        Änderungen speichern
+                      </button>
+                    ) : (
+                      <Button variant="primary" size="sm">
+                        Änderungen speichern
+                      </Button>
+                    )}
+                  </div>
                 </div>
 
               </div>
@@ -470,13 +466,13 @@ export function AgenticLabView() {
                   <div
                     onMouseEnter={() => setHighlighted("color")}
                     onMouseLeave={() => setHighlighted(null)}
-                    className={`rounded-xl border p-3.5 bg-card transition-all cursor-pointer ${
+                    className={`rounded-xl border p-4 bg-card transition-all cursor-pointer ${
                       highlighted === "color"
                         ? "border-primary ring-1 ring-primary/30"
                         : "border-border/80 hover:border-border"
                     }`}
                   >
-                    <div className="flex items-center gap-2 mb-1.5">
+                    <div className="flex items-center gap-2 mb-2">
                       <div className="p-1 rounded bg-primary/10 text-primary">
                         <Palette className="h-3.5 w-3.5" />
                       </div>
@@ -492,13 +488,13 @@ export function AgenticLabView() {
                   <div
                     onMouseEnter={() => setHighlighted("grid")}
                     onMouseLeave={() => setHighlighted(null)}
-                    className={`rounded-xl border p-3.5 bg-card transition-all cursor-pointer ${
+                    className={`rounded-xl border p-4 bg-card transition-all cursor-pointer ${
                       highlighted === "grid"
                         ? "border-primary ring-1 ring-primary/30"
                         : "border-border/80 hover:border-border"
                     }`}
                   >
-                    <div className="flex items-center gap-2 mb-1.5">
+                    <div className="flex items-center gap-2 mb-2">
                       <div className="p-1 rounded bg-blue-500/10 text-blue-500">
                         <Ruler className="h-3.5 w-3.5" />
                       </div>
@@ -514,13 +510,13 @@ export function AgenticLabView() {
                   <div
                     onMouseEnter={() => setHighlighted("a11y")}
                     onMouseLeave={() => setHighlighted(null)}
-                    className={`rounded-xl border p-3.5 bg-card transition-all cursor-pointer ${
+                    className={`rounded-xl border p-4 bg-card transition-all cursor-pointer ${
                       highlighted === "a11y"
                         ? "border-primary ring-1 ring-primary/30"
                         : "border-border/80 hover:border-border"
                     }`}
                   >
-                    <div className="flex items-center gap-2 mb-1.5">
+                    <div className="flex items-center gap-2 mb-2">
                       <div className="p-1 rounded bg-amber-500/10 text-amber-500">
                         <Eye className="h-3.5 w-3.5" />
                       </div>
@@ -589,7 +585,6 @@ export function AgenticLabView() {
         </div>
       )}
 
-      {/* Leeres Element für sauberes Layout-Spacing */}
       <div className="h-4" />
 
     </div>
