@@ -302,34 +302,15 @@ export function AgenticLabView() {
       {isComponentStageActive && (
         <div className="flex-1 flex flex-col justify-center max-w-5xl mx-auto w-full animate-in fade-in zoom-in-95 duration-700">
           
-          {/* Sprechende Status-Zeile über dem Canvas */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 px-2 gap-2">
-            <div className="flex items-center gap-2">
-              <span
-                className={`h-2.5 w-2.5 rounded-full shrink-0 ${
-                  phase === "component-scan"
-                    ? "bg-amber-500 animate-ping"
-                    : isBrokenUI
-                    ? "bg-rose-500"
-                    : "bg-emerald-500"
-                }`}
-              />
-              <span className="font-mono text-xs sm:text-sm font-semibold text-foreground">
-                {phase === "component-scan"
-                  ? "🛡️ Design System Guardrail greift ein: AST wird revalidiert..."
-                  : isBrokenUI
-                  ? "❌ Ohne Guardrails: 3 kritische Fehler im generierten Code"
-                  : "✓ Mit Guardrails: Automatisch auf Design System begradigt"}
-              </span>
-            </div>
-
-            <span className="font-mono text-xs text-muted-foreground">
+          {/* Sprechende Status-Headline: Nur purer Text ohne störende Objekte oder Emojis */}
+          <div className="mb-3 px-1">
+            <h3 className="font-mono text-xs sm:text-sm font-semibold text-foreground">
               {phase === "component-scan"
-                ? "Latenz: < 2ms Client AST"
-                : phase === "interactive" && !sabotageColor && !sabotageLabel
-                ? "100% WCAG AA • 0% Design Debt"
-                : "3 Regelverstöße erkannt"}
-            </span>
+                ? "Design System Guardrail greift ein: AST wird revalidiert..."
+                : isBrokenUI
+                ? "Ohne Guardrails: 3 kritische Fehler im generierten Code"
+                : "Mit Guardrails: Automatisch auf Design System begradigt"}
+            </h3>
           </div>
 
           {/* Der Zentrale Stage Canvas: Breiter & Großzügiger */}
@@ -367,15 +348,15 @@ export function AgenticLabView() {
 
                 {/* 1. Input Area: Klares, kollisionsfreies Layout */}
                 <div
-                  className={`relative transition-all rounded-lg p-1.5 ${
+                  className={`relative transition-all rounded-lg ${
                     highlighted === "a11y" ? "ring-2 ring-primary/50 bg-primary/5" : ""
                   }`}
                 >
-                  {/* Ruhiger, statischer Hinweis ohne wackelnde Animation */}
+                  {/* Fehler 1: Ruhiger, konsistenter Banner */}
                   {isLabelBroken && (
-                    <div className="mb-2 flex items-center justify-between rounded-md border border-rose-500/40 bg-rose-500/10 px-3 py-1 text-xs text-rose-500 font-mono font-medium">
-                      <span>🔴 Fehler 1: Nacktes &lt;input&gt; ohne Label</span>
-                      <span className="text-[10px] opacity-80 hidden sm:inline">Screenreader bleiben stumm (WCAG 3.3.2)</span>
+                    <div className="mb-2 flex items-center justify-between rounded-lg border border-rose-500/30 bg-rose-500/5 px-3.5 py-1.5 text-xs text-rose-500 font-mono">
+                      <span className="font-semibold">Fehler 1: Nacktes &lt;input&gt; ohne Label</span>
+                      <span className="text-[11px] opacity-80 hidden sm:inline">Screenreader bleiben stumm (WCAG 3.3.2)</span>
                     </div>
                   )}
 
@@ -397,35 +378,36 @@ export function AgenticLabView() {
                   )}
                 </div>
 
-                {/* 2. Grid Margin: Klarer, eigenständiger Annotation-Marker ohne Überlappung */}
-                <div className="relative my-2">
+                {/* 2. Grid Margin: Exakt gleicher visueller Banner wie Fehler 1 */}
+                <div className="my-2">
                   {isGridBroken ? (
-                    <div className="my-1 py-1 px-3 rounded-md border border-dashed border-rose-500/40 bg-rose-500/5 flex items-center justify-between text-xs font-mono text-rose-500">
-                      <span>🔴 Fehler 2: 13px Willkür-Abstand</span>
-                      <span className="text-[10px] opacity-80">Zerschlägt 8px DTCG-Raster</span>
+                    <div className="flex items-center justify-between rounded-lg border border-rose-500/30 bg-rose-500/5 px-3.5 py-1.5 text-xs text-rose-500 font-mono">
+                      <span className="font-semibold">Fehler 2: 13px Willkür-Abstand</span>
+                      <span className="text-[11px] opacity-80 hidden sm:inline">Zerschlägt 8px DTCG-Raster</span>
                     </div>
                   ) : (
                     <div className="h-4" />
                   )}
                 </div>
 
-                {/* 3. Button Actions: Sauber getrennte Buttons und fester Hinweis */}
+                {/* 3. Button Actions: Fehler 3 in voller Breite bündig über den Buttons */}
                 <div
-                  className={`relative pt-4 border-t border-border/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all rounded-lg p-1.5 ${
+                  className={`pt-3 border-t border-border/60 space-y-3 transition-all rounded-lg ${
                     highlighted === "color" ? "ring-2 ring-primary/50 bg-primary/5" : ""
                   }`}
                 >
-                  <Button variant="outline" size="sm" className="order-2 sm:order-1">
-                    Datensatz löschen
-                  </Button>
+                  {/* Fehler 3: Exakt gleicher visueller Banner wie Fehler 1 & 2 */}
+                  {isColorBroken && (
+                    <div className="flex items-center justify-between rounded-lg border border-rose-500/30 bg-rose-500/5 px-3.5 py-1.5 text-xs text-rose-500 font-mono">
+                      <span className="font-semibold">Fehler 3: Hardcoded Hex #ef4444</span>
+                      <span className="text-[11px] opacity-80 hidden sm:inline">Ignoriert Dark Mode &amp; Theme-Tokens</span>
+                    </div>
+                  )}
 
-                  <div className="order-1 sm:order-2 flex flex-col sm:flex-row sm:items-center gap-2.5">
-                    {/* Statischer, ruhiger Hinweis für Farbe */}
-                    {isColorBroken && (
-                      <span className="rounded-md border border-rose-500/40 bg-rose-500/10 px-2.5 py-1 text-xs text-rose-500 font-mono font-medium self-start sm:self-auto">
-                        🔴 Fehler 3: Hardcoded Hex #ef4444
-                      </span>
-                    )}
+                  <div className="flex items-center justify-between">
+                    <Button variant="outline" size="sm">
+                      Datensatz löschen
+                    </Button>
 
                     {isColorBroken ? (
                       <button
