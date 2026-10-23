@@ -23,12 +23,12 @@ export function SpecsView() {
 
             <div className="space-y-2 text-xs font-mono">
               <div className="flex items-center justify-between border-b border-border py-1.5">
-                <span className="text-muted-foreground">Target Tier:</span>
-                <span className="font-semibold text-foreground">Senior / Staff (90k–95k €)</span>
+                <span className="text-muted-foreground">Focus:</span>
+                <span className="font-semibold text-foreground">AI Product Design & Design Systems</span>
               </div>
               <div className="flex items-center justify-between border-b border-border py-1.5">
                 <span className="text-muted-foreground">Target Roles:</span>
-                <span className="font-semibold text-foreground">AI Product Design / Design Eng</span>
+                <span className="font-semibold text-foreground">Senior Product Designer / Design Engineer</span>
               </div>
               <div className="flex items-center justify-between py-1.5">
                 <span className="text-muted-foreground">Location:</span>

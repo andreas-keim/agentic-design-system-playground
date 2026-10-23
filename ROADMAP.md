@@ -1,7 +1,7 @@
 # Product & Architecture Master Blueprint (`ROADMAP.md`)
 **Repository:** `agentic-design-system-playground`  
 **Author & Lead Architect:** Andreas Keim (Senior UX Designer / Staff Design Engineer)  
-**Target Role & Positioning:** Senior AI Product Designer | Staff Design Engineer | Lead Design Systems (90k–95k+ € B2B/Enterprise Tier)  
+**Target Role & Positioning:** Senior AI Product Designer | Staff Design Engineer | Lead Design Systems (Enterprise Tier)  
 **Tech Stack:** React 19, TypeScript, Vite 8, Tailwind CSS v4, W3C DTCG Design Tokens (`design.json`), Style Dictionary, Deterministic Agentic UI Validator (`A2UI`)  
 **Deployment & Runtime:** Vercel Hobby Tier (100% Client-Side Execution, 0.00 € Infrastructure Cost, Zero External Paid APIs)
 
@@ -150,7 +150,7 @@ src/
 ---
 
 ### Phase 4: Executive Polish, Storytelling & Go-To-Market
-**Objective:** Maximize conversion for Senior/Staff/Lead applications (90k–95k+ € tier) by optimizing the showcase for time-constrained decision-makers.
+**Objective:** Maximize conversion for Senior/Staff/Lead applications by optimizing the showcase for time-constrained decision-makers.
 
 #### Deliverables
 * **In-App Role-Based Guided Tours:** Header dropdown offering two curated 90-second interactive walkthroughs:

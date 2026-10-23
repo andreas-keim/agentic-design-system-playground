@@ -13,7 +13,6 @@ export function AppShell() {
     { id: "workbench", label: "Workbench" },
     { id: "agentic-lab", label: "Agentic Lab" },
     { id: "tokens", label: "W3C Tokens" },
-    { id: "specs", label: "Architecture Specs" },
   ]
 
   return (
