@@ -18,19 +18,19 @@ export function AppShell() {
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col font-sans antialiased selection:bg-foreground selection:text-background">
-      {/* Apple-Style Navigation Bar: 44px (h-11) */}
-      <header className="sticky top-0 z-50 h-11 w-full bg-white dark:bg-card/75 dark:backdrop-blur-xl border-b border-transparent dark:border-border/80 dark:shadow-sm dark:shadow-black/40 transition-colors">
+      {/* Clean Navigation Bar: 56px (h-14) with comfortable typography */}
+      <header className="sticky top-0 z-50 h-14 w-full bg-white dark:bg-card/85 dark:backdrop-blur-xl border-b border-border/60 dark:border-border/80 dark:shadow-sm dark:shadow-black/40 transition-colors">
         <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-6">
-          {/* Left: Distinct Brand Mark & Identity (Clickable to Home) */}
+          {/* Left: Distinct Brand Mark & Identity */}
           <button
             onClick={() => setActiveTab("workbench")}
-            className="flex items-center gap-2.5 text-left group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 rounded-md py-0.5 transition-opacity hover:opacity-85 cursor-pointer"
+            className="flex items-center gap-3 text-left group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 rounded-md py-1 transition-opacity hover:opacity-85 cursor-pointer"
             title="Go to Home / Workbench"
           >
-            {/* Custom Geometric Token Icon */}
-            <div className="flex h-6 w-6 items-center justify-center rounded-md bg-foreground text-background shadow-2xs group-hover:scale-105 transition-transform">
+            {/* Geometric Token Icon */}
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-foreground text-background shadow-xs group-hover:scale-105 transition-transform">
               <svg
-                className="h-3.5 w-3.5 fill-current"
+                className="h-4 w-4 fill-current"
                 viewBox="0 0 24 24"
               >
                 <path d="M12 2L4 7v10l8 5 8-5V7l-8-5zm0 2.4l5.6 3.5L12 11.4 6.4 7.9 12 4.4zM6 9.6l5 3.1v6.2l-5-3.1V9.6zm12 0v6.2l-5 3.1v-6.2l5-3.1z" />
@@ -38,27 +38,27 @@ export function AppShell() {
             </div>
 
             <div className="flex flex-col justify-center">
-              <span className="font-semibold text-xs tracking-tight text-foreground leading-tight">
+              <span className="font-semibold text-sm tracking-tight text-foreground leading-tight">
                 Agentic DS
               </span>
-              <span className="text-[10px] text-muted-foreground font-normal leading-tight">
+              <span className="text-[11px] text-muted-foreground font-normal leading-tight">
                 by Andreas Keim
               </span>
             </div>
           </button>
 
-          {/* Center: Apple-style Text Navigation */}
-          <nav className="hidden sm:flex items-center gap-6">
+          {/* Center: Navigation Links */}
+          <nav className="hidden sm:flex items-center gap-7">
             {navItems.map((item) => {
               const isActive = activeTab === item.id
               return (
                 <button
                   key={item.id}
                   onClick={() => setActiveTab(item.id)}
-                  className={`text-[12px] tracking-tight transition-colors ${
+                  className={`text-[13px] sm:text-sm tracking-tight transition-colors cursor-pointer ${
                     isActive
-                      ? "text-foreground font-medium"
-                      : "text-muted-foreground/80 hover:text-foreground"
+                      ? "text-foreground font-semibold"
+                      : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
                   {item.label}
@@ -68,29 +68,29 @@ export function AppShell() {
           </nav>
 
           {/* Right Controls: X-Ray, Theme, GitHub */}
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-2">
             {/* Token X-Ray Toggle */}
             <button
               onClick={toggleXray}
-              className={`flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-mono transition-all ${
+              className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-mono transition-all cursor-pointer ${
                 xrayMode
                   ? "bg-blue-600 text-white font-medium shadow-xs"
-                  : "bg-muted/60 text-muted-foreground hover:text-foreground hover:bg-muted"
+                  : "bg-muted/70 text-muted-foreground hover:text-foreground hover:bg-muted"
               }`}
               title="Toggle Token X-Ray"
             >
-              <Crosshair className="h-3 w-3" />
+              <Crosshair className="h-3.5 w-3.5" />
               <span>X-Ray</span>
             </button>
 
             {/* Theme Switcher */}
             <button
               onClick={toggleTheme}
-              className="rounded-full p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
+              className="rounded-full p-2 text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors cursor-pointer"
               title={`Switch to ${theme === "dark" ? "Light" : "Dark"} Mode`}
               aria-label="Toggle theme"
             >
-              {theme === "dark" ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
+              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </button>
 
             {/* GitHub */}

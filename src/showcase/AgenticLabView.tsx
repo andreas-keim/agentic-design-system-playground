@@ -61,7 +61,7 @@ export function AgenticLabView() {
   }
 
   return (
-    <div className="h-[calc(100vh-44px)] flex flex-col justify-between max-w-7xl mx-auto px-6 py-6 pb-8 overflow-hidden select-none">
+    <div className="h-[calc(100vh-56px)] flex flex-col justify-between max-w-7xl mx-auto px-6 py-6 pb-8 overflow-hidden select-none">
       
       {/* ========================================================================= */}
       {/* 1. HERO HEADER (APPLE STYLE: GROSS, KRAFTVOLL, ATMET FREI)                */}
