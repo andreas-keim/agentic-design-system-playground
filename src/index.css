@@ -149,3 +149,36 @@
   --primary-foreground: var(--color-text-primary-default);
   --radius: var(--radii-md);
 }
+
+/*
+ * Bi-directional Precision Scanner (Down & Up Ping-Pong)
+ */
+@keyframes scanSweepPingPong {
+  0% {
+    top: 0%;
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  48% {
+    top: 96%;
+    opacity: 1;
+  }
+  52% {
+    top: 96%;
+    opacity: 1;
+  }
+  92% {
+    top: 0%;
+    opacity: 1;
+  }
+  100% {
+    top: 0%;
+    opacity: 0;
+  }
+}
+
+.animate-scan-sweep {
+  animation: scanSweepPingPong 2000ms cubic-bezier(0.45, 0, 0.25, 1) forwards;
+}

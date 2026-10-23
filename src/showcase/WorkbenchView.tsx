@@ -27,6 +27,34 @@ export function WorkbenchView() {
     setTimeout(() => setRecordSavedNotice(null), 2500)
   }
 
+  function getSimulatedButtonClass(variant: string) {
+    if (pinnedState === "hover") {
+      switch (variant) {
+        case "primary":
+          return "!bg-[var(--color-background-primary-hover)] ring-2 ring-primary/25"
+        case "outline":
+          return "!bg-muted !text-foreground"
+        case "secondary":
+          return "!bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)]"
+        case "ghost":
+          return "!bg-muted !text-foreground"
+        case "destructive":
+          return "!bg-destructive/20"
+        case "link":
+          return "underline"
+        default:
+          return ""
+      }
+    }
+    if (pinnedState === "focus") {
+      if (variant === "destructive") {
+        return "border-destructive/40 ring-3 ring-destructive/20"
+      }
+      return "border-ring ring-3 ring-ring/50"
+    }
+    return ""
+  }
+
   return (
     <div className="mx-auto max-w-7xl px-6 py-8">
       {/* 2-Column Clean Workspace: Exact Top Alignment, 2-Tier Surface Hierarchy */}
@@ -132,28 +160,52 @@ export function WorkbenchView() {
                         --color-background-primary-default
                       </span>
                     )}
-                    <Button variant="primary" disabled={pinnedState === "disabled"}>
+                    <Button
+                      variant="primary"
+                      disabled={pinnedState === "disabled"}
+                      className={getSimulatedButtonClass("primary")}
+                    >
                       Primary
                     </Button>
                   </div>
 
-                  <Button variant="outline" disabled={pinnedState === "disabled"}>
+                  <Button
+                    variant="outline"
+                    disabled={pinnedState === "disabled"}
+                    className={getSimulatedButtonClass("outline")}
+                  >
                     Outline
                   </Button>
 
-                  <Button variant="destructive" disabled={pinnedState === "disabled"}>
+                  <Button
+                    variant="destructive"
+                    disabled={pinnedState === "disabled"}
+                    className={getSimulatedButtonClass("destructive")}
+                  >
                     Destructive
                   </Button>
                 </div>
 
                 <div className="flex flex-wrap gap-2 justify-center items-center pt-2 border-t border-border/50 w-full">
-                  <Button variant="secondary" disabled={pinnedState === "disabled"}>
+                  <Button
+                    variant="secondary"
+                    disabled={pinnedState === "disabled"}
+                    className={getSimulatedButtonClass("secondary")}
+                  >
                     Secondary
                   </Button>
-                  <Button variant="ghost" disabled={pinnedState === "disabled"}>
+                  <Button
+                    variant="ghost"
+                    disabled={pinnedState === "disabled"}
+                    className={getSimulatedButtonClass("ghost")}
+                  >
                     Ghost
                   </Button>
-                  <Button variant="link" disabled={pinnedState === "disabled"}>
+                  <Button
+                    variant="link"
+                    disabled={pinnedState === "disabled"}
+                    className={getSimulatedButtonClass("link")}
+                  >
                     Link
                   </Button>
                 </div>
@@ -168,6 +220,13 @@ export function WorkbenchView() {
                   placeholder="e.g. k8s-eu-central-1"
                   defaultValue="k8s-prod-cluster-01"
                   disabled={pinnedState === "disabled"}
+                  className={
+                    pinnedState === "focus"
+                      ? "[&_input]:border-ring [&_input]:ring-3 [&_input]:ring-ring/50"
+                      : pinnedState === "hover"
+                      ? "[&_input]:border-foreground/50"
+                      : ""
+                  }
                 />
 
                 <FormField
@@ -177,6 +236,13 @@ export function WorkbenchView() {
                   defaultValue="secret-token-value"
                   error={pinnedState === "focus" ? undefined : "Key expires in 2 hours."}
                   disabled={pinnedState === "disabled"}
+                  className={
+                    pinnedState === "focus"
+                      ? "[&_input]:border-ring [&_input]:ring-3 [&_input]:ring-ring/50"
+                      : pinnedState === "hover"
+                      ? "[&_input]:border-foreground/50"
+                      : ""
+                  }
                 />
               </div>
             )}
@@ -245,8 +311,24 @@ export function WorkbenchView() {
                   <span className="text-[11px]">surface.panel</span>
                 </div>
                 <div className="flex items-center justify-between py-1 text-muted-foreground">
-                  <span className="text-foreground">--color-primary</span>
-                  <span className="text-[11px] text-purple-600 dark:text-purple-400 font-semibold">#6d28d9 (violet)</span>
+                  <span className="text-foreground">
+                    {pinnedState === "hover"
+                      ? "--color-primary-hover"
+                      : pinnedState === "focus"
+                      ? "--color-ring"
+                      : pinnedState === "disabled"
+                      ? "--opacity-disabled"
+                      : "--color-primary"}
+                  </span>
+                  <span className="text-[11px] text-purple-600 dark:text-purple-400 font-semibold">
+                    {pinnedState === "hover"
+                      ? "#5b21b6 (violet-hover)"
+                      : pinnedState === "focus"
+                      ? "ring-3 (focus-ring)"
+                      : pinnedState === "disabled"
+                      ? "0.5 (disabled)"
+                      : "#6d28d9 (violet)"}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between py-1 text-muted-foreground">
                   <span className="text-foreground">--space-component-md</span>
