@@ -9,19 +9,12 @@ interface ShowcaseContextValue {
   theme: ThemeMode
   setTheme: (theme: ThemeMode) => void
   toggleTheme: () => void
-  xrayMode: boolean
-  setXrayMode: (enabled: boolean) => void
-  toggleXray: () => void
-  hoveredToken: string | null
-  setHoveredToken: (token: string | null) => void
 }
 
 const ShowcaseContext = createContext<ShowcaseContextValue | undefined>(undefined)
 
 export function ShowcaseProvider({ children }: { children: React.ReactNode }) {
   const [activeTab, setActiveTab] = useState<ShowcaseTab>("workbench")
-  const [xrayMode, setXrayMode] = useState<boolean>(false)
-  const [hoveredToken, setHoveredToken] = useState<string | null>(null)
 
   const [theme, setTheme] = useState<ThemeMode>(() => {
     if (typeof window !== "undefined") {
@@ -46,10 +39,6 @@ export function ShowcaseProvider({ children }: { children: React.ReactNode }) {
     setTheme((prev) => (prev === "dark" ? "light" : "dark"))
   }
 
-  function toggleXray() {
-    setXrayMode((prev) => !prev)
-  }
-
   return (
     <ShowcaseContext.Provider
       value={{
@@ -58,11 +47,6 @@ export function ShowcaseProvider({ children }: { children: React.ReactNode }) {
         theme,
         setTheme,
         toggleTheme,
-        xrayMode,
-        setXrayMode,
-        toggleXray,
-        hoveredToken,
-        setHoveredToken,
       }}
     >
       {children}

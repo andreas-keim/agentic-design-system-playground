@@ -1,7 +1,6 @@
 import { useState, useMemo } from "react"
-import { CheckCircle2 } from "lucide-react"
+import { CheckCircle2, Crosshair } from "lucide-react"
 
-import { useShowcase } from "./ShowcaseContext"
 import { SegmentedTabs } from "./SegmentedTabs"
 import { PageHeader } from "./PageHeader"
 import { Button } from "@/components/ui/button"
@@ -47,7 +46,7 @@ interface CalculatedContrastPair {
 }
 
 export function WorkbenchView() {
-  const { xrayMode } = useShowcase()
+  const [xrayMode, setXrayMode] = useState<boolean>(false)
   const [activeComponent, setActiveComponent] = useState<ActiveComponent>("edit-panel")
   const [pinnedState, setPinnedState] = useState<PinnedState>("default")
 
@@ -183,19 +182,36 @@ export function WorkbenchView() {
             xrayMode ? "ring-1 ring-blue-500/40" : ""
           }`}
         >
-          {/* Stage Header / Toolbar: h-14 für horizontales Divider-Alignment */}
-          <div className="flex items-center justify-between border-b border-border/60 px-4 sm:px-5 h-14 bg-card shrink-0 overflow-x-auto scrollbar-none">
+          {/* Stage Header / Toolbar: h-14 für horizontales Divider-Alignment auf Desktop, umbruchsicher auf Mobile */}
+          <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2.5 border-b border-border/60 px-3.5 sm:px-5 py-2.5 sm:py-0 sm:h-14 bg-card shrink-0">
             {/* Apple-Style Segmented Component Selector */}
-            <SegmentedTabs<ActiveComponent>
-              items={[
-                { id: "edit-panel", label: "Record Panel" },
-                { id: "button", label: "Button Variants" },
-                { id: "form-field", label: "Form Fields" },
-                { id: "login-page", label: "SSO Login" },
-              ]}
-              value={activeComponent}
-              onChange={setActiveComponent}
-            />
+            <div className="overflow-x-auto scrollbar-none max-w-full">
+              <SegmentedTabs<ActiveComponent>
+                items={[
+                  { id: "edit-panel", label: "Record Panel" },
+                  { id: "button", label: "Button Variants" },
+                  { id: "form-field", label: "Form Fields" },
+                  { id: "login-page", label: "SSO Login" },
+                ]}
+                value={activeComponent}
+                onChange={setActiveComponent}
+              />
+            </div>
+
+            {/* Token-Namen anzeigen Schalter */}
+            <button
+              type="button"
+              onClick={() => setXrayMode((prev) => !prev)}
+              aria-pressed={xrayMode}
+              className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-mono transition-all cursor-pointer shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-1 ${
+                xrayMode
+                  ? "bg-blue-600 text-white font-medium shadow-xs border border-blue-500"
+                  : "border border-border/80 bg-muted/40 text-muted-foreground hover:text-foreground hover:bg-muted/70"
+              }`}
+            >
+              <Crosshair className="h-3.5 w-3.5" />
+              <span>Token-Namen anzeigen</span>
+            </button>
           </div>
 
           {/* The Viewport Canvas (Subtle Recessed Surface where the Object Lives) */}

@@ -1,4 +1,4 @@
-import { Sun, Moon, Crosshair } from "lucide-react"
+import { Sun, Moon } from "lucide-react"
 
 import { useShowcase, type ShowcaseTab } from "./ShowcaseContext"
 import { WorkbenchView } from "./WorkbenchView"
@@ -7,7 +7,7 @@ import { TokenView } from "./TokenView"
 import { SpecsView } from "./SpecsView"
 
 export function AppShell() {
-  const { activeTab, setActiveTab, theme, toggleTheme, xrayMode, toggleXray } = useShowcase()
+  const { activeTab, setActiveTab, theme, toggleTheme } = useShowcase()
 
   const navItems: { id: ShowcaseTab; label: string }[] = [
     { id: "workbench", label: "Workbench" },
@@ -69,25 +69,8 @@ export function AppShell() {
             })}
           </nav>
 
-          {/* Right Controls: X-Ray, Theme, GitHub */}
+          {/* Right Controls: Theme, LinkedIn, GitHub */}
           <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-            {/* Token X-Ray Toggle */}
-            <button
-              type="button"
-              onClick={toggleXray}
-              aria-pressed={xrayMode}
-              aria-label="Token X-Ray Ansicht umschalten"
-              className={`flex items-center gap-1.5 rounded-full px-2.5 sm:px-3 py-1 text-xs font-mono transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
-                xrayMode
-                  ? "bg-blue-600 text-white font-medium shadow-xs"
-                  : "bg-muted/70 text-muted-foreground hover:text-foreground hover:bg-muted"
-              }`}
-              title="Toggle Token X-Ray"
-            >
-              <Crosshair className="h-3.5 w-3.5" />
-              <span>X-Ray</span>
-            </button>
-
             {/* Theme Switcher */}
             <button
               type="button"
