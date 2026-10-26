@@ -259,8 +259,8 @@ export function WorkbenchView() {
                     }`}
                   >
                     {xrayMode && (
-                      <span className="absolute -top-3 left-3 z-30 inline-flex items-center gap-1 rounded bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 font-mono text-[9px] sm:text-[10px] px-2 py-0.5 shadow-xs border border-zinc-700/50 dark:border-zinc-300/50 pointer-events-none select-none tracking-tight">
-                        --color-card • --space-component-md • --radii-md
+                      <span className="absolute -top-3 left-3 z-30 inline-flex items-center rounded bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 font-mono text-[9px] sm:text-[10px] px-2 py-0.5 shadow-xs border border-zinc-700/50 dark:border-zinc-300/50 pointer-events-none select-none tracking-tight">
+                        --color-card
                       </span>
                     )}
                     <EditEntryPanel
@@ -288,8 +288,8 @@ export function WorkbenchView() {
                 }`}
               >
                 {xrayMode && (
-                  <span className="absolute -top-3 left-3 z-30 inline-flex items-center gap-1 rounded bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 font-mono text-[9px] sm:text-[10px] px-2 py-0.5 shadow-xs border border-zinc-700/50 dark:border-zinc-300/50 pointer-events-none select-none tracking-tight">
-                    --color-background-primary-default • --space-component-sm • --radii-md
+                  <span className="absolute -top-3 left-3 z-30 inline-flex items-center rounded bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 font-mono text-[9px] sm:text-[10px] px-2 py-0.5 shadow-xs border border-zinc-700/50 dark:border-zinc-300/50 pointer-events-none select-none tracking-tight">
+                    --color-background-primary-default
                   </span>
                 )}
 
@@ -353,8 +353,8 @@ export function WorkbenchView() {
                 }`}
               >
                 {xrayMode && (
-                  <span className="absolute -top-3 left-3 z-30 inline-flex items-center gap-1 rounded bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 font-mono text-[9px] sm:text-[10px] px-2 py-0.5 shadow-xs border border-zinc-700/50 dark:border-zinc-300/50 pointer-events-none select-none tracking-tight">
-                    --color-border-input-default • --space-component-sm • --radii-md
+                  <span className="absolute -top-3 left-3 z-30 inline-flex items-center rounded bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 font-mono text-[9px] sm:text-[10px] px-2 py-0.5 shadow-xs border border-zinc-700/50 dark:border-zinc-300/50 pointer-events-none select-none tracking-tight">
+                    --color-border-input-default
                   </span>
                 )}
 
@@ -398,8 +398,8 @@ export function WorkbenchView() {
                 }`}
               >
                 {xrayMode && (
-                  <span className="absolute -top-3 left-3 z-30 inline-flex items-center gap-1 rounded bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 font-mono text-[9px] sm:text-[10px] px-2 py-0.5 shadow-xs border border-zinc-700/50 dark:border-zinc-300/50 pointer-events-none select-none tracking-tight">
-                    --font-size-xl • --color-background-primary-default • --space-component-md
+                  <span className="absolute -top-3 left-3 z-30 inline-flex items-center rounded bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 font-mono text-[9px] sm:text-[10px] px-2 py-0.5 shadow-xs border border-zinc-700/50 dark:border-zinc-300/50 pointer-events-none select-none tracking-tight">
+                    --color-card
                   </span>
                 )}
 
@@ -414,7 +414,7 @@ export function WorkbenchView() {
         </div>
 
         {/* Right: The Quiet Inspector Panel Card */}
-        <div className="lg:col-span-4 rounded-2xl border border-border/80 bg-card overflow-hidden flex flex-col justify-between shadow-xs">
+        <div className="lg:col-span-4 rounded-2xl border border-border/80 bg-card overflow-hidden flex flex-col shadow-xs">
           {/* Header: Exakt h-14 bündig mit linker Stage-Toolbar */}
           <div className="border-b border-border/60 px-6 h-14 flex flex-col justify-center bg-card shrink-0">
             <h3 className="text-xs font-semibold tracking-tight text-foreground leading-tight">
@@ -426,7 +426,6 @@ export function WorkbenchView() {
           </div>
 
           <div className="p-6 space-y-6">
-
             {/* Simulated States */}
             <div>
               <span className="text-[11px] font-mono text-muted-foreground block mb-2 uppercase tracking-wider">
@@ -458,16 +457,16 @@ export function WorkbenchView() {
             </div>
 
             {/* Tokens */}
-            <div className="border-t border-border/60 pt-4">
+            <div className="border-t border-border/60 pt-5">
               <span className="text-[11px] font-mono text-muted-foreground block mb-2 uppercase tracking-wider">
                 Active W3C Tokens
               </span>
               <div className="space-y-1.5 font-mono text-xs">
-                <div className="flex items-center justify-between py-1 text-muted-foreground">
+                <div className="flex items-center justify-between py-0.5 text-muted-foreground">
                   <span className="text-foreground">--color-card</span>
                   <span className="text-[11px]">surface.panel</span>
                 </div>
-                <div className="flex items-center justify-between py-1 text-muted-foreground">
+                <div className="flex items-center justify-between py-0.5 text-muted-foreground">
                   <span className="text-foreground">
                     {pinnedState === "hover"
                       ? "--color-primary-hover"
@@ -487,66 +486,53 @@ export function WorkbenchView() {
                       : "#6d28d9 (violet)"}
                   </span>
                 </div>
-                <div className="flex items-center justify-between py-1 text-muted-foreground">
+                <div className="flex items-center justify-between py-0.5 text-muted-foreground">
                   <span className="text-foreground">--space-component-md</span>
                   <span className="text-[11px]">16px on-grid</span>
                 </div>
-                <div className="flex items-center justify-between py-1 text-muted-foreground">
+                <div className="flex items-center justify-between py-0.5 text-muted-foreground">
                   <span className="text-foreground">--radii-md</span>
                   <span className="text-[11px]">6px radius</span>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Quiet Status Bottom: Berechnete Farbkontraste statt pauschaler AAA-Aussage */}
-          <div className="border-t border-border/60 pt-4 mt-6 font-mono text-xs text-muted-foreground space-y-2.5">
-            <div className="flex items-center justify-between">
-              <span>Token-Bindung</span>
-              <span className="font-medium text-foreground">W3C DTCG (tokens.css)</span>
-            </div>
-
-            {/* Konkrete berechnete Farbpaarungen */}
-            <div className="rounded-xl border border-border/60 bg-muted/20 p-2.5 space-y-2">
-              <div className="flex items-center justify-between text-[11px] font-sans font-semibold text-foreground">
-                <span>Berechnete Farbkontraste (WCAG 2.1)</span>
+            {/* Token-Bindung & Berechnete Farbkontraste */}
+            <div className="border-t border-border/60 pt-5 space-y-3 font-mono text-xs">
+              <div className="flex items-center justify-between text-muted-foreground">
+                <span>Token-Bindung</span>
+                <span className="font-medium text-foreground">W3C DTCG (tokens.css)</span>
               </div>
 
-              <div className="space-y-1.5 text-[11px]">
-                {calculatedPairs.map((pair, idx) => (
-                  <div key={idx} className="flex items-center justify-between gap-1.5">
-                    <div className="truncate">
-                      <span className="text-foreground font-medium">{pair.role}:</span>{" "}
-                      <span className="text-muted-foreground text-[10px]">{pair.fg} auf {pair.bg}</span>
+              <div className="pt-1">
+                <span className="text-[11px] font-mono text-muted-foreground block mb-2 uppercase tracking-wider">
+                  Berechnete Farbkontraste (WCAG 2.1)
+                </span>
+                <div className="space-y-1.5 text-[11px]">
+                  {calculatedPairs.map((pair, idx) => (
+                    <div key={idx} className="flex items-center justify-between gap-1.5 py-0.5">
+                      <div className="truncate">
+                        <span className="text-foreground font-medium">{pair.role}:</span>{" "}
+                        <span className="text-muted-foreground text-[10px]">{pair.fg} auf {pair.bg}</span>
+                      </div>
+                      <div className="shrink-0 flex items-center gap-1 font-mono">
+                        <span className="font-semibold text-foreground">{pair.ratio.toFixed(2)}:1</span>
+                        <span
+                          className={`text-[9px] px-1.5 py-0.2 rounded font-semibold ${
+                            pair.ratio >= 7.0
+                              ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
+                              : pair.ratio >= 4.5
+                              ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
+                              : "bg-amber-500/10 text-amber-600 border border-amber-500/20"
+                          }`}
+                        >
+                          {pair.level}
+                        </span>
+                      </div>
                     </div>
-                    <div className="shrink-0 flex items-center gap-1 font-mono">
-                      <span className="font-semibold text-foreground">{pair.ratio.toFixed(2)}:1</span>
-                      <span
-                        className={`text-[9px] px-1.5 py-0.2 rounded font-semibold ${
-                          pair.ratio >= 7.0
-                            ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
-                            : pair.ratio >= 4.5
-                            ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
-                            : "bg-amber-500/10 text-amber-600 border border-amber-500/20"
-                        }`}
-                      >
-                        {pair.level}
-                      </span>
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <span>Katalog-Freigabe</span>
-              <span className="text-foreground font-mono text-[11px]">
-                {activeComponent === "button"
-                  ? "ButtonApi (.strict)"
-                  : activeComponent === "form-field"
-                  ? "FormFieldApi (.strict)"
-                  : "ButtonApi + FormFieldApi"}
-              </span>
             </div>
           </div>
         </div>
