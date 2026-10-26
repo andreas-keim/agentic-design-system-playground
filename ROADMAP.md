@@ -2,17 +2,17 @@
 **Repository:** `agentic-design-system-playground`  
 **Author & Lead Architect:** Andreas Keim (Senior UX Designer / Staff Design Engineer)  
 **Target Role & Positioning:** Senior AI Product Designer | Staff Design Engineer | Lead Design Systems (Enterprise Tier)  
-**Tech Stack:** React 19, TypeScript, Vite 8, Tailwind CSS v4, W3C DTCG Design Tokens (`design.json`), Style Dictionary, Deterministic Agentic UI Validator (`A2UI`)  
-**Deployment & Runtime:** Vercel Hobby Tier (100% Client-Side Execution, 0.00 € Infrastructure Cost, Zero External Paid APIs)
+**Tech Stack:** React 19, TypeScript, Vite 8, Tailwind CSS v4, W3C DTCG Design Tokens (`src/tokens/tokens.json`), Style Dictionary (CSS & Figma JSON), Deterministic Agentic UI Validator (`src/a2ui/check.ts`)  
+**Deployment & Runtime:** Vercel Hobby Tier (100% Client-Side Showcase Execution, 0.00 € Infrastructure Cost, Zero External Paid APIs)
 
 ---
 
 ## 1. Executive Summary & Strategic Goal
 
 This project serves as a 100% NDA-free, live, interactive **Proof of Work** on the web. Instead of presenting static Figma screens or an isolated component cemetery in Storybook, it demonstrates the complete engineering and design symbiosis required for modern AI-driven enterprise software:
-1. **W3C Design Token Governance:** Strict semantic token taxonomy (`Category.Subcategory.Role.State`) compiled via Style Dictionary into CSS Custom Properties and TypeScript types.
-2. **Modern React 19 & TypeScript Architecture:** Accessible, composable B2B components (`Button`, `Input`, `FormField`, `EditEntryPanel`, `LoginPage`, `SignUpPage`).
-3. **Deterministic Agentic / Generative UI (`A2UI`):** A client-side validation engine (`check.ts` + `catalog.api.ts`) that proves how design systems prevent LLMs and coding agents from hallucinating rogue styles, breaking spacing scales, or violating WCAG accessibility rules.
+1. **W3C Design Token Governance:** Strict semantic token taxonomy compiled via Style Dictionary into CSS Custom Properties (`src/styles/tokens.css`) and Figma JSON (`src/tokens/tokens.figma.json`).
+2. **Modern React 19 & TypeScript Architecture:** Accessible, composable B2B components (`Button`, `Input`, `FormField`, `EditEntryPanel`, `LoginPage`).
+3. **Deterministic Agentic UI Governance (`src/a2ui/`):** A strict component catalog schema (`catalog.api.ts` with Zod `.strict()`) and a reproducible CLI test suite (`check.ts`) testing 12 targeted fixtures against design and schema rules (11 of 12 as expected, 1 documented semantic gap). A companion interactive browser lab (`AgenticLabView.tsx`) simulates common AI UI errors and their deterministic fixes.
 
 ---
 
@@ -22,9 +22,9 @@ This project serves as a 100% NDA-free, live, interactive **Proof of Work** on t
 * **Decision:** The Vite application serves a custom-built, high-craft **Interactive Control Room** on the root route (`/`). Storybook is not deployed as the primary public entrypoint (it remains an optional local development workbench).
 * **Rationale:** Hiring Managers, VPs of Design, and Staff Engineers rarely click through raw Storybook trees. A bespoke showcase application on `/` immediately proves product sense, information architecture mastery, and high-end UI craft while integrating live prop controls and token inspection directly into the product experience.
 
-### ADR-02: Pure Client-Side Agentic Validation (`a2ui` Engine)
-* **Decision:** Consolidate the `a2ui-experiment` branch (`catalog.api.ts`, `check.ts`, `fixtures.ts`) into `main` as pure, deterministic TypeScript functions running directly in the browser.
-* **Rationale:** Evaluates structured UI payloads in real time (< 2ms execution) with zero server latency, zero API key exposure, and 0.00 € hosting cost on Vercel. Visitors can interactively mutate payloads and watch the validator catch and remediate LLM hallucinations live.
+### ADR-02: Deterministic Schema & Rule Validation via Node CLI (with Browser-Based Lab Simulation)
+* **Decision:** Run the deterministic Zod schema and AST design rule validator (`src/a2ui/check.ts`) as a reproducible Node CLI suite against 12 targeted fixtures (`node --experimental-strip-types src/a2ui/check.ts`). The Agentic Lab in the showcase serves as an interactive browser-side simulation demonstrating typical error fixes (hardcoded hex colors, arbitrary spacing, missing labels).
+* **Rationale:** Separates true regression testing of AI payloads from the interactive UI demonstration. The CLI suite verifies 11 of 12 targeted test cases as expected (with 1 documented semantic gap for destructive cancellations), while the browser lab allows zero-latency interactive error injection.
 
 ### ADR-03: Industry-Agnostic Enterprise B2B Framing
 * **Decision:** All showcase components and AI fixtures use a universal **"Enterprise System & Access Configuration"** domain (e.g., *System Record Management*, *Role & Permission Assignment*, *Security Clearance*, *Enterprise Workspace SSO*).
@@ -38,184 +38,89 @@ This project serves as a 100% NDA-free, live, interactive **Proof of Work** on t
 When a Design Leader or Staff Engineer opens the URL, they land directly in an interactive **System Control Room** (aesthetic inspired by Linear and Vercel Geist).
 
 * **Headline:** *Deterministic Design Systems for the Agentic Era.*
-* **Subline:** *Bridging W3C Design Tokens, React 19 Architecture, and Guardrailed Generative UI for Mission-Critical Enterprise Applications.*
-* **Interactive Hero Hook (Immediate Aha-Moment):** A prominent split-mode toggle directly in the hero section:  
-  `[ Mode: Raw LLM Output (Ungoverned) ]` vs. `[ Mode: Agentic System Guardrails (W3C Enforced) ]`
-  * **Raw Mode:** Renders the `EditEntryPanel` with typical AI hallucinations (hardcoded hex codes like `#3b82f6`, off-grid padding `13px`, missing `FormField` ARIA labels, low contrast) highlighted by red diagnostic badges generated live by `check.ts`.
-  * **Guardrailed Mode:** Smoothly transitions the UI into 100% W3C-token-compliant components. All diagnostic metrics turn green (`100% Token Compliance | WCAG AA/AAA (nach Farbpaarung berechnet) | 0 Hallucinations`).
+* **Projektthese:** *Ich habe ein Design System gebaut, das Agenten auf freigegebene Komponenten begrenzt und strukturierte UI-Ausgaben gegen konkrete Regeln prüft.*
+* **Interactive Hero Hook:** Direct tabbed navigation between the live Workbench, the simulated Agentic Lab, the W3C Token Explorer, and the Architecture Specs with reproducible CLI test results.
+  * **Workbench Mode:** Renders live B2B patterns with state pinning, calculated WCAG 2.1 contrast ratios, and Figma-style top-left token badges.
+  * **Lab Mode:** Interactively simulates typical AI generation errors (hardcoded hex `#ef4444`, 13px arbitrary spacing, missing input labels) and their automatic resolution.
 
 ### Top-Level Navigation Structure
-The App Shell features a sleek top navigation bar, global theme switcher (`Light` / `Dark` / `High-Contrast`), a global **`[ Token X-Ray: ON/OFF ]`** toggle, a `Cmd + K` command palette, and a **Role-Based Guided Tour** selector.
+The App Shell features a sleek top navigation bar, global theme switcher (`Light` / `Dark`), and direct links to GitHub and LinkedIn.
 
 | Navigation Tab | Primary Audience | Core Value & Functionality |
 | :--- | :--- | :--- |
-| **1. Component Workbench** | UX/Product Leaders & Design Systems Teams | Live B2B patterns (`EditEntryPanel`, `LoginPage`, `SignUpPage`, `FormField`, `Input`, `Button`) with interactive state pinning and bidirectional Token X-Ray inspection. |
-| **2. Agentic UI Lab (`A2UI`)** | AI Product Leads & Staff Engineers | Interactive before/after stress-test showing how `catalog.api.ts` and `check.ts` deterministically prevent LLM UI hallucinations, including a live error-injection sandbox. |
-| **3. W3C Token Explorer** | Design Engineers & Frontend Architects | Interactive explorer for `design.json` (`Category.Subcategory.Role.State`), primitive-to-semantic alias graphs, live WCAG/APCA contrast matrix, and multi-format developer export. |
-| **4. Architecture & Specs** | CTOs, Hiring Managers & Recruiters | End-to-end build pipeline diagrams, ADRs, business ROI of Agentic Design Systems, and executive profile/contact of Andreas Keim. |
+| **1. Component Workbench** | UX/Product Leaders & Design Systems Teams | Live B2B patterns (`EditEntryPanel`, `Button Variants`, `Form Fields`, `SSO Login`) with state pinning, calculated contrast ratios, and Figma-style token frame labels. |
+| **2. Agentic UI Lab** | AI Product Leads & Staff Engineers | Interactive simulation showing how design system guardrails fix common agent errors (color, spacing, a11y labels). |
+| **3. W3C Tokens** | Design Engineers & Frontend Architects | Interactive explorer for `src/tokens/tokens.json`, live computed WCAG 2.1 contrast matrix, and 4-format snippet drawer. |
+| **4. Architecture Specs** | CTOs, Hiring Managers & Recruiters | Two-pathway architecture diagram (B4 → A2 bridge), Testfall 03 CLI verification, ADRs, and executive profile. |
 
 ---
 
 ## 4. Target Repository & File Structure
 
-To implement this cleanly within the existing Vite 8 + React 19 + Tailwind v4 setup, the `src/` directory is structured as follows:
-
 ```text
 src/
-├── components/              # Existing Core Design System Components
-│   ├── Button/              # All variants & interactive states
-│   ├── Input/               # Token-governed text input
-│   ├── FormField/           # Accessible label, hint & error wrapper
-│   ├── EditEntryPanel/      # Complex B2B record configuration panel
-│   ├── LoginPage/           # Enterprise SSO authentication view
-│   └── SignUpPage/          # Workspace provisioning & registration view
+├── components/              # Core Design System Components
+│   ├── ui/button.tsx        # Base UI + CVA Token-bound button
+│   ├── ui/form-field.tsx    # Accessible label, hint & error wrapper
+│   ├── edit-entry-panel.tsx # Complex B2B record configuration panel
+│   └── login-page.tsx       # Enterprise SSO authentication view
 ├── tokens/                  # W3C DTCG Token Architecture
-│   ├── design.json          # Single Source of Truth (Category.Subcategory.Role.State)
-│   └── generated/           # Style Dictionary outputs (CSS Custom Properties, TS Union Types)
-├── a2ui/                    # Consolidated from branch `a2ui-experiment`
-│   ├── catalog.api.ts       # Strict component contracts & allowed token schemas for AI agents
-│   ├── check.ts             # Pure client-side deterministic validator returning ValidationResult
-│   └── fixtures.ts          # B2B Enterprise scenarios (Ungoverned LLM vs. Guardrailed payloads)
+│   ├── tokens.json          # Single Source of Truth ($value, $type, useFor, avoidFor)
+│   └── tokens.figma.json    # Style Dictionary Figma variable snapshot
+├── styles/
+│   └── tokens.css           # Style Dictionary CSS Custom Properties (:root)
+├── a2ui/                    # Deterministic Governance Engine
+│   ├── catalog.api.ts       # Strict component contracts & Zod .strict() schemas
+│   ├── check.ts             # CLI test runner checking 12 targeted fixtures
+│   ├── design-rules.ts      # AST design rules (e.g. exactly one primary CTA)
+│   └── fixtures.ts          # 12 targeted test cases (valid & invalid AI payloads)
 ├── showcase/                # Primary Showcase Application (Root `/` UI)
-│   ├── AppShell.tsx         # Top navigation, Theme Switcher, Global X-Ray Toggle, Role Tour
-│   ├── HeroControlBar.tsx   # 5-second pitch + Quick Guardrail Toggle + System Status Metrics
-│   ├── WorkbenchView.tsx    # Tab 1: Component Stage + Live Props/State/Token Inspector
-│   ├── AgenticLabView.tsx   # Tab 2: 3-Column A2UI Validator Lab & Live Rule Mutator
-│   ├── TokenView.tsx        # Tab 3: W3C Taxonomy Filter, Alias Graph & Contrast Matrix
-│   └── SpecsView.tsx        # Tab 4: Pipeline Architecture Diagram, ADRs & About Andreas Keim
+│   ├── AppShell.tsx         # Responsive top navigation, theme switcher
+│   ├── WorkbenchView.tsx    # Tab 1: Component Stage + Token frame labels + State Inspector
+│   ├── AgenticLabView.tsx   # Tab 2: Guardrail Lab simulation + reduced-motion support
+│   ├── TokenView.tsx        # Tab 3: W3C Taxonomy Filter, computed WCAG matrix & exports
+│   └── SpecsView.tsx        # Tab 4: 2-Pathway diagram, Testfall 03 CLI check & ADRs
 └── App.tsx                  # Root entry rendering AppShell
 ```
 
 ---
 
-## 5. Phased Implementation Roadmap (Phase 1 – Phase 4)
+## 5. Phased Implementation Status (Phase 1 – Phase 4)
 
-### Phase 1: The Interactive Foundation (MVP Showcase & Workbench)
-**Objective:** Replace the minimal developer test surface on Vercel with the high-craft `AppShell` and `WorkbenchView`, framing all existing components in a cohesive Enterprise B2B context.
+### Phase 1: The Interactive Foundation (MVP Showcase & Workbench) — Completed
+* **Global App Shell (`AppShell.tsx`):** Responsive top navigation (390px, 768px, 1280px), instant Light/Dark theme switching via CSS Custom Properties.
+* **Component Workbench (`WorkbenchView.tsx`):** Interactive Stage and Inspector with state pinning (`default`, `hover`, `focus`, `disabled`), calculated WCAG 2.1 contrast ratios for active color pairings, and Figma-style top-left frame labels.
+* **Enterprise B2B Framing:** Universal enterprise patterns (`System Access & Role Configuration`, `SSO Login`).
 
-#### Deliverables
-* **Global App Shell (`AppShell.tsx`):** Top navigation bar, instant Light/Dark theme switching via CSS Custom Properties, and the global **Token X-Ray Mode** state.
-* **Interactive Component Workbench (`WorkbenchView.tsx`):** Split-pane layout (65% Interactive Stage / 35% Live Inspector Panel).
-* **Enterprise B2B Context Framing:** Default component copy and scenarios updated to universal B2B workflows:
-  * `EditEntryPanel`: *"Edit System Record & Access Permissions"* (Fields: *Record ID*, *Assigned Role*, *Security Clearance*, *Environment Status*).
-  * `LoginPage` & `SignUpPage`: *"Enterprise Workspace SSO & Provisioning"*.
+### Phase 2: The Agentic UI Lab (Interactive Simulation) — Completed
+* **Interactive Guardrail Lab (`AgenticLabView.tsx`):** Demonstrates automated fixes for three typical agent errors:
+  1. *Color:* Raw `#ef4444` → Semantic token `var(--color-background-primary-default)`.
+  2. *Grid:* Arbitrary `13px` spacing → 8px grid token `16px` (`var(--space-component-md)`).
+  3. *A11y:* Naked `<input>` without programmatic label → Accessible `FormField` (WCAG 3.3.2).
+* **Accessibility & Motion:** Instant transition under `prefers-reduced-motion: reduce` (49ms) and cancellable scanner timeouts on reset.
 
-#### User Stories & Acceptance Criteria (Phase 1)
-* **US 1.1 (UX / Design System Lead):** *As a Design Leader, I want to inspect all interactive states (`default`, `hover`, `focus-visible`, `error`, `disabled`) and accessibility properties of a component on one screen.*
-  * **AC 1:** The right-hand Inspector Panel allows interactive prop switching and **State Pinning** (locking `:hover`, `:focus-visible`, or `error` states without holding the mouse).
-  * **AC 2:** Each inspected component displays live ARIA role verification, keyboard focus-order badges, and contrast compliance.
-* **US 1.2 (Staff Design Engineer):** *As an Engineer, I want to hover over any rendered element in the `EditEntryPanel` and immediately see which semantic W3C tokens power its styling.*
-  * **AC 1:** Activating **Token X-Ray Mode** displays a precision blueprint overlay on hover, revealing the semantic token path (e.g., `color.surface.interactive.hover` → `var(--ds-color-surface-interactive-hover)`).
-  * **AC 2:** Switching between Light and Dark mode updates all tokens cleanly with zero layout shift (CLS = 0).
+### Phase 3: W3C DTCG Token Deep-Dive & Snippet Export — Completed
+* **Taxonomy Explorer (`TokenView.tsx`):** Faceted search across `src/tokens/tokens.json`.
+* **Computed WCAG 2.1 Contrast Matrix:** Mathematical contrast calculations ($L_1 + 0.05 / L_2 + 0.05$) against White, Dark (`#09090b`), and Primary Violet (`#6d28d9`).
+* **Multi-Format Developer Snippets:** Copy drawer for W3C JSON, CSS Variables, TypeScript Snippet (reference), and LLM Prompt rules.
 
----
-
-### Phase 2: The Agentic UI Lab (The Unfair Advantage)
-**Objective:** Merge branch `a2ui-experiment` into `main` and build `AgenticLabView.tsx`—an interactive, client-side validation environment that visually proves how your system prevents LLM UI hallucinations.
-
-#### Deliverables
-* **Scenario Selector (`fixtures.ts`):** Three selectable B2B agent prompts:
-  1. *Prompt A:* "Generate an Enterprise Record Configuration Panel (`EditEntryPanel`)."
-  2. *Prompt B:* "Generate a Zero-Trust Workspace Login (`LoginPage`)."
-  3. *Prompt C:* "Generate a Critical Form Validation Group (`FormField` + `Input` + `Button`)."
-* **3-Column Lab Interface (`AgenticLabView.tsx`):**
-  * **Column 1: Agent Contract (`catalog.api.ts`):** Displays the strict TypeScript/JSON schema provided to the coding agent (allowed components, required props, forbidden inline styles).
-  * **Column 2: Comparative Stage:** Interactive toggle/slider switching between:
-    * *0% – Raw LLM Output (Ungoverned):* Renders hallucinated UI with off-scale spacing (`13px`), hardcoded hex colors (`#ef4444`), raw `<input>` without `FormField`, and broken button hierarchy.
-    * *50% – Diagnostic Audit Overlay (`check.ts` Active):* Highlights every violation directly on the UI canvas with red bounding boxes and rule IDs.
-    * *100% – Auto-Remediated Agentic UI:* Renders the 100% compliant React component tree using strict semantic tokens.
-  * **Column 3: Live Diagnostic Report (`check.ts` Output):** Real-time scorecard displaying `Token Compliance %`, `Catalog API Match`, and a clickable list of violations with auto-fix diffs.
-* **Interactive Rule Mutator (Sandbox):** Quick-action buttons allowing visitors to inject errors into the valid payload (`[+ Inject Rogue Hex Color]`, `[+ Break 8px Spacing Grid]`, `[+ Strip FormField Label]`) and watch `check.ts` immediately fail the audit and highlight the offending DOM node.
-
-#### User Stories & Acceptance Criteria (Phase 2)
-* **US 2.1 (AI Product Lead / Principal Engineer):** *As an AI Product Leader, I want to see how the design system acts as a deterministic guardrail for LLM-generated interfaces.*
-  * **AC 1:** Switching between *Ungoverned* and *Guardrailed* modes dynamically recalculates the output of `check.ts` in the browser and animates the compliance score from `< 50%` to `100%`.
-  * **AC 2:** Clicking any violation in the Diagnostic Report highlights the corresponding rule in `catalog.api.ts` and shows the exact W3C token remediation.
+### Phase 4: Architecture Specs & V1 Stabilization — Completed
+* **Two-Pathway Architecture Diagram (`SpecsView.tsx`):** Connects Build Pipeline (B1–B4) directly to Governance Pipeline (A1–A4) via the B4 → A2 component-to-catalog link.
+* **Reproducible Testfall 03:** Direct verification of CLI fixture rejection (`Unrecognized key(s) in object: 'className'`).
+* **CLI Benchmark Documentation:** 11 of 12 targeted fixtures verified as expected; 1 documented semantic gap (fixture 08: destructive cancellation).
+* **Planned Future Deliverables:**
+  * In-App Role-Based Guided Tour dropdown (*planned*).
+  * Command Palette (`Cmd + K`) shortcut launcher (*planned*).
+  * Video walkthrough & screen recordings (*planned*).
 
 ---
 
-### Phase 3: W3C DTCG Token Deep-Dive & Developer Export
-**Objective:** Prove deep architectural mastery of `design.json`, Style Dictionary pipelines, and enterprise accessibility governance.
+## 6. Implementation Execution Checklist
 
-#### Deliverables
-* **Interactive Taxonomy Explorer (`TokenView.tsx`):** Faceted search and click-to-filter across the `Category.Subcategory.Role.State` structure.
-* **Alias Traceability Visualizer:** Visual flow showing how a Primitive Token (e.g., `palette.blue.600`) maps to a Semantic Token (`color.action.primary.default`) and binds to a Component Property (`Button.background`).
-* **Live WCAG 2.1 (AA/AAA) & APCA Contrast Matrix:** Client-side contrast calculator validating text and border tokens against surface tokens across Light and Dark modes.
-* **Multi-Target Export Drawer:** One-click copy drawer showing any selected token set in four synchronized formats:
-  1. **W3C DTCG Standard JSON** (`$value`, `$type`, `$description`)
-  2. **CSS Custom Properties** (Style Dictionary / Tailwind v4 output)
-  3. **TypeScript Union Types** (Strict prop types)
-  4. **Agent System Prompt Manifest** (Compact token rules optimized for LLM context windows)
-
----
-
-### Phase 4: Executive Polish, Storytelling & Go-To-Market
-**Objective:** Maximize conversion for Senior/Staff/Lead applications by optimizing the showcase for time-constrained decision-makers.
-
-#### Deliverables
-* **In-App Role-Based Guided Tours:** Header dropdown offering two curated 90-second interactive walkthroughs:
-  * **Tour A: For Design & Product Leaders** (Focus: UX consistency, accessibility guarantees, state completeness, design-to-dev velocity).
-  * **Tour B: For Staff Engineers & Tech Leads** (Focus: W3C DTCG pipeline, React 19 + Tailwind v4 architecture, `catalog.api.ts` type contracts, deterministic `check.ts` AST/schema validation).
-* **Architecture & Executive Specs View (`SpecsView.tsx`):** Visual Mermaid/SVG pipeline diagram (`design.json` → `Style Dictionary` → `React 19 Components` → `catalog.api.ts` → `check.ts`), key ADRs, and direct links to Andreas Keim’s LinkedIn, GitHub, and CV.
-* **GitHub `README.md` & LinkedIn Launch Assets:** High-impact repository documentation and a scripted 90-second screen recording demonstrating the Token X-Ray and Agentic UI Lab.
-
----
-
-## 6. Screen & Layout Specification (UX/UI Blueprint)
-
-### Visual Design Direction: "Swiss Precision Engineering"
-* **Chrome vs. Canvas Separation:** The application shell uses a restrained, high-contrast monochrome palette (Slate/Zinc with crisp `1px` borders) so that the inspected Design System components and the semantic diagnostic badges (Emerald Green for Valid, Amber for Warning, Crimson for Violation) stand out with maximum clarity.
-* **Typography:** Clean geometric sans-serif (`Inter` or `Geist`) for UI controls, paired with a sharp monospace font (`Geist Mono` or `JetBrains Mono`) for token paths, hex values, contrast ratios, and `check.ts` audit logs.
-
-### Wireframe Blueprint (Main Workbench & Agentic Lab)
-
-```text
-+----------------------------------------------------------------------------------------------------+
-| [Logo] AGENTIC DS // Andreas Keim      [1. Workbench] [2. Agentic Lab] [3. W3C Tokens] [4. Specs]  |
-|                                                          [X-Ray: ON] [Theme: Dark] [Guided Tour v] |
-+----------------------------------------------------------------------------------------------------+
-| HERO / SYSTEM STATUS BAR                                                                           |
-| > W3C DTCG v1.0 | Core Components: 6 | Domain: Enterprise B2B | A2UI Validator: PASS (100% Strict) |
-+----------------------------------------------------------------------------------------------------+
-|                                                         |                                          |
-|  INTERACTIVE STAGE (65% Width)                          |  LIVE INSPECTOR & DIAGNOSTICS (35%)      |
-|  +---------------------------------------------------+  |  +------------------------------------+  |
-|  | [Pattern: EditEntryPanel v] [Mode: Guardrailed v] |  |  | [Tab: Props/State] [Tokens] [A2UI] |  |
-|  |                                                   |  |  +------------------------------------+  |
-|  |   +-------------------------------------------+   |  |  | ACTIVE TARGET: EditEntryPanel      |  |
-|  |   | Edit System Record & Permissions          |   |  |  |                                    |  |
-|  |   | ----------------------------------------- |   |  |  | PINNED STATE: :focus-visible       |  |
-|  |   | FormField: Record Identifier *            |   |  |  | [Default] [Hover] [Focus] [Error]  |  |
-|  |   | [ Input: SYS-REC-84920                 ]  |   |  |  |                                    |  |
-|  |   |   ^-- [X-RAY: color.border.input.focus]   |   |  |  | CONSUMED W3C SEMANTIC TOKENS:      |  |
-|  |   |                                           |   |  |  | • color.surface.panel.default      |  |
-|  |   | FormField: Security Clearance             |   |  |  | • space.layout.padding.md (16px)   |  |
-|  |   | [ Input: Level 3 - Restricted          ]  |   |  |  | • color.border.interactive.focus   |  |
-|  |   |                                           |   |  |  |                                    |  |
-|  |   | [ Cancel (Secondary) ]  [ Save (Primary)] |   |  |  | DETERMINISTIC AUDIT (check.ts):    |  |
-|  |   +-------------------------------------------+   |  |  | [✓] Token Strictness: 100%         |  |
-|  |                                                   |  |  | [✓] Catalog API Contract: Valid    |  |
-|  | [ Viewport: Desktop | Grid: 8px | Contrast: AAA ] |  |  | [✓] A11y Labels & Contrast: PASS   |  |
-|  +---------------------------------------------------+  |  +------------------------------------+  |
-+----------------------------------------------------------------------------------------------------+
-```
-
-### Signature High-Craft Micro-Interactions
-1. **Bidirectional Token X-Ray Loupe:** Hovering over any sub-element inside `EditEntryPanel`, `LoginPage`, or `Button` draws a precision laser border around the element with a floating token pill, while simultaneously highlighting and auto-scrolling to that exact token in the right-hand Inspector Panel.
-2. **Real-Time Guardrail Morphing:** In the Agentic UI Lab, toggling from *Ungoverned LLM* to *Guardrailed Mode* smoothly animates the compliance score counter from `42%` to `100%` while transforming red violation badges (`❌ Hardcoded #3B82F6`) into green verified token badges (`✓ color.action.primary.default`).
-3. **Zero-Latency State Pinning:** Clicking a pseudo-state pill (`:hover`, `:focus-visible`, `error`, `disabled`) in the Inspector locks the rendered component into that visual state on the canvas so reviewers can inspect focus rings and error tokens effortlessly.
-4. **Command Palette (`Cmd + K`):** Instant keyboard navigation to switch views, toggle X-Ray mode, flip Light/Dark themes, run the A2UI validator stress-test, or copy W3C token JSON.
-
----
-
-## 7. Implementation Execution Checklist (For Coding Agent / Antigravity)
-
-Use this sequential checklist to execute the roadmap inside the repository:
-
-- [x] **Step 1 (Branch Consolidation):** Merge or copy `a2ui-experiment` files (`catalog.api.ts`, `check.ts`, `fixtures.ts`) into `src/a2ui/` on `main` and ensure `check.ts` exports a pure, browser-safe validation function.
-- [x] **Step 2 (B2B Domain Framing):** Update default props and fixture payloads for `EditEntryPanel`, `LoginPage`, `SignUpPage`, `FormField`, `Input`, and `Button` to use the universal *"Enterprise System & Access Configuration"* copy.
-- [x] **Step 3 (AppShell & Theme/X-Ray Context):** Build `src/showcase/AppShell.tsx` with global state providers for `theme` (`light` | `dark`), `xrayMode` (`boolean`), and `activeTab` (`workbench` | `agentic-lab` | `tokens` | `specs`).
-- [x] **Step 4 (Phase 1 – Component Workbench):** Build `src/showcase/WorkbenchView.tsx` featuring the interactive component stage, state pinning controls, and bidirectional Token X-Ray inspector.
-- [x] **Step 5 (Phase 2 – Agentic UI Lab):** Build `src/showcase/AgenticLabView.tsx` wiring up `fixtures.ts`, `catalog.api.ts`, and `check.ts` with the 3-stage Guardrail Enforcement switch and the interactive Rule Mutator buttons.
-- [x] **Step 6 (Phase 3 – W3C Token Explorer):** Build `src/showcase/TokenView.tsx` rendering the `design.json` taxonomy table, alias mapping, WCAG contrast badges, and the 4-format developer export drawer.
-- [x] **Step 7 (Phase 4 – Architecture Specs & V1 Stabilization):** Build `src/showcase/SpecsView.tsx` with two connected pathways (B4 → A2), verify zero build/lint errors, stabilize responsive layouts (390, 768, 1280 px with 0 overflows), add `prefers-reduced-motion` support for the scan animation, ground all claims against repo facts, and deploy to Vercel via `main`.
+- [x] **Step 1 (Branch Consolidation):** Consolidate `a2ui` governance files (`catalog.api.ts`, `check.ts`, `fixtures.ts`) into `src/a2ui/` on `main`.
+- [x] **Step 2 (B2B Domain Framing):** Wire up enterprise B2B scenarios for `EditEntryPanel`, `Button`, `FormField`, and `LoginPage`.
+- [x] **Step 3 (AppShell & Theme Context):** Build responsive `src/showcase/AppShell.tsx` supporting Light and Dark modes.
+- [x] **Step 4 (Phase 1 – Component Workbench):** Build `src/showcase/WorkbenchView.tsx` with state pinning, calculated contrast pairs, and Figma-style frame labels.
+- [x] **Step 5 (Phase 2 – Agentic UI Lab):** Build `src/showcase/AgenticLabView.tsx` with interactive error simulation and `prefers-reduced-motion` support.
+- [x] **Step 6 (Phase 3 – W3C Token Explorer):** Build `src/showcase/TokenView.tsx` rendering `tokens.json` taxonomy, contrast matrix, and code snippets.
+- [x] **Step 7 (Phase 4 – Architecture Specs & V1 Stabilization):** Build `src/showcase/SpecsView.tsx` with B4 → A2 connection, stabilize responsive layouts (390px, 768px, 1280px with 0 page overflows), align all statements with repo facts, and deploy to Vercel via `main`.

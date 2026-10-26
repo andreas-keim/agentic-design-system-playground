@@ -1,8 +1,8 @@
 import { useState, useMemo } from "react"
-import { CheckCircle2 } from "lucide-react"
+import { CheckCircle2, ArrowRight } from "lucide-react"
 
+import { useShowcase } from "./ShowcaseContext"
 import { SegmentedTabs } from "./SegmentedTabs"
-import { PageHeader } from "./PageHeader"
 import { Button } from "@/components/ui/button"
 import { FormField } from "@/components/ui/form-field"
 import { EditEntryPanel } from "@/components/edit-entry-panel"
@@ -46,6 +46,7 @@ interface CalculatedContrastPair {
 }
 
 export function WorkbenchView() {
+  const { setActiveTab } = useShowcase()
   const [xrayMode, setXrayMode] = useState<boolean>(false)
   const [activeComponent, setActiveComponent] = useState<ActiveComponent>("edit-panel")
   const [pinnedState, setPinnedState] = useState<PinnedState>("default")
@@ -169,10 +170,27 @@ export function WorkbenchView() {
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-8">
-      <PageHeader
-        title="Interactive Component Stage"
-        subtitle="Live states, ARIA verification, and bidirectional W3C token X-Ray inspection."
-      />
+      {/* 1. Sichtbare Projektthese & direkter Weg zum Beleg in Architecture Specs */}
+      <div className="mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">
+            Komponenten-Workbench
+          </h1>
+          <p className="text-sm text-muted-foreground mt-1 max-w-2xl leading-relaxed">
+            Ich habe ein Design System gebaut, das Agenten auf freigegebene Komponenten begrenzt und strukturierte UI-Ausgaben gegen konkrete Regeln prüft.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab("specs")}
+          aria-label="Zum stärksten Beleg: Testfall 03 in Architecture Specs ansehen"
+          className="inline-flex items-center gap-1.5 text-xs font-medium text-foreground hover:text-primary transition-colors cursor-pointer shrink-0 pb-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 rounded-sm self-start md:self-end"
+        >
+          <span>Zum Beleg: Testfall 03 in Specs</span>
+          <ArrowRight className="h-3.5 w-3.5" />
+        </button>
+      </div>
 
       {/* 2-Column Clean Workspace: Exact Top Alignment, 2-Tier Surface Hierarchy */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">

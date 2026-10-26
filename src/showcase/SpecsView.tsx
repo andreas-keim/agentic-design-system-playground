@@ -264,8 +264,8 @@ const ARCHITECTURE_STATIONS: ArchitectureStation[] = [
     function: "Deterministische Schema- & Regelprüfung",
     role: "Node-basierte Validierung (Schema-Layer + Designregeln)",
     connectionLabel: "Urteilsfindung & Übersetzung",
-    inputDescription: "Node-Aufruf (node src/a2ui/check.ts) validiert Fixtures gegen den Katalog",
-    outputDescription: "Verdict (Schema, Design-Regel oder durchgelassen) + Ursachenmeldung",
+    inputDescription: "Node-Aufruf (node src/a2ui/check.ts) validiert 12 gezielte Fixtures gegen den Katalog",
+    outputDescription: "11 von 12 gezielten Fixtures wie erwartet; 1 dokumentierte semantische Lücke (Fixture 08)",
     adrTag: "ADR-02 // Deterministische Validierung",
     adrDecision:
       "Deterministische Schema-Prüfung vor dem Rendern statt unberechenbarem Prompting.",
@@ -346,6 +346,9 @@ export function SpecsView() {
             </h2>
             <p className="text-xs text-muted-foreground mt-0.5">
               Beweis: <code className="text-foreground">node src/a2ui/check.ts</code> weist unerlaubtes Styling sofort ab.
+              <span className="block sm:inline sm:ml-2 text-muted-foreground/80 font-mono text-[11px]">
+                (11 von 12 gezielten Fixtures wie erwartet; 1 dokumentierte semantische Lücke)
+              </span>
             </p>
           </div>
 
