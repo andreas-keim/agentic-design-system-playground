@@ -177,11 +177,7 @@ export function WorkbenchView() {
       {/* 2-Column Clean Workspace: Exact Top Alignment, 2-Tier Surface Hierarchy */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
         {/* Left: The Component Stage Card */}
-        <div
-          className={`lg:col-span-8 rounded-2xl border border-border/80 bg-card shadow-xs flex flex-col overflow-hidden transition-all ${
-            xrayMode ? "ring-1 ring-foreground/20" : ""
-          }`}
-        >
+        <div className="lg:col-span-8 rounded-2xl border border-border/80 bg-card shadow-xs flex flex-col overflow-hidden">
           {/* Stage Header / Toolbar: h-14 für horizontales Divider-Alignment auf Desktop, umbruchsicher auf Mobile */}
           <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2.5 border-b border-border/60 px-3.5 sm:px-5 py-2.5 sm:py-0 sm:h-14 bg-card shrink-0">
             {/* Apple-Style Segmented Component Selector */}
@@ -239,10 +235,14 @@ export function WorkbenchView() {
                     </Button>
                   </div>
                 ) : (
-                  <div className="relative">
+                  <div
+                    className={`relative rounded-xl transition-all ${
+                      xrayMode ? "ring-1 ring-foreground/30 shadow-sm" : ""
+                    }`}
+                  >
                     {xrayMode && (
-                      <span className="absolute -top-3.5 right-2 z-30 rounded bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 font-mono text-[9px] px-1.5 py-0.5 shadow-xs border border-zinc-700/40 dark:border-zinc-300/40 pointer-events-none">
-                        --color-card • --space-component-md
+                      <span className="absolute -top-3 left-3 z-30 inline-flex items-center gap-1 rounded bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 font-mono text-[9px] sm:text-[10px] px-2 py-0.5 shadow-xs border border-zinc-700/50 dark:border-zinc-300/50 pointer-events-none select-none tracking-tight">
+                        --color-card • --space-component-md • --radii-md
                       </span>
                     )}
                     <EditEntryPanel
@@ -264,22 +264,25 @@ export function WorkbenchView() {
 
             {/* 2. Button View: Floating cleanly on the Canvas */}
             {activeComponent === "button" && (
-              <div className="flex flex-col gap-6 items-center w-full max-w-md bg-card p-8 rounded-xl border border-border/80 shadow-xs">
+              <div
+                className={`relative flex flex-col gap-6 items-center w-full max-w-md bg-card p-8 rounded-xl border border-border/80 shadow-xs transition-all ${
+                  xrayMode ? "ring-1 ring-foreground/30 shadow-sm" : ""
+                }`}
+              >
+                {xrayMode && (
+                  <span className="absolute -top-3 left-3 z-30 inline-flex items-center gap-1 rounded bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 font-mono text-[9px] sm:text-[10px] px-2 py-0.5 shadow-xs border border-zinc-700/50 dark:border-zinc-300/50 pointer-events-none select-none tracking-tight">
+                    --color-background-primary-default • --space-component-sm • --radii-md
+                  </span>
+                )}
+
                 <div className="flex flex-wrap gap-3 justify-center items-center">
-                  <div className="relative">
-                    {xrayMode && (
-                      <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-30 rounded bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 font-mono text-[9px] px-1.5 py-0.5 whitespace-nowrap shadow-xs border border-zinc-700/40 dark:border-zinc-300/40 pointer-events-none">
-                        --color-background-primary-default
-                      </span>
-                    )}
-                    <Button
-                      variant="primary"
-                      disabled={pinnedState === "disabled"}
-                      className={getSimulatedButtonClass("primary")}
-                    >
-                      Primary
-                    </Button>
-                  </div>
+                  <Button
+                    variant="primary"
+                    disabled={pinnedState === "disabled"}
+                    className={getSimulatedButtonClass("primary")}
+                  >
+                    Primary
+                  </Button>
 
                   <Button
                     variant="outline"
@@ -326,7 +329,17 @@ export function WorkbenchView() {
 
             {/* 3. FormField View */}
             {activeComponent === "form-field" && (
-              <div className="w-full max-w-sm flex flex-col gap-4 bg-card p-6 rounded-xl border border-border/80 shadow-xs">
+              <div
+                className={`relative w-full max-w-sm flex flex-col gap-4 bg-card p-6 rounded-xl border border-border/80 shadow-xs transition-all ${
+                  xrayMode ? "ring-1 ring-foreground/30 shadow-sm" : ""
+                }`}
+              >
+                {xrayMode && (
+                  <span className="absolute -top-3 left-3 z-30 inline-flex items-center gap-1 rounded bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 font-mono text-[9px] sm:text-[10px] px-2 py-0.5 shadow-xs border border-zinc-700/50 dark:border-zinc-300/50 pointer-events-none select-none tracking-tight">
+                    --color-border-input-default • --space-component-sm • --radii-md
+                  </span>
+                )}
+
                 <FormField
                   label="System Identifier"
                   placeholder="e.g. k8s-eu-central-1"
@@ -361,7 +374,17 @@ export function WorkbenchView() {
 
             {/* 4. LoginPage View */}
             {activeComponent === "login-page" && (
-              <div className="w-full max-w-sm bg-card p-8 rounded-2xl border border-border/90 shadow-sm">
+              <div
+                className={`relative w-full max-w-sm bg-card p-8 rounded-2xl border border-border/90 shadow-sm transition-all ${
+                  xrayMode ? "ring-1 ring-foreground/30 shadow-sm" : ""
+                }`}
+              >
+                {xrayMode && (
+                  <span className="absolute -top-3 left-3 z-30 inline-flex items-center gap-1 rounded bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 font-mono text-[9px] sm:text-[10px] px-2 py-0.5 shadow-xs border border-zinc-700/50 dark:border-zinc-300/50 pointer-events-none select-none tracking-tight">
+                    --font-size-xl • --color-background-primary-default • --space-component-md
+                  </span>
+                )}
+
                 <LoginPage
                   onSubmit={({ email }) => {
                     alert(`SSO invoked for: ${email}`)
