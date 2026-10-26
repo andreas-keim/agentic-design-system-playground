@@ -42,7 +42,7 @@ When a Design Leader or Staff Engineer opens the URL, they land directly in an i
 * **Interactive Hero Hook (Immediate Aha-Moment):** A prominent split-mode toggle directly in the hero section:  
   `[ Mode: Raw LLM Output (Ungoverned) ]` vs. `[ Mode: Agentic System Guardrails (W3C Enforced) ]`
   * **Raw Mode:** Renders the `EditEntryPanel` with typical AI hallucinations (hardcoded hex codes like `#3b82f6`, off-grid padding `13px`, missing `FormField` ARIA labels, low contrast) highlighted by red diagnostic badges generated live by `check.ts`.
-  * **Guardrailed Mode:** Smoothly transitions the UI into 100% W3C-token-compliant components. All diagnostic metrics turn green (`100% Token Compliance | WCAG AAA | 0 Hallucinations`).
+  * **Guardrailed Mode:** Smoothly transitions the UI into 100% W3C-token-compliant components. All diagnostic metrics turn green (`100% Token Compliance | WCAG AA/AAA (nach Farbpaarung berechnet) | 0 Hallucinations`).
 
 ### Top-Level Navigation Structure
 The App Shell features a sleek top navigation bar, global theme switcher (`Light` / `Dark` / `High-Contrast`), a global **`[ Token X-Ray: ON/OFF ]`** toggle, a `Cmd + K` command palette, and a **Role-Based Guided Tour** selector.
@@ -212,10 +212,10 @@ src/
 
 Use this sequential checklist to execute the roadmap inside the repository:
 
-- [ ] **Step 1 (Branch Consolidation):** Merge or copy `a2ui-experiment` files (`catalog.api.ts`, `check.ts`, `fixtures.ts`) into `src/a2ui/` on `main` and ensure `check.ts` exports a pure, browser-safe validation function.
-- [ ] **Step 2 (B2B Domain Framing):** Update default props and fixture payloads for `EditEntryPanel`, `LoginPage`, `SignUpPage`, `FormField`, `Input`, and `Button` to use the universal *"Enterprise System & Access Configuration"* copy.
-- [ ] **Step 3 (AppShell & Theme/X-Ray Context):** Build `src/showcase/AppShell.tsx` with global state providers for `theme` (`light` | `dark`), `xrayMode` (`boolean`), and `activeTab` (`workbench` | `agentic-lab` | `tokens` | `specs`).
-- [ ] **Step 4 (Phase 1 – Component Workbench):** Build `src/showcase/WorkbenchView.tsx` featuring the interactive component stage, state pinning controls, and bidirectional Token X-Ray inspector.
-- [ ] **Step 5 (Phase 2 – Agentic UI Lab):** Build `src/showcase/AgenticLabView.tsx` wiring up `fixtures.ts`, `catalog.api.ts`, and `check.ts` with the 3-stage Guardrail Enforcement switch and the interactive Rule Mutator buttons.
+- [x] **Step 1 (Branch Consolidation):** Merge or copy `a2ui-experiment` files (`catalog.api.ts`, `check.ts`, `fixtures.ts`) into `src/a2ui/` on `main` and ensure `check.ts` exports a pure, browser-safe validation function.
+- [x] **Step 2 (B2B Domain Framing):** Update default props and fixture payloads for `EditEntryPanel`, `LoginPage`, `SignUpPage`, `FormField`, `Input`, and `Button` to use the universal *"Enterprise System & Access Configuration"* copy.
+- [x] **Step 3 (AppShell & Theme/X-Ray Context):** Build `src/showcase/AppShell.tsx` with global state providers for `theme` (`light` | `dark`), `xrayMode` (`boolean`), and `activeTab` (`workbench` | `agentic-lab` | `tokens` | `specs`).
+- [x] **Step 4 (Phase 1 – Component Workbench):** Build `src/showcase/WorkbenchView.tsx` featuring the interactive component stage, state pinning controls, and bidirectional Token X-Ray inspector.
+- [x] **Step 5 (Phase 2 – Agentic UI Lab):** Build `src/showcase/AgenticLabView.tsx` wiring up `fixtures.ts`, `catalog.api.ts`, and `check.ts` with the 3-stage Guardrail Enforcement switch and the interactive Rule Mutator buttons.
 - [x] **Step 6 (Phase 3 – W3C Token Explorer):** Build `src/showcase/TokenView.tsx` rendering the `design.json` taxonomy table, alias mapping, WCAG contrast badges, and the 4-format developer export drawer.
-- [ ] **Step 7 (Phase 4 – Architecture Specs & Guided Tour):** Build `src/showcase/SpecsView.tsx` and the Role-Based Guided Tour overlay, verify zero TypeScript/build warnings (`npm run build`), and deploy to Vercel via `main`.
+- [x] **Step 7 (Phase 4 – Architecture Specs & V1 Stabilization):** Build `src/showcase/SpecsView.tsx` with two connected pathways (B4 → A2), verify zero build/lint errors, stabilize responsive layouts (390, 768, 1280 px with 0 overflows), add `prefers-reduced-motion` support for the scan animation, ground all claims against repo facts, and deploy to Vercel via `main`.

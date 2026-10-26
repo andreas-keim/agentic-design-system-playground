@@ -4,7 +4,11 @@ import {
   Copy,
   Check,
   ArrowRight,
+  Terminal,
 } from "lucide-react"
+
+import { SegmentedTabs } from "./SegmentedTabs"
+import { PageHeader } from "./PageHeader"
 
 export type TokenFilterTab = "all" | "semantic" | "primitive"
 
@@ -185,7 +189,7 @@ const TOKEN_CATALOG: TokenItem[] = [
     tier: "primitive",
     category: "color",
     componentTarget: "Raw Palette Primitive",
-    description: "WCAG AAA Alert Red Primitive.",
+    description: "Alarm-Rot Primitive (#b91c1c). Erreicht z. B. auf Weiß (#ffffff) 6.47:1 (WCAG AA).",
   },
   {
     id: "colors.white",
@@ -458,66 +462,56 @@ ${selectedToken.avoidFor ? `- Strictly Forbidden: ${selectedToken.avoidFor}` : "
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-8">
-      {/* Clean Header: Human-friendly, benefit-driven UX writing */}
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold tracking-tight text-foreground">
-          W3C Design Token Architecture
-        </h2>
-        <p className="text-sm text-muted-foreground mt-1.5 max-w-2xl leading-relaxed">
-          Eine gemeinsame Sprache für Design, Code und KI. Farben, Abstände und Barrierefreiheit zentral definiert — ohne manuelle Fehler.
-        </p>
-      </div>
+      <PageHeader
+        title="W3C Design Token Architecture"
+        subtitle="Single Source of Truth für Primitives, semantische Aliase und Barrierefreiheit — ohne manuelle Fehler."
+      />
 
       {/* 2-Column Responsive Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Left Column (7/12): Single-Row Segmented Filter & Token Directory */}
-        <div className="lg:col-span-7 space-y-4">
-          {/* Controls: Generous Apple Desktop Segmented Tabs + Search */}
-          <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-between">
-            {/* 3 Clean W3C DTCG Segmented Tabs: 38px Height, 14px Font */}
-            <div className="inline-flex p-1 bg-muted/70 dark:bg-muted/40 rounded-xl gap-1.5 border border-border/60 shadow-2xs">
-              {[
-                { id: "all", label: `Alle (${tabCounts.all})` },
-                { id: "semantic", label: `Semantic (${tabCounts.semantic})` },
-                { id: "primitive", label: `Primitives (${tabCounts.primitive})` },
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id as TokenFilterTab)}
-                  className={`rounded-lg px-4 py-2 text-sm tracking-tight transition-all whitespace-nowrap cursor-pointer ${
-                    activeTab === tab.id
-                      ? "bg-card text-foreground font-semibold shadow-xs"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
+        {/* Left Column (7/12): Token Directory Card mit integrierter Toolbar */}
+        <div className="lg:col-span-7 min-w-0 rounded-2xl border border-border/80 bg-card overflow-hidden shadow-xs">
+          {/* Card Header Toolbar: Tabs + Search */}
+          <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between border-b border-border/60 px-4 sm:px-5 py-3.5 bg-card">
+            <div className="overflow-x-auto scrollbar-none pb-0.5 sm:pb-0">
+              <SegmentedTabs<TokenFilterTab>
+                items={[
+                  { id: "all", label: `Alle (${tabCounts.all})` },
+                  { id: "semantic", label: `Semantic (${tabCounts.semantic})` },
+                  { id: "primitive", label: `Primitives (${tabCounts.primitive})` },
+                ]}
+                value={activeTab}
+                onChange={setActiveTab}
+              />
             </div>
 
-            {/* Generous Search Input: 260px Width, 40px Height */}
-            <div className="relative w-full sm:w-64">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground/50 pointer-events-none" />
+            {/* Search Input: Nutzt den verfügbaren Raum im Header */}
+            <div className="relative w-full sm:flex-1 sm:max-w-xs">
+              <label htmlFor="token-search" className="sr-only">
+                Token, Rolle oder CSS-Variable suchen
+              </label>
+              <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-muted-foreground/50 pointer-events-none" />
               <input
-                type="text"
-                placeholder="Token oder Wert suchen..."
+                id="token-search"
+                name="token-search"
+                type="search"
+                aria-label="Token, Rolle oder CSS-Variable suchen"
+                placeholder="Token, Rolle oder CSS-Var suchen..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-10 pl-9 pr-3.5 text-sm bg-card border border-border/80 rounded-xl text-foreground placeholder:text-muted-foreground/40 dark:placeholder:text-muted-foreground/30 focus:outline-none focus:ring-2 focus:ring-primary/40 font-mono shadow-xs transition-shadow"
+                className="w-full h-8 pl-8.5 pr-3 text-xs bg-muted/40 border border-border/60 rounded-lg text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-1 focus:ring-primary/40 font-mono transition-shadow"
               />
             </div>
           </div>
 
-          {/* Tokens List Card: Scrollbar eliminated */}
-          <div className="rounded-2xl border border-border/80 bg-card overflow-hidden shadow-xs">
-            <div className="overflow-x-auto sm:overflow-x-visible">
-              <table className="w-full text-left font-mono text-xs">
+          <div className="w-full overflow-x-auto scrollbar-thin">
+            <table className="w-full min-w-[580px] text-left font-mono text-xs">
                 <thead className="border-b border-border/60 bg-muted/30 text-muted-foreground text-[10px] uppercase tracking-wider">
                   <tr>
-                    <th className="py-2.5 px-3 sm:px-4">Token & Rolle</th>
-                    <th className="py-2.5 px-2">Ebene</th>
-                    <th className="py-2.5 px-2">W3C Wert</th>
-                    <th className="py-2.5 px-3 sm:px-4 text-right">Preview</th>
+                    <th scope="col" className="py-2.5 pl-5 pr-3">Token & Rolle</th>
+                    <th scope="col" className="py-2.5 px-2">Ebene</th>
+                    <th scope="col" className="py-2.5 px-2">W3C Wert</th>
+                    <th scope="col" className="py-2.5 pl-3 pr-5 text-right">Preview</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border/60">
@@ -526,20 +520,30 @@ ${selectedToken.avoidFor ? `- Strictly Forbidden: ${selectedToken.avoidFor}` : "
                     return (
                       <tr
                         key={token.id}
-                        onClick={() => setSelectedTokenId(token.id)}
-                        className={`cursor-pointer transition-colors ${
+                        aria-selected={isSelected}
+                        className={`transition-colors border-l-2 ${
                           isSelected
-                            ? "bg-primary/5 dark:bg-primary/10 border-l-2 border-primary"
-                            : "hover:bg-muted/30"
+                            ? "bg-primary/5 dark:bg-primary/10 border-primary"
+                            : "border-transparent hover:bg-muted/30"
                         }`}
                       >
-                        <td className="py-2.5 px-3 sm:px-4">
-                          <div className="font-semibold text-[13px] text-foreground tracking-tight">
-                            {token.cssVar}
-                          </div>
-                          <div className="text-[11px] text-muted-foreground mt-0.5">
-                            {token.path}
-                          </div>
+                        <td className="py-2 pl-5 pr-3">
+                          <button
+                            type="button"
+                            onClick={() => setSelectedTokenId(token.id)}
+                            aria-pressed={isSelected}
+                            aria-label={`Token ${token.cssVar} (${token.path}) auswählen`}
+                            className="w-full text-left py-1 px-1.5 -mx-1.5 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 cursor-pointer group"
+                          >
+                            <div className={`font-semibold text-[13px] tracking-tight transition-colors ${
+                              isSelected ? "text-primary" : "text-foreground group-hover:text-primary"
+                            }`}>
+                              {token.cssVar}
+                            </div>
+                            <div className="text-[11px] text-muted-foreground mt-0.5">
+                              {token.path}
+                            </div>
+                          </button>
                         </td>
                         <td className="py-2.5 px-2">
                           <span
@@ -561,7 +565,7 @@ ${selectedToken.avoidFor ? `- Strictly Forbidden: ${selectedToken.avoidFor}` : "
                             <span>{token.value}</span>
                           )}
                         </td>
-                        <td className="py-2.5 px-3 sm:px-4 text-right">
+                        <td className="py-2.5 pl-3 pr-5 text-right">
                           {token.type === "color" ? (
                             <div className="inline-flex items-center gap-2 justify-end">
                               <span className="text-xs text-muted-foreground font-mono">
@@ -606,7 +610,6 @@ ${selectedToken.avoidFor ? `- Strictly Forbidden: ${selectedToken.avoidFor}` : "
               </div>
             )}
           </div>
-        </div>
 
         {/* Right Column (5/12): Inspector, Traceability, Contrast & Code Export */}
         <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-16">
@@ -735,7 +738,7 @@ ${selectedToken.avoidFor ? `- Strictly Forbidden: ${selectedToken.avoidFor}` : "
                 {/* Against Light Canvas */}
                 <div className="p-3 rounded-xl bg-white text-zinc-950 border border-zinc-200 shadow-2xs space-y-1.5">
                   <div className="text-[10px] text-zinc-500 uppercase tracking-tight">
-                    On Light (#fff)
+                    Auf Weiß (#ffffff)
                   </div>
                   <div className="text-base font-bold">
                     {contrastLight?.toFixed(2)}:1
@@ -743,31 +746,30 @@ ${selectedToken.avoidFor ? `- Strictly Forbidden: ${selectedToken.avoidFor}` : "
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <span
                       className={`text-[9px] px-1.5 py-0.5 rounded font-semibold ${
-                        (contrastLight || 0) >= 4.5
+                        (contrastLight || 0) >= 7.0
+                          ? "bg-emerald-100 text-emerald-800 border border-emerald-300"
+                          : (contrastLight || 0) >= 4.5
                           ? "bg-emerald-100 text-emerald-800"
                           : (contrastLight || 0) >= 3.0
                           ? "bg-amber-100 text-amber-800"
                           : "bg-rose-100 text-rose-800"
                       }`}
                     >
-                      {(contrastLight || 0) >= 4.5
-                        ? "AA Pass"
+                      {(contrastLight || 0) >= 7.0
+                        ? "WCAG AAA (≥ 7:1)"
+                        : (contrastLight || 0) >= 4.5
+                        ? "WCAG AA (≥ 4.5:1)"
                         : (contrastLight || 0) >= 3.0
-                        ? "Large"
-                        : "Fail"}
+                        ? "WCAG Large (≥ 3:1)"
+                        : "Nicht konform"}
                     </span>
-                    {(contrastLight || 0) >= 7.0 && (
-                      <span className="text-[9px] px-1.5 py-0.5 rounded font-semibold bg-emerald-100 text-emerald-800">
-                        AAA
-                      </span>
-                    )}
                   </div>
                 </div>
 
                 {/* Against Dark Canvas */}
                 <div className="p-3 rounded-xl bg-zinc-950 text-white border border-zinc-800 shadow-2xs space-y-1.5">
                   <div className="text-[10px] text-zinc-400 uppercase tracking-tight">
-                    On Dark (#090)
+                    Auf Dunkel (#09090b)
                   </div>
                   <div className="text-base font-bold">
                     {contrastDark?.toFixed(2)}:1
@@ -775,31 +777,30 @@ ${selectedToken.avoidFor ? `- Strictly Forbidden: ${selectedToken.avoidFor}` : "
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <span
                       className={`text-[9px] px-1.5 py-0.5 rounded font-semibold ${
-                        (contrastDark || 0) >= 4.5
+                        (contrastDark || 0) >= 7.0
+                          ? "bg-emerald-950 text-emerald-300 border border-emerald-700"
+                          : (contrastDark || 0) >= 4.5
                           ? "bg-emerald-950 text-emerald-300 border border-emerald-800"
                           : (contrastDark || 0) >= 3.0
                           ? "bg-amber-950 text-amber-300 border border-amber-800"
                           : "bg-rose-950 text-rose-300 border border-rose-800"
                       }`}
                     >
-                      {(contrastDark || 0) >= 4.5
-                        ? "AA Pass"
+                      {(contrastDark || 0) >= 7.0
+                        ? "WCAG AAA (≥ 7:1)"
+                        : (contrastDark || 0) >= 4.5
+                        ? "WCAG AA (≥ 4.5:1)"
                         : (contrastDark || 0) >= 3.0
-                        ? "Large"
-                        : "Fail"}
+                        ? "WCAG Large (≥ 3:1)"
+                        : "Nicht konform"}
                     </span>
-                    {(contrastDark || 0) >= 7.0 && (
-                      <span className="text-[9px] px-1.5 py-0.5 rounded font-semibold bg-emerald-950 text-emerald-300 border border-emerald-800">
-                        AAA
-                      </span>
-                    )}
                   </div>
                 </div>
 
                 {/* Against Brand Violet Canvas */}
                 <div className="p-3 rounded-xl bg-violet-950 text-violet-100 border border-violet-800 shadow-2xs space-y-1.5">
                   <div className="text-[10px] text-violet-300 uppercase tracking-tight">
-                    On Brand (#6d2)
+                    Auf Violett (#6d28d9)
                   </div>
                   <div className="text-base font-bold">
                     {contrastOnViolet?.toFixed(2)}:1
@@ -807,46 +808,61 @@ ${selectedToken.avoidFor ? `- Strictly Forbidden: ${selectedToken.avoidFor}` : "
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <span
                       className={`text-[9px] px-1.5 py-0.5 rounded font-semibold ${
-                        (contrastOnViolet || 0) >= 4.5
+                        (contrastOnViolet || 0) >= 7.0
+                          ? "bg-emerald-950 text-emerald-300 border border-emerald-700"
+                          : (contrastOnViolet || 0) >= 4.5
                           ? "bg-emerald-950 text-emerald-300 border border-emerald-800"
                           : (contrastOnViolet || 0) >= 3.0
                           ? "bg-amber-950 text-amber-300 border border-amber-800"
                           : "bg-rose-950 text-rose-300 border border-rose-800"
                       }`}
                     >
-                      {(contrastOnViolet || 0) >= 4.5
-                        ? "AA Pass"
+                      {(contrastOnViolet || 0) >= 7.0
+                        ? "WCAG AAA (≥ 7:1)"
+                        : (contrastOnViolet || 0) >= 4.5
+                        ? "WCAG AA (≥ 4.5:1)"
                         : (contrastOnViolet || 0) >= 3.0
-                        ? "Large"
-                        : "Fail"}
+                        ? "WCAG Large (≥ 3:1)"
+                        : "Nicht konform"}
                     </span>
-                    {(contrastOnViolet || 0) >= 7.0 && (
-                      <span className="text-[9px] px-1.5 py-0.5 rounded font-semibold bg-emerald-950 text-emerald-300 border border-emerald-800">
-                        AAA
-                      </span>
-                    )}
                   </div>
                 </div>
               </div>
 
-              {/* Sample Live Contrast Render Pill */}
-              <div
-                className="p-3 rounded-xl border border-border/80 flex items-center justify-between transition-colors"
-                style={{
-                  backgroundColor:
-                    selectedToken.id.includes("text")
-                      ? "#6d28d9"
-                      : selectedToken.resolvedValue,
-                  color: selectedToken.id.includes("text")
-                    ? selectedToken.resolvedValue
-                    : "#ffffff",
-                }}
-              >
-                <span className="text-xs font-medium">Live Render Preview</span>
-                <span className="text-[10px] font-mono opacity-85">
-                  Sample Text on Surface
-                </span>
-              </div>
+              {/* Sample Live Contrast Render Pill: Berechnete Farbpaarung mit Ergebnis */}
+              {(() => {
+                const isTextToken = selectedToken.id.includes("text")
+                const bg = isTextToken ? "#ffffff" : selectedToken.resolvedValue
+                const fg = isTextToken
+                  ? selectedToken.resolvedValue
+                  : (contrastLight || 0) >= 4.5
+                  ? "#ffffff"
+                  : "#09090b"
+                const ratio = calculateContrastRatio(fg, bg)
+                const level =
+                  ratio >= 7.0 ? "WCAG AAA" : ratio >= 4.5 ? "WCAG AA" : ratio >= 3.0 ? "WCAG Large" : "Fail"
+
+                return (
+                  <div
+                    className="p-3 rounded-xl border border-border/80 flex items-center justify-between transition-colors font-mono"
+                    style={{
+                      backgroundColor: bg,
+                      color: fg,
+                    }}
+                  >
+                    <div>
+                      <div className="text-xs font-semibold">Live Farbpaarung</div>
+                      <div className="text-[10px] opacity-85">
+                        {fg} auf {bg}
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-xs font-bold">{ratio.toFixed(2)}:1</div>
+                      <div className="text-[10px] font-semibold">{level}</div>
+                    </div>
+                  </div>
+                )
+              })()}
             </div>
           )}
 
@@ -859,60 +875,62 @@ ${selectedToken.avoidFor ? `- Strictly Forbidden: ${selectedToken.avoidFor}` : "
             </div>
 
             {/* Target Format Tabs */}
-            <div className="inline-flex p-0.5 bg-muted/80 rounded-lg gap-1 border border-border/60 w-full">
-              {[
+            <SegmentedTabs<"json" | "css" | "ts" | "prompt">
+              fullWidth
+              items={[
                 { id: "json", label: "W3C JSON" },
                 { id: "css", label: "CSS Vars" },
-                { id: "ts", label: "TypeScript" },
-                { id: "prompt", label: "LLM Guardrail" },
-              ].map((fmt) => (
+                { id: "ts", label: "TS-Snippet" },
+                { id: "prompt", label: "LLM-Prompt" },
+              ]}
+              value={exportFormat}
+              onChange={setExportFormat}
+            />
+
+            {/* Code Output Viewer: Standardized Terminal Canvas */}
+            <div className="relative rounded-xl border border-border/60 bg-muted/20 dark:bg-muted/10 overflow-hidden font-mono text-xs">
+              {/* Code Toolbar */}
+              <div className="flex items-center justify-between border-b border-border/60 px-4 py-2 bg-card/60">
+                <div className="flex items-center gap-2 text-[11px] font-mono text-muted-foreground">
+                  <Terminal className="h-3.5 w-3.5 text-primary" />
+                  <span className="text-foreground font-semibold">
+                    {exportFormat === "json"
+                      ? "tokens.json"
+                      : exportFormat === "css"
+                      ? "tokens.css"
+                      : exportFormat === "ts"
+                      ? "Snippet: TypeScript"
+                      : "Prompt: LLM-Regel"}
+                  </span>
+                  <span className="opacity-40">•</span>
+                  <span>{exportFormat === "ts" ? "TS" : exportFormat.toUpperCase()}</span>
+                </div>
+
                 <button
-                  key={fmt.id}
-                  onClick={() => setExportFormat(fmt.id as "json" | "css" | "ts" | "prompt")}
-                  className={`flex-1 rounded-md py-1 text-[11px] font-mono tracking-tight transition-all cursor-pointer ${
-                    exportFormat === fmt.id
-                      ? "bg-card text-foreground font-medium shadow-xs"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
+                  type="button"
+                  onClick={handleCopyExport}
+                  aria-label={copiedFormat ? "Code in die Zwischenablage kopiert" : `${exportFormat.toUpperCase()} Code in Zwischenablage kopieren`}
+                  className="inline-flex items-center gap-1 rounded px-2 py-0.5 text-[11px] text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                  title="Code kopieren"
                 >
-                  {fmt.label}
+                  {copiedFormat ? (
+                    <>
+                      <Check className="h-3 w-3 text-emerald-500" />
+                      <span className="text-emerald-500 font-medium">Kopiert</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="h-3 w-3" />
+                      <span>Kopieren</span>
+                    </>
+                  )}
                 </button>
-              ))}
-            </div>
+              </div>
 
-            {/* Code Output Viewer: Fixed Height prevents layout jumps */}
-            <div className="relative rounded-xl bg-zinc-950 p-4 border border-zinc-800 text-zinc-100 font-mono text-[11px] leading-relaxed overflow-auto h-52">
-              <pre className="whitespace-pre">{exportCode}</pre>
-            </div>
-
-            {/* Footer with subtle copy interaction & source link */}
-            <div className="pt-1 flex items-center justify-between text-[11px] text-muted-foreground font-mono">
-              <button
-                onClick={handleCopyExport}
-                className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors cursor-pointer"
-                title="Snippet kopieren"
-              >
-                {copiedFormat ? (
-                  <>
-                    <Check className="h-3 w-3 text-emerald-500" />
-                    <span className="text-emerald-500">In Zwischenablage</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="h-3 w-3" />
-                    <span>Copy Snippet</span>
-                  </>
-                )}
-              </button>
-
-              <a
-                href="https://github.com/andreas-keim/agentic-design-system-playground/blob/main/src/tokens/tokens.json"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-foreground underline transition-colors"
-              >
-                Source: tokens.json
-              </a>
+              {/* Code Pre: Soft-wrapping verhindert horizontales Scrollen im schmalen Panel */}
+              <pre className="p-4 text-[12px] leading-relaxed text-foreground/90 overflow-y-auto h-52 whitespace-pre-wrap break-words">
+                <code>{exportCode}</code>
+              </pre>
             </div>
           </div>
         </div>

@@ -1,13 +1,19 @@
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import {
   RotateCcw,
   AlertTriangle,
+  ExternalLink,
 } from "lucide-react"
 
+import { useShowcase } from "./ShowcaseContext"
+import { SegmentedTabs } from "./SegmentedTabs"
+import { PageHeader } from "./PageHeader"
 import { Button } from "@/components/ui/button"
 import { FormField } from "@/components/ui/form-field"
 
 export function AgenticLabView() {
+  const { setActiveTab } = useShowcase()
+
   // Direct error states: starts in the unguided raw LLM state (3 violations active)
   const [sabotageHex, setSabotageHex] = useState<boolean>(true)
   const [sabotageGrid, setSabotageGrid] = useState<boolean>(true)
@@ -15,6 +21,20 @@ export function AgenticLabView() {
 
   // Scanner animation trigger
   const [isScanning, setIsScanning] = useState<boolean>(false)
+
+  // Ref to track and cancel pending scan timeouts on reset or unmount
+  const timeoutsRef = useRef<number[]>([])
+
+  function clearScanTimeouts() {
+    timeoutsRef.current.forEach((id) => window.clearTimeout(id))
+    timeoutsRef.current = []
+  }
+
+  useEffect(() => {
+    return () => {
+      clearScanTimeouts()
+    }
+  }, [])
 
   // Sub-tab in code panel
   const [codeTab, setCodeTab] = useState<"diff" | "rules">("diff")
@@ -29,65 +49,96 @@ export function AgenticLabView() {
   const isFullyGuarded = activeViolationsCount === 0
 
   // Bi-directional Ping-Pong Sweep (Down & Up, 2000ms total)
+  // Bei prefers-reduced-motion: sofortiger Wechsel ohne Scan-Animation
   function healAll() {
-    if (isScanning) return
+    clearScanTimeouts()
+
+    const prefersReducedMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+
+    if (prefersReducedMotion) {
+      setSabotageHex(false)
+      setSabotageGrid(false)
+      setSabotageA11y(false)
+      setIsScanning(false)
+      return
+    }
+
     setIsScanning(true)
 
     // Phase 1 (0ms - 1000ms): Scanner sweeps DOWN to inspect full canvas
-
     // Phase 2 (1000ms - 2000ms): Scanner sweeps BACK UP, healing each element on return
-    setTimeout(() => {
+    const t1 = window.setTimeout(() => {
       setSabotageHex(false) // 1150ms: heals Button at the bottom
     }, 1150)
 
-    setTimeout(() => {
+    const t2 = window.setTimeout(() => {
       setSabotageGrid(false) // 1450ms: snaps Spacing in the middle
     }, 1450)
 
-    setTimeout(() => {
+    const t3 = window.setTimeout(() => {
       setSabotageA11y(false) // 1750ms: fixes Input at the top
     }, 1750)
 
-    setTimeout(() => {
+    const t4 = window.setTimeout(() => {
       setIsScanning(false) // 2000ms: scanner completes at the top
     }, 2000)
+
+    timeoutsRef.current = [t1, t2, t3, t4]
   }
 
   // Reset back to initial error state
   function resetAll() {
+    clearScanTimeouts()
+    setIsScanning(false)
     setSabotageHex(true)
     setSabotageGrid(true)
     setSabotageA11y(true)
   }
 
   return (
-    <div className="h-[calc(100vh-56px)] flex flex-col justify-between max-w-7xl mx-auto px-6 py-6 pb-8 overflow-hidden select-none">
+    <div className="mx-auto max-w-7xl px-6 py-8 select-none">
       
-      {/* ========================================================================= */}
-      {/* 1. HERO HEADER (APPLE STYLE: GROSS, KRAFTVOLL, ATMET FREI)                */}
-      {/* ========================================================================= */}
-      <header className="pb-4 border-b border-border/60 shrink-0">
-        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground leading-none">
-          Code ohne Halluzinationen.
-        </h1>
-        <p className="text-sm sm:text-base text-muted-foreground mt-2 font-normal">
-          Wie ein Design System KI-Code produktionsreif macht.
-        </p>
-      </header>
+      {/* 1. STANDARDIZED PAGE HEADER */}
+      <PageHeader
+        title="Agentic UI Guardrail Lab"
+        subtitle="Interaktive Simulation: Wie ein deterministisches Design System typische Agenten-Fehler korrigiert."
+      />
+
+      {/* HINWEIS ZUR ABGRENZUNG: INTERAKTIVE SIMULATION VS. ECHTE FIXTURE-PRÜFUNG */}
+      <div className="mb-6 rounded-xl border border-border/80 bg-muted/20 px-4 py-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-mono">
+        <div className="flex items-center gap-2 text-muted-foreground">
+          <span className="font-bold text-foreground uppercase tracking-wider text-[10px] bg-muted/60 border border-border/60 px-1.5 py-0.5 rounded">
+            Browser-Simulation
+          </span>
+          <span className="text-[11px] font-sans">
+            Visuelle Demo typischer Fehlerkorrekturen. Die echte Validierung aller Testfälle läuft per CLI.
+          </span>
+        </div>
+        <button
+          type="button"
+          onClick={() => setActiveTab("specs")}
+          className="text-primary hover:underline cursor-pointer flex items-center gap-1 shrink-0 text-[11px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 rounded-sm self-start sm:self-auto"
+        >
+          <span>Echte Fixture-Prüfung in Specs ansehen</span>
+          <ExternalLink className="h-3 w-3" />
+        </button>
+      </div>
 
       {/* ========================================================================= */}
       {/* 2. SPLIT-STUDIO STAGE (GENEROUS PADDING, 100% ABOVE THE FOLD)             */}
       {/* ========================================================================= */}
-      <main className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 py-5 min-h-0 items-stretch">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
         
         {/* ----------------------------------------------------------------------- */}
         {/* LEFT COLUMN: LIVE COMPONENT CANVAS (6 COLS)                             */}
         {/* ----------------------------------------------------------------------- */}
-        <section className="lg:col-span-6 flex flex-col justify-between rounded-2xl border border-border/80 bg-card/60 backdrop-blur-md shadow-xs p-6 sm:p-7 relative overflow-hidden">
+        <section className="lg:col-span-6 flex flex-col justify-between rounded-2xl border border-border/80 bg-card/60 backdrop-blur-md shadow-xs p-4 sm:p-7 relative overflow-hidden">
           
-          {/* Precision Sweep Beam: Sweeps across the entire left canvas in Brand Violet */}
+          {/* Precision Sweep Beam: Sweeps across the entire left canvas in Brand Violet (ausgeblendet bei prefers-reduced-motion) */}
           {isScanning && (
-            <div className="pointer-events-none absolute inset-x-0 z-30 h-1 animate-scan-sweep">
+            <div className="pointer-events-none absolute inset-x-0 z-30 h-1 animate-scan-sweep motion-reduce:hidden">
               {/* Sharp laser line in Brand Violet */}
               <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-violet-500 dark:via-violet-400 to-transparent shadow-[0_0_16px_rgba(124,58,237,0.85)]" />
               {/* Soft ambient glow diffuser in Brand Violet */}
@@ -96,29 +147,31 @@ export function AgenticLabView() {
           )}
 
           {/* Top Label & Mode Indicator */}
-          <div className="flex items-center justify-between pb-3 border-b border-border/40">
+          <div className="flex items-center justify-between pb-3 border-b border-border/40 gap-2 flex-wrap">
             <span className="font-mono text-xs font-bold text-foreground">
               <span className={isFullyGuarded ? "text-muted-foreground font-medium" : "text-rose-500 font-semibold"}>
-                {isFullyGuarded ? "W3C Validiert" : "Ungeschützt (Raw Code)"}
+                {isFullyGuarded ? "W3C Validiert (Simuliert)" : "Ungeschützt (Raw Code)"}
               </span>
             </span>
 
             {/* Quick action button when broken, or subtle reset when healed */}
             {!isFullyGuarded ? (
               <button
+                type="button"
                 onClick={healAll}
-                className="px-3 py-1.5 rounded-lg bg-emerald-500/15 border border-emerald-500/40 text-emerald-600 dark:text-emerald-400 font-mono text-xs font-bold hover:bg-emerald-500/25 active:scale-95 transition-all cursor-pointer shadow-2xs"
+                className="px-3 py-1.5 rounded-lg bg-emerald-500/15 border border-emerald-500/40 text-emerald-600 dark:text-emerald-400 font-mono text-xs font-bold hover:bg-emerald-500/25 active:scale-95 transition-all cursor-pointer shadow-2xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/40 shrink-0"
               >
-                Auto-Fix anwenden
+                Korrektur simulieren
               </button>
             ) : (
               <button
+                type="button"
                 onClick={resetAll}
-                className="flex items-center gap-1.5 text-muted-foreground/60 hover:text-foreground text-xs font-mono transition-colors cursor-pointer active:scale-95"
-                title="Auf Ausgangszustand zurücksetzen"
+                className="flex items-center gap-1.5 text-muted-foreground/60 hover:text-foreground text-xs font-mono transition-colors cursor-pointer active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 rounded-sm shrink-0"
+                title="Simulation auf Ausgangszustand zurücksetzen"
               >
                 <RotateCcw className="h-3 w-3" />
-                <span>Zurücksetzen</span>
+                <span>Simulation zurücksetzen</span>
               </button>
             )}
           </div>
@@ -188,14 +241,14 @@ export function AgenticLabView() {
               </div>
 
               {/* 3. Element: Action Buttons */}
-              <div className="pt-3 border-t border-border/60 flex items-center justify-between gap-3">
+              <div className="pt-3 border-t border-border/60 flex items-center justify-between gap-2 flex-wrap">
                 <Button variant="outline" size="sm" className="text-xs h-8">
                   Widerrufen
                 </Button>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap justify-end">
                   {isColorBroken && (
-                    <span className="text-[10px] font-mono text-rose-500 bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 rounded">
+                    <span className="text-[10px] font-mono text-rose-500 bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 rounded shrink-0">
                       Fehler 3: Hex #ef4444
                     </span>
                   )}
@@ -203,13 +256,13 @@ export function AgenticLabView() {
                   {isColorBroken ? (
                     <button
                       type="button"
-                      className="rounded-md px-3.5 py-1.5 text-xs font-semibold text-white shadow-xs transition-colors cursor-pointer"
+                      className="rounded-md px-3.5 py-1.5 text-xs font-semibold text-white shadow-xs transition-colors cursor-pointer shrink-0"
                       style={{ backgroundColor: "#ef4444" }}
                     >
                       Speichern
                     </button>
                   ) : (
-                    <Button variant="primary" size="sm" className="text-xs h-8">
+                    <Button variant="primary" size="sm" className="text-xs h-8 shrink-0">
                       Speichern
                     </Button>
                   )}
@@ -224,8 +277,8 @@ export function AgenticLabView() {
             <span>Komponente: AccessPermissionModal</span>
             <span className={isFullyGuarded ? "text-muted-foreground" : "text-rose-500 font-semibold"}>
               {isFullyGuarded
-                ? "0 Verstöße · Produktionsbereit"
-                : `${activeViolationsCount} ${activeViolationsCount === 1 ? "Regel-Verstoß" : "Regel-Verstöße"}`}
+                ? "Simulation: 0 Verstöße"
+                : `${activeViolationsCount} ${activeViolationsCount === 1 ? "simulierter Verstoß" : "simulierte Verstöße"}`}
             </span>
           </div>
 
@@ -234,32 +287,22 @@ export function AgenticLabView() {
         {/* ----------------------------------------------------------------------- */}
         {/* RIGHT COLUMN: HARMONIOUS CODE INSPECTOR (6 COLS)                         */}
         {/* ----------------------------------------------------------------------- */}
-        <section className="lg:col-span-6 flex flex-col justify-between rounded-2xl border border-border/80 bg-card/90 shadow-xs p-6 sm:p-7 overflow-hidden">
+        <section className="lg:col-span-6 flex flex-col justify-between rounded-2xl border border-border/80 bg-card/90 shadow-xs p-4 sm:p-7 overflow-hidden">
           
           {/* Console Header & Tabs */}
           <div className="flex items-center justify-between pb-3 border-b border-border/60 text-xs font-mono">
             <div className="text-foreground font-bold">
-              <span>Code Guardrail Inspector</span>
+              <span>Simulierter Prüfbericht</span>
             </div>
 
-            <div className="flex items-center gap-1 bg-muted/70 p-0.5 rounded-lg border border-border/60">
-              <button
-                onClick={() => setCodeTab("diff")}
-                className={`px-3 py-1 rounded text-[11px] transition-colors ${
-                  codeTab === "diff" ? "bg-card text-foreground font-bold shadow-2xs" : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                JSX Code Diff
-              </button>
-              <button
-                onClick={() => setCodeTab("rules")}
-                className={`px-3 py-1 rounded text-[11px] transition-colors ${
-                  codeTab === "rules" ? "bg-card text-foreground font-bold shadow-2xs" : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                AST Engine Log
-              </button>
-            </div>
+            <SegmentedTabs<"diff" | "rules">
+              items={[
+                { id: "diff", label: "JSX Code Diff" },
+                { id: "rules", label: "Geprüfte Regeln" },
+              ]}
+              value={codeTab}
+              onChange={setCodeTab}
+            />
           </div>
 
           {/* Clean Editor / Diff Window (Matches App Palette, roomy vertical padding) */}
@@ -348,8 +391,11 @@ export function AgenticLabView() {
 
             <div className="grid grid-cols-3 gap-2 font-mono text-[11px]">
               <button
+                type="button"
+                aria-pressed={sabotageHex}
+                aria-label="Hex-Farbfehler simulieren"
                 onClick={() => setSabotageHex((p) => !p)}
-                className={`py-2 px-2.5 rounded-lg border transition-all text-center ${
+                className={`py-2 px-2.5 rounded-lg border transition-all text-center cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
                   sabotageHex
                     ? "bg-rose-500/15 border-rose-500/40 text-rose-600 dark:text-rose-400 font-bold shadow-2xs"
                     : "bg-card border-border/80 text-muted-foreground hover:text-foreground hover:bg-muted/50"
@@ -359,8 +405,11 @@ export function AgenticLabView() {
               </button>
 
               <button
+                type="button"
+                aria-pressed={sabotageGrid}
+                aria-label="13px Grid-Abstand-Fehler simulieren"
                 onClick={() => setSabotageGrid((p) => !p)}
-                className={`py-2 px-2.5 rounded-lg border transition-all text-center ${
+                className={`py-2 px-2.5 rounded-lg border transition-all text-center cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
                   sabotageGrid
                     ? "bg-rose-500/15 border-rose-500/40 text-rose-600 dark:text-rose-400 font-bold shadow-2xs"
                     : "bg-card border-border/80 text-muted-foreground hover:text-foreground hover:bg-muted/50"
@@ -370,8 +419,11 @@ export function AgenticLabView() {
               </button>
 
               <button
+                type="button"
+                aria-pressed={sabotageA11y}
+                aria-label="Fehlendes Label (A11y-Fehler) simulieren"
                 onClick={() => setSabotageA11y((p) => !p)}
-                className={`py-2 px-2.5 rounded-lg border transition-all text-center ${
+                className={`py-2 px-2.5 rounded-lg border transition-all text-center cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
                   sabotageA11y
                     ? "bg-rose-500/15 border-rose-500/40 text-rose-600 dark:text-rose-400 font-bold shadow-2xs"
                     : "bg-card border-border/80 text-muted-foreground hover:text-foreground hover:bg-muted/50"
@@ -384,7 +436,7 @@ export function AgenticLabView() {
 
         </section>
 
-      </main>
+      </div>
 
     </div>
   )
