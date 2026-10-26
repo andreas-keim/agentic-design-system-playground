@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react"
-import { CheckCircle2, Crosshair } from "lucide-react"
+import { CheckCircle2 } from "lucide-react"
 
 import { SegmentedTabs } from "./SegmentedTabs"
 import { PageHeader } from "./PageHeader"
@@ -179,7 +179,7 @@ export function WorkbenchView() {
         {/* Left: The Component Stage Card */}
         <div
           className={`lg:col-span-8 rounded-2xl border border-border/80 bg-card shadow-xs flex flex-col overflow-hidden transition-all ${
-            xrayMode ? "ring-1 ring-blue-500/40" : ""
+            xrayMode ? "ring-1 ring-foreground/20" : ""
           }`}
         >
           {/* Stage Header / Toolbar: h-14 für horizontales Divider-Alignment auf Desktop, umbruchsicher auf Mobile */}
@@ -198,18 +198,17 @@ export function WorkbenchView() {
               />
             </div>
 
-            {/* Token-Namen anzeigen Schalter */}
+            {/* Token-Namen anzeigen Schalter (ohne Icon, monochrom) */}
             <button
               type="button"
               onClick={() => setXrayMode((prev) => !prev)}
               aria-pressed={xrayMode}
-              className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-mono transition-all cursor-pointer shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-1 ${
+              className={`inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-mono transition-all cursor-pointer shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-1 ${
                 xrayMode
-                  ? "bg-blue-600 text-white font-medium shadow-xs border border-blue-500"
-                  : "border border-border/80 bg-muted/40 text-muted-foreground hover:text-foreground hover:bg-muted/70"
+                  ? "bg-foreground text-background font-medium shadow-2xs border border-foreground"
+                  : "border border-border/80 bg-muted/30 text-muted-foreground hover:text-foreground hover:bg-muted/60"
               }`}
             >
-              <Crosshair className="h-3.5 w-3.5" />
               <span>Token-Namen anzeigen</span>
             </button>
           </div>
@@ -242,7 +241,7 @@ export function WorkbenchView() {
                 ) : (
                   <div className="relative">
                     {xrayMode && (
-                      <span className="absolute -top-3.5 right-2 z-30 rounded bg-blue-600 text-white font-mono text-[9px] px-1.5 py-0.5 shadow-xs pointer-events-none">
+                      <span className="absolute -top-3.5 right-2 z-30 rounded bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 font-mono text-[9px] px-1.5 py-0.5 shadow-xs border border-zinc-700/40 dark:border-zinc-300/40 pointer-events-none">
                         --color-card • --space-component-md
                       </span>
                     )}
@@ -269,7 +268,7 @@ export function WorkbenchView() {
                 <div className="flex flex-wrap gap-3 justify-center items-center">
                   <div className="relative">
                     {xrayMode && (
-                      <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-30 rounded bg-blue-600 text-white font-mono text-[9px] px-1.5 py-0.5 whitespace-nowrap shadow-xs pointer-events-none">
+                      <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-30 rounded bg-zinc-900 text-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 font-mono text-[9px] px-1.5 py-0.5 whitespace-nowrap shadow-xs border border-zinc-700/40 dark:border-zinc-300/40 pointer-events-none">
                         --color-background-primary-default
                       </span>
                     )}
