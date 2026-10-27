@@ -57,10 +57,10 @@ function SimulationSwitch({ label, checked, onChange }: SimulationSwitchProps) {
       role="switch"
       aria-checked={checked}
       onClick={onChange}
-      className="p-2.5 rounded-lg border border-border/80 bg-card hover:bg-muted/40 transition-colors cursor-pointer text-left flex items-center justify-between gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 select-none group"
+      className="p-2.5 rounded-lg border border-border/80 bg-card hover:bg-muted/40 transition-colors cursor-pointer text-left flex items-center justify-between gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 select-none group h-full"
     >
       <div className="flex flex-col min-w-0 pr-1">
-        <span className="text-xs font-medium text-foreground truncate">
+        <span className="text-xs font-medium text-foreground leading-snug">
           {label}
         </span>
         <span className="text-[11px] text-muted-foreground mt-0.5">
