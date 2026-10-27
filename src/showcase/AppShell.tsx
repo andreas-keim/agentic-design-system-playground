@@ -16,6 +16,13 @@ export function AppShell() {
     { id: "specs", label: "Architecture Specs" },
   ]
 
+  function handleNavTab(tabId: ShowcaseTab) {
+    if (window.location.hash) {
+      history.replaceState(null, "", window.location.pathname + window.location.search)
+    }
+    setActiveTab(tabId)
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col font-sans antialiased selection:bg-foreground selection:text-background">
       {/* Clean Navigation Bar: Height adapts to content on mobile/tablet, single-row on desktop (lg:) */}
@@ -23,7 +30,7 @@ export function AppShell() {
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6">
           {/* Left: Distinct Brand Mark & Identity */}
           <button
-            onClick={() => setActiveTab("workbench")}
+            onClick={() => handleNavTab("workbench")}
             className="flex items-center gap-3 text-left group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 rounded-md py-1 transition-opacity hover:opacity-85 cursor-pointer shrink-0"
             title="Go to Home / Workbench"
           >
@@ -55,7 +62,7 @@ export function AppShell() {
                 <button
                   key={item.id}
                   type="button"
-                  onClick={() => setActiveTab(item.id)}
+                  onClick={() => handleNavTab(item.id)}
                   aria-current={isActive ? "page" : undefined}
                   className={`text-[13px] tracking-tight transition-colors cursor-pointer rounded-sm py-0.5 px-1 -mx-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
                     isActive
@@ -84,7 +91,7 @@ export function AppShell() {
 
             {/* LinkedIn */}
             <a
-              href="https://linkedin.com/in/andreas-keim-ux"
+              href="https://www.linkedin.com/in/akeimux/"
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-full p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
@@ -121,7 +128,7 @@ export function AppShell() {
             <button
               key={item.id}
               type="button"
-              onClick={() => setActiveTab(item.id)}
+              onClick={() => handleNavTab(item.id)}
               aria-current={activeTab === item.id ? "page" : undefined}
               className={`shrink-0 text-xs tracking-tight transition-colors cursor-pointer py-0.5 px-1 -mx-1 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
                 activeTab === item.id

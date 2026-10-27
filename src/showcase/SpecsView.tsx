@@ -1,8 +1,7 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
   ArrowRight,
   ArrowDown,
-  ExternalLink,
   Code2,
   Terminal,
 } from "lucide-react"
@@ -322,47 +321,77 @@ export function SpecsView() {
   const [selectedStationId, setSelectedStationId] = useState<StationId | null>(null)
   const [showCode, setShowCode] = useState<boolean>(false)
 
+  useEffect(() => {
+    const scrollAndFocus = () => {
+      if (window.location.hash === "#testfall-03") {
+        const el = document.getElementById("testfall-03")
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" })
+          el.focus({ preventScroll: true })
+        }
+      }
+    }
+
+    scrollAndFocus()
+    const raf = requestAnimationFrame(scrollAndFocus)
+    const timer = setTimeout(scrollAndFocus, 100)
+
+    window.addEventListener("hashchange", scrollAndFocus)
+
+    return () => {
+      cancelAnimationFrame(raf)
+      clearTimeout(timer)
+      window.removeEventListener("hashchange", scrollAndFocus)
+    }
+  }, [])
+
   const activeStation = selectedStationId
     ? ARCHITECTURE_STATIONS.find((s) => s.id === selectedStationId) ?? null
     : null
 
   return (
-    <div className="mx-auto max-w-7xl px-6 py-8 space-y-8">
+    <div className="mx-auto max-w-7xl px-6 py-8">
       {/* 1. STANDARDIZIERTER PAGE HEADER */}
       <PageHeader
         title="So prüft das System Agenten-Ausgaben"
         subtitle="Wie Andreas Design Tokens, Komponenten-Code und Agentensteuerung zu einem überprüfbaren System verbindet."
       />
 
-      {/* 2. REPRODUZIERBARER TESTFALL AUS FIXTURES.TS */}
-      <section className="rounded-2xl border border-border/80 bg-card p-6 shadow-xs space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border/60">
-          <div>
-            <div className="text-[11px] font-mono text-muted-foreground uppercase tracking-wider mb-1">
-              Testfall 03 // CLI-Validierung im Repository
+      <div className="space-y-6">
+        {/* 2. REPRODUZIERBARER TESTFALL AUS FIXTURES.TS */}
+        <section
+          id="testfall-03"
+          tabIndex={-1}
+          aria-labelledby="testfall-03-title"
+          className="scroll-mt-20 rounded-2xl border border-border/80 bg-card p-6 shadow-xs space-y-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+        >
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border/60">
+            <div>
+              <div className="text-[11px] font-mono text-muted-foreground uppercase tracking-wider mb-1">
+                Testfall 03 // CLI-Validierung im Repository
+              </div>
+              <h2 id="testfall-03-title" className="text-base font-bold text-foreground tracking-tight">
+                Eine unerlaubte Button-Farbe wird abgelehnt
+              </h2>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Der CLI-Test weist die unerlaubte Klasse zurück und liefert eine konkrete Korrekturanweisung.
+              </p>
+              <div className="text-[11px] font-mono text-muted-foreground/80 mt-1">
+                11 gezielte Prüfungen bestätigt · 1 bekannte Regelgrenze dokumentiert
+              </div>
             </div>
-            <h2 className="text-base font-bold text-foreground tracking-tight">
-              Eine unerlaubte Button-Farbe wird abgelehnt
-            </h2>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              Beweis: <code className="text-foreground">node src/a2ui/check.ts</code> weist unerlaubtes Styling sofort ab.
-              <span className="block sm:inline sm:ml-2 text-muted-foreground/80 font-mono text-[11px]">
-                (11 von 12 gezielten Fixtures wie erwartet; 1 dokumentierte semantische Lücke)
-              </span>
-            </p>
-          </div>
 
-          <button
-            type="button"
-            onClick={() => setActiveTab("agentic-lab")}
-            aria-label="Ähnliche Fehler im Lab simulieren"
-            className="inline-flex items-center gap-1.5 rounded-lg border border-border/80 bg-muted/40 hover:bg-muted px-3 py-1.5 text-xs font-medium text-foreground transition-colors cursor-pointer self-start sm:self-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 shrink-0"
-            title="Ähnliche Fehler im Lab simulieren"
-          >
-            <span>Ähnliche Fehler im Lab simulieren</span>
-            <ExternalLink className="h-3.5 w-3.5 text-muted-foreground" />
-          </button>
-        </div>
+            <button
+              type="button"
+              onClick={() => setActiveTab("agentic-lab")}
+              aria-label="Ähnliche Fehler im Lab simulieren"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-border/80 bg-muted/40 hover:bg-muted px-3 py-1.5 text-xs font-medium text-foreground transition-colors cursor-pointer self-start sm:self-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 shrink-0"
+              title="Ähnliche Fehler im Lab simulieren"
+            >
+              <span>Ähnliche Fehler im Lab simulieren</span>
+              <ArrowRight className="h-3.5 w-3.5 text-muted-foreground" />
+            </button>
+          </div>
 
         {/* 3-Spalten-Ablauf: Eingabe -> Ablehnung -> Korrekturhinweis (Trennlinien statt verschachtelter Boxen) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -421,11 +450,14 @@ export function SpecsView() {
       <section className="rounded-2xl border border-border/80 bg-card overflow-hidden shadow-xs flex flex-col">
         {/* Header Toolbar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border/60 px-6 py-4 bg-card">
-          <div>
+          <div className="space-y-0.5">
             <h3 className="text-sm font-semibold tracking-tight text-foreground">
               Vom Design Token zur geprüften Agenten-Ausgabe
             </h3>
-            <p className="text-xs text-muted-foreground mt-0.5">
+            <p className="text-xs text-foreground/90 font-medium">
+              Der Build-Pfad definiert erlaubte UI. Der Prüf-Pfad blockiert Ausgaben, die davon abweichen.
+            </p>
+            <p className="text-[11px] text-muted-foreground">
               Station auswählen: Regel, Ergebnis und Code ansehen.
             </p>
           </div>
@@ -707,33 +739,25 @@ export function SpecsView() {
         )}
       </section>
 
-      {/* 4. ÜBERGREIFENDE ARCHITEKTUR-ENTSCHEIDUNGEN (ADR-01 & ADR-03) */}
+      {/* 4. ÜBERGREIFENDE ARCHITEKTURENTSCHEIDUNG (ADR-03) */}
       <section className="pt-2 border-t border-border/60 space-y-2 text-xs">
         <div className="flex items-center justify-between text-muted-foreground pb-1">
           <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground font-mono">
-            Übergreifende Architekturentscheidungen
+            Übergreifende Architekturentscheidung
           </h3>
           <span className="font-mono text-xs text-muted-foreground">
-            ADR-01 &amp; ADR-03
+            ADR-03
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-muted-foreground">
-          <div className="space-y-1">
-            <span className="font-semibold text-foreground block">ADR-01 // Custom Showcase:</span>
-            <p className="text-xs text-muted-foreground font-sans leading-relaxed">
-              Maßgeschneiderter interaktiver Control Room auf der Root-Route (/) statt statischem Storybook-Baum – beweist Produkt-Craft, State-Handling und User Journey für Entscheider.
-            </p>
-          </div>
-
-          <div className="space-y-1">
-            <span className="font-semibold text-foreground block">ADR-03 // Enterprise B2B Domain:</span>
-            <p className="text-xs text-muted-foreground font-sans leading-relaxed">
-              Geschäftskritische B2B-Governance (Zugriffsrechte, Rollen, SSO-Provisioning) statt generischer Todo-Demos für Senior/Staff-Zielgruppen.
-            </p>
-          </div>
+        <div className="space-y-1 text-muted-foreground">
+          <span className="font-semibold text-foreground block">ADR-03 // Enterprise-Domäne</span>
+          <p className="text-xs text-muted-foreground font-sans leading-relaxed">
+            Die Demo verwendet Rollen, Zugriffsrechte und SSO-Provisioning, damit Guardrails an realistischen, sicherheitsrelevanten UI-Mustern geprüft werden.
+          </p>
         </div>
       </section>
+      </div>
     </div>
   )
 }

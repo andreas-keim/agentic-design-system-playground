@@ -10,6 +10,8 @@ import {
 import { SegmentedTabs } from "./SegmentedTabs"
 import { PageHeader } from "./PageHeader"
 
+import rawTokens from "../tokens/tokens.json"
+
 export type TokenFilterTab = "all" | "semantic" | "primitive"
 
 export interface TokenItem {
@@ -29,289 +31,319 @@ export interface TokenItem {
   description?: string
 }
 
-const TOKEN_CATALOG: TokenItem[] = [
+interface TokenPresentationMeta {
+  displayName?: string
+  description?: string
+  componentTarget?: string
+}
+
+/**
+ * Rein presentationale Metadaten (optional nach Token-ID / Pfad).
+ * Enthält KEINE Values, Typen, resolvedValues, useFor/avoidFor oder Tier-Zuordnungen,
+ * damit tokens.json die alleinige Single Source of Truth für Designdaten bleibt.
+ */
+const TOKEN_PRESENTATION_META: Record<string, TokenPresentationMeta> = {
   // Semantic Tokens (Tier 2 - Purpose-Bound & Role Aliases)
-  {
-    id: "color.background.primary.default",
-    name: "action.primary.default",
-    path: "color.background.primary.default",
-    cssVar: "--color-background-primary-default",
-    value: "{colors.violet.700}",
-    resolvedValue: "#6d28d9",
-    type: "color",
-    tier: "semantic",
-    category: "color",
-    alias: "colors.violet.700",
+  "color.background.primary.default": {
+    displayName: "action.primary.default",
     componentTarget: "Button (variant=primary)",
-    useFor: "Haupt-Aktion in einem Flow, primärer CTA",
-    avoidFor: "dekorative Flächen, sekundäre/tertiäre Aktionen",
     description: "Deterministischer Standard-Hintergrund für Hauptaktionen.",
   },
-  {
-    id: "color.background.primary.hover",
-    name: "action.primary.hover",
-    path: "color.background.primary.hover",
-    cssVar: "--color-background-primary-hover",
-    value: "{colors.violet.800}",
-    resolvedValue: "#5b21b6",
-    type: "color",
-    tier: "semantic",
-    category: "color",
-    alias: "colors.violet.800",
+  "color.background.primary.hover": {
+    displayName: "action.primary.hover",
     componentTarget: "Button:hover (variant=primary)",
-    useFor: "Hover-State für primäre Buttons",
-    avoidFor: "Standardzustand oder inaktive Buttons",
     description: "Abgedunkelter Brand-Violet-Farbton für aktives Nutzer-Feedback.",
   },
-  {
-    id: "color.text.primary.default",
-    name: "text.primary.default",
-    path: "color.text.primary.default",
-    cssVar: "--color-text-primary-default",
-    value: "{colors.white}",
-    resolvedValue: "#ffffff",
-    type: "color",
-    tier: "semantic",
-    category: "color",
-    alias: "colors.white",
+  "color.text.primary.default": {
+    displayName: "text.primary.default",
     componentTarget: "Button label, Badge text",
-    useFor: "Lesbarer Text auf primärem Aktionshintergrund",
-    avoidFor: "Fließtext auf hellem Hintergrund (unzureichender Kontrast)",
     description: "Reines Weiß für maximalen Kontrast auf Brand-Flächen (7.4:1).",
   },
-  {
-    id: "color.text.destructive.default",
-    name: "text.destructive.default",
-    path: "color.text.destructive.default",
-    cssVar: "--color-text-destructive-default",
-    value: "{colors.red.700}",
-    resolvedValue: "#b91c1c",
-    type: "color",
-    tier: "semantic",
-    category: "color",
-    alias: "colors.red.700",
+  "color.text.destructive.default": {
+    displayName: "text.destructive.default",
     componentTarget: "Button (variant=destructive), FormField error",
-    useFor: "Text auf getöntem Destructive-Hintergrund (bg-destructive/10)",
-    avoidFor: "Text auf vollflächig rotem Grund (dort weiß verwenden)",
     description: "Spezifisch kalibriertes Rot für AA-Konformität auf subtilen Tints.",
   },
-  {
-    id: "color.border.primary.default",
-    name: "border.primary.default",
-    path: "color.border.primary.default",
-    cssVar: "--color-border-primary-default",
-    value: "{colors.violet.600}",
-    resolvedValue: "#7c3aed",
-    type: "color",
-    tier: "semantic",
-    category: "color",
-    alias: "colors.violet.600",
+  "color.border.primary.default": {
+    displayName: "border.primary.default",
     componentTarget: "Button:focus-visible, Active Input border",
-    useFor: "Fokus- und Rahmen-Akzente auf primären Elementen",
-    avoidFor: "Neutrale Container-Bordüren (dort border-border)",
     description: "Signalstarker Fokus-Ring gemäß WCAG 2.1 Focus-Appearance.",
   },
 
   // Primitive Palette Colors (Tier 1)
-  {
-    id: "colors.violet.500",
-    name: "violet.500",
-    path: "colors.violet.500",
-    cssVar: "--colors-violet-500",
-    value: "#8b5cf6",
-    resolvedValue: "#8b5cf6",
-    type: "color",
-    tier: "primitive",
-    category: "color",
+  "colors.violet.500": {
+    displayName: "violet.500",
     componentTarget: "Raw Palette Primitive",
     description: "Brand Primitive Violet Hell (Luminanz 31%).",
   },
-  {
-    id: "colors.violet.600",
-    name: "violet.600",
-    path: "colors.violet.600",
-    cssVar: "--colors-violet-600",
-    value: "#7c3aed",
-    resolvedValue: "#7c3aed",
-    type: "color",
-    tier: "primitive",
-    category: "color",
+  "colors.violet.600": {
+    displayName: "violet.600",
     componentTarget: "Raw Palette Primitive",
     description: "Brand Primitive Violet Basis (Referenziert von border.primary).",
   },
-  {
-    id: "colors.violet.700",
-    name: "violet.700",
-    path: "colors.violet.700",
-    cssVar: "--colors-violet-700",
-    value: "#6d28d9",
-    resolvedValue: "#6d28d9",
-    type: "color",
-    tier: "primitive",
-    category: "color",
+  "colors.violet.700": {
+    displayName: "violet.700",
     componentTarget: "Raw Palette Primitive",
     description: "Brand Primitive Violet Dunkel (Referenziert von background.primary).",
   },
-  {
-    id: "colors.violet.800",
-    name: "violet.800",
-    path: "colors.violet.800",
-    cssVar: "--colors-violet-800",
-    value: "#5b21b6",
-    resolvedValue: "#5b21b6",
-    type: "color",
-    tier: "primitive",
-    category: "color",
+  "colors.violet.800": {
+    displayName: "violet.800",
     componentTarget: "Raw Palette Primitive",
     description: "Brand Primitive Violet Deep (Referenziert von background.hover).",
   },
-  {
-    id: "colors.blue.600",
-    name: "blue.600",
-    path: "colors.blue.600",
-    cssVar: "--colors-blue-600",
-    value: "#2563eb",
-    resolvedValue: "#2563eb",
-    type: "color",
-    tier: "primitive",
-    category: "color",
+  "colors.blue.500": {
+    displayName: "blue.500",
+    componentTarget: "Raw Palette Primitive",
+    description: "Brand Primitive Blue Hell.",
+  },
+  "colors.blue.600": {
+    displayName: "blue.600",
     componentTarget: "Raw Palette Primitive",
     description: "Legacy Blue Accent aus Figma-Baseline.",
   },
-  {
-    id: "colors.red.700",
-    name: "red.700",
-    path: "colors.red.700",
-    cssVar: "--colors-red-700",
-    value: "#b91c1c",
-    resolvedValue: "#b91c1c",
-    type: "color",
-    tier: "primitive",
-    category: "color",
+  "colors.blue.700": {
+    displayName: "blue.700",
+    componentTarget: "Raw Palette Primitive",
+    description: "Brand Primitive Blue Dunkel.",
+  },
+  "colors.red.700": {
+    displayName: "red.700",
     componentTarget: "Raw Palette Primitive",
     description: "Alarm-Rot Primitive (#b91c1c). Erreicht z. B. auf Weiß (#ffffff) 6.47:1 (WCAG AA).",
   },
-  {
-    id: "colors.white",
-    name: "white",
-    path: "colors.white",
-    cssVar: "--colors-white",
-    value: "#ffffff",
-    resolvedValue: "#ffffff",
-    type: "color",
-    tier: "primitive",
-    category: "color",
+  "colors.white": {
+    displayName: "white",
     componentTarget: "Raw Palette Primitive",
     description: "Absolute Pure White Primitive (#ffffff).",
   },
 
   // Space & Radii Primitives (Tier 1)
-  {
-    id: "space.component.sm",
-    name: "space.component.sm",
-    path: "space.component.sm",
-    cssVar: "--space-component-sm",
-    value: "8px",
-    resolvedValue: "8px",
-    type: "dimension",
-    tier: "primitive",
-    category: "space-radius",
+  "space.component.sm": {
+    displayName: "space.component.sm",
     componentTarget: "Button.py, FormField.gap",
-    useFor: "Innere Abstände und vertikale Element-Gaps",
-    avoidFor: "Große Container-Paddings (dort space.component.md)",
     description: "W3C 8px-Raster Basiseinheit (1x Grid).",
   },
-  {
-    id: "space.component.md",
-    name: "space.component.md",
-    path: "space.component.md",
-    cssVar: "--space-component-md",
-    value: "16px",
-    resolvedValue: "16px",
-    type: "dimension",
-    tier: "primitive",
-    category: "space-radius",
+  "space.component.md": {
+    displayName: "space.component.md",
     componentTarget: "Button.px, Card.padding",
-    useFor: "Horizontale Button-Paddings und Standard-Abstände",
-    avoidFor: "Feine Inline-Icons",
     description: "W3C 8px-Raster Doppeleinheit (2x Grid).",
   },
-  {
-    id: "radii.md",
-    name: "radii.md",
-    path: "radii.md",
-    cssVar: "--radii-md",
-    value: "6px",
-    resolvedValue: "6px",
-    type: "dimension",
-    tier: "primitive",
-    category: "space-radius",
+  "radii.md": {
+    displayName: "radii.md",
     componentTarget: "Button, Input, Badge",
-    useFor: "Standardmäßige Eckenabrundung für interaktive Kontrollen",
-    avoidFor: "Vollständig runde Avatare (dort rounded-full)",
     description: "Subtile, moderne Eckenverrundung für dichte B2B-UIs.",
   },
 
   // Typography Primitives (Tier 1)
-  {
-    id: "font.size.sm",
-    name: "font.size.sm",
-    path: "font.size.sm",
-    cssVar: "--font-size-sm",
-    value: "12px",
-    resolvedValue: "12px",
-    type: "dimension",
-    tier: "primitive",
-    category: "typography",
+  "font.size.sm": {
+    displayName: "font.size.sm",
     componentTarget: "FormField.hint, Badge",
-    useFor: "Hilfstext und Fehlermeldungen unterhalb von Feldern",
-    avoidFor: "Fließtext, Labels, Button-Text (dort font.size.md)",
     description: "Kompakter Beschriftungstext mit 16px Zeilenhöhe.",
   },
-  {
-    id: "font.size.md",
-    name: "font.size.md",
-    path: "font.size.md",
-    cssVar: "--font-size-md",
-    value: "14px",
-    resolvedValue: "14px",
-    type: "dimension",
-    tier: "primitive",
-    category: "typography",
+  "font.size.md": {
+    displayName: "font.size.md",
     componentTarget: "Button.text, Input.text, Body",
-    useFor: "Standard UI-Größe für Controls und Formulare",
-    avoidFor: "H1/H2 Überschriften",
     description: "Standard-Arbeitsgröße für B2B-Oberflächen.",
   },
-  {
-    id: "font.size.xl",
-    name: "font.size.xl",
-    path: "font.size.xl",
-    cssVar: "--font-size-xl",
-    value: "24px",
-    resolvedValue: "24px",
-    type: "dimension",
-    tier: "primitive",
-    category: "typography",
+  "font.size.xl": {
+    displayName: "font.size.xl",
     componentTarget: "Card Title, Header Headline",
-    useFor: "Modaltitel und Sektionsüberschriften",
-    avoidFor: "Fließtext",
     description: "Display-Größe für Enterprise-Seitentitel.",
   },
-  {
-    id: "font.family.base",
-    name: "font.family.base",
-    path: "font.family.base",
-    cssVar: "--font-family-base",
-    value: "'Geist Variable'",
-    resolvedValue: "'Geist Variable', -apple-system, sans-serif",
-    type: "fontFamily",
-    tier: "primitive",
-    category: "typography",
+  "font.weight.medium": {
+    displayName: "font.weight.medium",
+    componentTarget: "Button, FormField Label",
+    description: "Mittleres Schriftgewicht (500) für interaktive Controls.",
+  },
+  "font.weight.bold": {
+    displayName: "font.weight.bold",
+    componentTarget: "Headlines",
+    description: "Fettes Schriftgewicht (700) für primäre Überschriften.",
+  },
+  "font.lineHeight.sm": {
+    displayName: "font.lineHeight.sm",
+    componentTarget: "Caption / FormField Error",
+    description: "Kompakte Zeilenhöhe (16px) passend zu font.size.sm.",
+  },
+  "font.lineHeight.md": {
+    displayName: "font.lineHeight.md",
+    componentTarget: "Button, Input, Body",
+    description: "Standard-Zeilenhöhe (20px) passend zu font.size.md.",
+  },
+  "font.lineHeight.xl": {
+    displayName: "font.lineHeight.xl",
+    componentTarget: "Headlines",
+    description: "Große Zeilenhöhe (32px) passend zu font.size.xl.",
+  },
+  "font.family.base": {
+    displayName: "font.family.base",
     componentTarget: "Universal Body & Controls",
     description: "Geist Sans Schriftenfamilie für maximale Lesbarkeit.",
   },
-]
+}
+
+interface DtcgLeafNode {
+  $value: string | number
+  $type: "color" | "dimension" | "fontFamily" | "number"
+  useFor?: string
+  avoidFor?: string
+  [key: string]: unknown
+}
+
+function isDtcgLeaf(node: unknown): node is DtcgLeafNode {
+  return (
+    typeof node === "object" &&
+    node !== null &&
+    "$value" in node &&
+    "$type" in node
+  )
+}
+
+function resolveTokenValue(
+  rawValue: string | number,
+  tokensRoot: Record<string, unknown>,
+  visited: Set<string> = new Set()
+): string {
+  if (typeof rawValue !== "string") {
+    return String(rawValue)
+  }
+
+  const aliasMatch = rawValue.trim().match(/^\{([^}]+)\}$/)
+  if (!aliasMatch) {
+    return rawValue
+  }
+
+  const aliasPath = aliasMatch[1]
+  if (visited.has(aliasPath)) {
+    throw new Error(
+      `Zyklische Alias-Referenz in tokens.json entdeckt: "${aliasPath}" (Kette: ${[...visited, aliasPath].join(" -> ")})`
+    )
+  }
+
+  const segments = aliasPath.split(".")
+  let current: unknown = tokensRoot
+  for (const segment of segments) {
+    if (typeof current !== "object" || current === null || !(segment in current)) {
+      throw new Error(
+        `Ungültige Alias-Referenz: "{${aliasPath}}" konnte in tokens.json nicht aufgelöst werden. Segment "${segment}" existiert nicht.`
+      )
+    }
+    current = (current as Record<string, unknown>)[segment]
+  }
+
+  if (!isDtcgLeaf(current)) {
+    throw new Error(
+      `Ungültige Alias-Referenz: "{${aliasPath}}" verweist auf keinen gültigen DTCG-Leaf mit $value und $type.`
+    )
+  }
+
+  const nextVisited = new Set(visited)
+  nextVisited.add(aliasPath)
+
+  return resolveTokenValue(current.$value, tokensRoot, nextVisited)
+}
+
+function toCssVar(path: string): string {
+  const kebabSegments = path
+    .split(".")
+    .map((seg) => seg.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase())
+  return `--${kebabSegments.join("-")}`
+}
+
+function classifyTier(path: string): "semantic" | "primitive" {
+  if (path.startsWith("color.")) return "semantic"
+  return "primitive"
+}
+
+function classifyCategory(
+  path: string,
+  type: "color" | "dimension" | "fontFamily" | "number"
+): "color" | "space-radius" | "typography" {
+  if (path.startsWith("color.") || path.startsWith("colors.") || type === "color") {
+    return "color"
+  }
+  if (path.startsWith("space.") || path.startsWith("radii.")) {
+    return "space-radius"
+  }
+  if (path.startsWith("font.")) {
+    return "typography"
+  }
+  return "color"
+}
+
+function buildTokenCatalog(
+  raw: Record<string, unknown>,
+  presentationMeta: Record<string, TokenPresentationMeta> = {}
+): TokenItem[] {
+  const leaves: Array<{ path: string; leaf: DtcgLeafNode }> = []
+
+  function traverse(node: unknown, pathSegments: string[]) {
+    if (isDtcgLeaf(node)) {
+      leaves.push({ path: pathSegments.join("."), leaf: node })
+      return
+    }
+
+    if (typeof node === "object" && node !== null) {
+      for (const [key, value] of Object.entries(node)) {
+        if (key.startsWith("$")) continue
+        traverse(value, [...pathSegments, key])
+      }
+    }
+  }
+
+  traverse(raw, [])
+
+  // Semantische Tokens zuerst für konsistente User Experience & stabilen Default
+  leaves.sort((a, b) => {
+    const tierA = classifyTier(a.path)
+    const tierB = classifyTier(b.path)
+    if (tierA !== tierB) {
+      return tierA === "semantic" ? -1 : 1
+    }
+    return a.path.localeCompare(b.path)
+  })
+
+  return leaves.map(({ path, leaf }) => {
+    const rawVal = leaf.$value
+    const value = String(rawVal)
+    const aliasMatch = typeof rawVal === "string" ? rawVal.trim().match(/^\{([^}]+)\}$/) : null
+    const alias = aliasMatch ? aliasMatch[1] : undefined
+    const resolvedValue = resolveTokenValue(rawVal, raw)
+    const cssVar = toCssVar(path)
+    const tier = classifyTier(path)
+    const category = classifyCategory(path, leaf.$type)
+    const meta = presentationMeta[path]
+
+    // Fallbacks für fehlende Präsentations-Metadaten
+    const name = meta?.displayName || path
+    const componentTarget = meta?.componentTarget
+    const description = meta?.description
+
+    const item: TokenItem = {
+      id: path,
+      name,
+      path,
+      cssVar,
+      value,
+      resolvedValue,
+      type: leaf.$type,
+      tier,
+      category,
+      ...(alias ? { alias } : {}),
+      ...(componentTarget ? { componentTarget } : {}),
+      ...(typeof leaf.useFor === "string" ? { useFor: leaf.useFor } : {}),
+      ...(typeof leaf.avoidFor === "string" ? { avoidFor: leaf.avoidFor } : {}),
+      ...(description ? { description } : {}),
+    }
+
+    return item
+  })
+}
+
+const TOKEN_CATALOG: TokenItem[] = buildTokenCatalog(
+  rawTokens as Record<string, unknown>,
+  TOKEN_PRESENTATION_META
+)
 
 // Accurate WCAG 2.1 Contrast Formula
 function hexToRgb(hex: string): [number, number, number] | null {
@@ -353,7 +385,7 @@ function calculateContrastRatio(hex1: string, hex2: string): number {
 
 export function TokenView() {
   const [selectedTokenId, setSelectedTokenId] = useState<string>("color.background.primary.default")
-  const [activeTab, setActiveTab] = useState<TokenFilterTab>("all")
+  const [activeTab, setActiveTab] = useState<TokenFilterTab>("semantic")
   const [searchQuery, setSearchQuery] = useState<string>("")
   const [exportFormat, setExportFormat] = useState<"json" | "css" | "ts" | "prompt">("json")
   const [copiedFormat, setCopiedFormat] = useState<string | null>(null)
@@ -415,7 +447,7 @@ export function TokenView() {
         [selectedToken.path]: {
           $value: selectedToken.value,
           $type: selectedToken.type,
-          $description: selectedToken.description,
+          ...(selectedToken.description ? { $description: selectedToken.description } : {}),
           ...(selectedToken.useFor ? { useFor: selectedToken.useFor } : {}),
           ...(selectedToken.avoidFor ? { avoidFor: selectedToken.avoidFor } : {}),
         },
@@ -464,15 +496,15 @@ ${selectedToken.avoidFor ? `- Strictly Forbidden: ${selectedToken.avoidFor}` : "
     <div className="mx-auto max-w-7xl px-6 py-8">
       <PageHeader
         title="W3C Design Token Architecture"
-        subtitle="Single Source of Truth für Primitives, semantische Aliase und Barrierefreiheit — ohne manuelle Fehler."
+        subtitle="Ein Token-System, das Gestaltung, Code und Agenten an dieselben freigegebenen Regeln bindet."
       />
 
       {/* 2-Column Responsive Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column (7/12): Token Directory Card mit integrierter Toolbar */}
         <div className="lg:col-span-7 min-w-0 rounded-2xl border border-border/80 bg-card overflow-hidden shadow-xs">
           {/* Card Header Toolbar: Tabs + Search */}
-          <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between border-b border-border/60 px-4 sm:px-5 py-3.5 bg-card">
+          <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between border-b border-border/60 px-6 py-3.5 sm:py-0 sm:h-16 bg-card">
             <div className="overflow-x-auto scrollbar-none pb-0.5 sm:pb-0">
               <SegmentedTabs<TokenFilterTab>
                 items={[
@@ -613,78 +645,146 @@ ${selectedToken.avoidFor ? `- Strictly Forbidden: ${selectedToken.avoidFor}` : "
 
         {/* Right Column (5/12): Inspector, Traceability, Contrast & Code Export */}
         <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-16">
-          {/* Card 1: W3C Alias Traceability Flow */}
-          <div className="rounded-2xl border border-border/80 bg-card p-5 shadow-xs space-y-4">
+          {/* Card 1: Token-Herkunft & Komponentenbindung */}
+          <div className="rounded-2xl border border-border/80 bg-card p-6 shadow-xs space-y-4">
             <div className="border-b border-border/60 pb-3">
               <h3 className="text-sm font-semibold tracking-tight text-foreground">
-                Alias Traceability Flow
+                Token-Herkunft & Komponentenbindung
               </h3>
             </div>
 
             {/* Traceability Graph Nodes */}
-            <div className="space-y-2.5">
-              {/* Step 1: Primitive */}
-              <div className="p-3 rounded-xl bg-muted/30 border border-border/60 space-y-1">
-                <div className="flex items-center justify-between text-[11px]">
-                  <span className="text-muted-foreground font-medium">1. Primitive Token</span>
-                  <span className="font-mono text-primary font-medium">
-                    {selectedToken.alias || selectedToken.id}
-                  </span>
+            {selectedToken.tier === "semantic" ? (
+              <div className="space-y-2.5">
+                {/* Step 1: Primitive */}
+                <div className="p-3 rounded-xl bg-muted/30 border border-border/60 space-y-1">
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="text-muted-foreground font-medium">1. Primitive Token</span>
+                    <span className="font-mono text-primary font-medium">
+                      {selectedToken.alias || selectedToken.id}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-xs font-mono">
+                    <span className="text-foreground font-semibold">
+                      {selectedToken.resolvedValue}
+                    </span>
+                    {selectedToken.type === "color" && (
+                      <div
+                        className="h-3.5 w-3.5 rounded border border-border/80 shadow-2xs"
+                        style={{ backgroundColor: selectedToken.resolvedValue }}
+                      />
+                    )}
+                  </div>
                 </div>
-                <div className="flex items-center justify-between text-xs font-mono">
-                  <span className="text-foreground font-semibold">
-                    {selectedToken.resolvedValue}
-                  </span>
-                  {selectedToken.type === "color" && (
-                    <div
-                      className="h-3.5 w-3.5 rounded border border-border/80 shadow-2xs"
-                      style={{ backgroundColor: selectedToken.resolvedValue }}
-                    />
+
+                {/* Arrow */}
+                <div className="flex justify-center text-muted-foreground/60 py-0.5">
+                  <ArrowRight className="h-3.5 w-3.5 rotate-90" />
+                </div>
+
+                {/* Step 2: Semantic Token */}
+                <div className="p-3 rounded-xl bg-primary/5 dark:bg-primary/10 border border-primary/20 space-y-1">
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="text-primary font-medium">2. Semantic Token</span>
+                    <span className="font-mono text-[10px] text-muted-foreground">
+                      {selectedToken.tier}
+                    </span>
+                  </div>
+                  <div className="text-xs font-mono font-semibold text-foreground">
+                    {selectedToken.cssVar}
+                  </div>
+                  {selectedToken.description && (
+                    <p className="text-[11px] text-muted-foreground font-sans pt-1">
+                      {selectedToken.description}
+                    </p>
                   )}
                 </div>
-              </div>
 
-              {/* Arrow */}
-              <div className="flex justify-center text-muted-foreground/60 py-0.5">
-                <ArrowRight className="h-3.5 w-3.5 rotate-90" />
-              </div>
+                {/* Arrow */}
+                <div className="flex justify-center text-muted-foreground/60 py-0.5">
+                  <ArrowRight className="h-3.5 w-3.5 rotate-90" />
+                </div>
 
-              {/* Step 2: Semantic Token */}
-              <div className="p-3 rounded-xl bg-primary/5 dark:bg-primary/10 border border-primary/20 space-y-1">
-                <div className="flex items-center justify-between text-[11px]">
-                  <span className="text-primary font-medium">2. Semantic Token</span>
-                  <span className="font-mono text-[10px] text-muted-foreground">
-                    {selectedToken.tier}
-                  </span>
+                {/* Step 3: Component Binding */}
+                <div className="p-3 rounded-xl bg-muted/30 border border-border/60 space-y-1">
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="text-muted-foreground font-medium">3. Component Binding</span>
+                    <span className="font-mono text-emerald-600 dark:text-emerald-400 font-medium text-[10px]">
+                      Runtime Guardrail
+                    </span>
+                  </div>
+                  <div className="text-xs font-mono font-semibold text-foreground">
+                    {selectedToken.componentTarget || "Global Design Scale"}
+                  </div>
                 </div>
-                <div className="text-xs font-mono font-semibold text-foreground">
-                  {selectedToken.cssVar}
+              </div>
+            ) : (
+              <div className="space-y-2.5">
+                {/* Step 1: Primitive Token */}
+                <div className="p-3 rounded-xl bg-muted/30 border border-border/60 space-y-1">
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="text-muted-foreground font-medium">1. Primitive Token</span>
+                    <span className="font-mono text-primary font-medium">
+                      {selectedToken.path}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-xs font-mono">
+                    <span className="text-foreground font-semibold">
+                      {selectedToken.resolvedValue}
+                    </span>
+                    {selectedToken.type === "color" && (
+                      <div
+                        className="h-3.5 w-3.5 rounded border border-border/80 shadow-2xs"
+                        style={{ backgroundColor: selectedToken.resolvedValue }}
+                      />
+                    )}
+                  </div>
                 </div>
-                {selectedToken.description && (
-                  <p className="text-[11px] text-muted-foreground font-sans pt-1">
-                    {selectedToken.description}
-                  </p>
+
+                {/* Arrow */}
+                <div className="flex justify-center text-muted-foreground/60 py-0.5">
+                  <ArrowRight className="h-3.5 w-3.5 rotate-90" />
+                </div>
+
+                {/* Step 2: CSS Variable */}
+                <div className="p-3 rounded-xl bg-muted/30 border border-border/60 space-y-1">
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="text-muted-foreground font-medium">2. CSS Variable</span>
+                    <span className="font-mono text-[10px] text-muted-foreground">
+                      Export
+                    </span>
+                  </div>
+                  <div className="text-xs font-mono font-semibold text-foreground">
+                    {selectedToken.cssVar}
+                  </div>
+                  {selectedToken.description && (
+                    <p className="text-[11px] text-muted-foreground font-sans pt-1">
+                      {selectedToken.description}
+                    </p>
+                  )}
+                </div>
+
+                {/* Optional Step: Component Binding nur bei tatsächlicher, konkreter Bindung */}
+                {selectedToken.componentTarget && selectedToken.componentTarget !== "Raw Palette Primitive" && (
+                  <>
+                    <div className="flex justify-center text-muted-foreground/60 py-0.5">
+                      <ArrowRight className="h-3.5 w-3.5 rotate-90" />
+                    </div>
+                    <div className="p-3 rounded-xl bg-muted/30 border border-border/60 space-y-1">
+                      <div className="flex items-center justify-between text-[11px]">
+                        <span className="text-muted-foreground font-medium">3. Component Binding</span>
+                        <span className="font-mono text-emerald-600 dark:text-emerald-400 font-medium text-[10px]">
+                          Runtime Guardrail
+                        </span>
+                      </div>
+                      <div className="text-xs font-mono font-semibold text-foreground">
+                        {selectedToken.componentTarget}
+                      </div>
+                    </div>
+                  </>
                 )}
               </div>
-
-              {/* Arrow */}
-              <div className="flex justify-center text-muted-foreground/60 py-0.5">
-                <ArrowRight className="h-3.5 w-3.5 rotate-90" />
-              </div>
-
-              {/* Step 3: Component Binding */}
-              <div className="p-3 rounded-xl bg-muted/30 border border-border/60 space-y-1">
-                <div className="flex items-center justify-between text-[11px]">
-                  <span className="text-muted-foreground font-medium">3. Component Binding</span>
-                  <span className="font-mono text-emerald-600 dark:text-emerald-400 font-medium text-[10px]">
-                    Runtime Guardrail
-                  </span>
-                </div>
-                <div className="text-xs font-mono font-semibold text-foreground">
-                  {selectedToken.componentTarget || "Global Design Scale"}
-                </div>
-              </div>
-            </div>
+            )}
 
             {/* Prominent Agent Contract Guardrails (useFor / avoidFor from tokens.json) */}
             {(selectedToken.useFor || selectedToken.avoidFor) && (
@@ -725,12 +825,12 @@ ${selectedToken.avoidFor ? `- Strictly Forbidden: ${selectedToken.avoidFor}` : "
             )}
           </div>
 
-          {/* Card 2: Live WCAG 2.1 & APCA Contrast Matrix (for Color Tokens) */}
+          {/* Card 2: Barrierefreiheit & Kontraste (für Color Tokens) */}
           {selectedToken.type === "color" && (
-            <div className="rounded-2xl border border-border/80 bg-card p-5 shadow-xs space-y-4">
+            <div className="rounded-2xl border border-border/80 bg-card p-6 shadow-xs space-y-4">
               <div className="border-b border-border/60 pb-3">
                 <h3 className="text-sm font-semibold tracking-tight text-foreground">
-                  WCAG 2.1 Accessibility Matrix
+                  Barrierefreiheit & Kontraste
                 </h3>
               </div>
 
@@ -829,18 +929,67 @@ ${selectedToken.avoidFor ? `- Strictly Forbidden: ${selectedToken.avoidFor}` : "
                 </div>
               </div>
 
-              {/* Sample Live Contrast Render Pill: Berechnete Farbpaarung mit Ergebnis */}
+              {/* Sample Live Contrast Render Pill: Fachlich korrekte Farbpaarungen */}
               {(() => {
-                const isTextToken = selectedToken.id.includes("text")
-                const bg = isTextToken ? "#ffffff" : selectedToken.resolvedValue
-                const fg = isTextToken
-                  ? selectedToken.resolvedValue
-                  : (contrastLight || 0) >= 4.5
-                  ? "#ffffff"
-                  : "#09090b"
+                if (selectedToken.id === "color.border.primary.default") {
+                  return (
+                    <div className="p-3.5 rounded-xl border border-border/80 bg-muted/20 flex items-center justify-between transition-colors">
+                      <div className="space-y-0.5">
+                        <div className="text-xs font-semibold text-foreground font-mono">
+                          Non-Text Contrast
+                        </div>
+                        <p className="text-[11px] text-muted-foreground leading-snug">
+                          Rahmen- und Fokusfarbe – als Non-Text Contrast zu bewerten.
+                        </p>
+                      </div>
+                      <div
+                        className="h-6 w-6 rounded-md border-2 shrink-0 ml-3"
+                        style={{ borderColor: selectedToken.resolvedValue }}
+                      />
+                    </div>
+                  )
+                }
+
+                let title = "Live Farbpaarung"
+                let fg = "#ffffff"
+                let bg = selectedToken.resolvedValue
+                let label = "#ffffff auf dem ausgewählten Hintergrund"
+
+                if (
+                  selectedToken.id === "color.background.primary.default" ||
+                  selectedToken.id === "color.background.primary.hover"
+                ) {
+                  fg = "#ffffff"
+                  bg = selectedToken.resolvedValue
+                  label = `#ffffff auf ${selectedToken.resolvedValue}`
+                } else if (selectedToken.id === "color.text.primary.default") {
+                  const bgToken = TOKEN_CATALOG.find((t) => t.id === "color.background.primary.default")
+                  fg = selectedToken.resolvedValue
+                  bg = bgToken ? bgToken.resolvedValue : "#6d28d9"
+                  label = `${selectedToken.resolvedValue} auf ${bg}`
+                } else if (selectedToken.id === "color.text.destructive.default") {
+                  fg = selectedToken.resolvedValue
+                  bg = "#fde5e7"
+                  label = `${selectedToken.resolvedValue} auf #fde5e7`
+                } else {
+                  // Primitive Farben
+                  title = "Technischer Farbvergleich"
+                  if ((contrastLight || 0) >= 4.5) {
+                    bg = selectedToken.resolvedValue
+                    fg = "#ffffff"
+                  } else if ((contrastDark || 0) >= 4.5) {
+                    bg = selectedToken.resolvedValue
+                    fg = "#09090b"
+                  } else {
+                    bg = "#ffffff"
+                    fg = selectedToken.resolvedValue
+                  }
+                  label = `${fg} auf ${bg}`
+                }
+
                 const ratio = calculateContrastRatio(fg, bg)
                 const level =
-                  ratio >= 7.0 ? "WCAG AAA" : ratio >= 4.5 ? "WCAG AA" : ratio >= 3.0 ? "WCAG Large" : "Fail"
+                  ratio >= 7.0 ? "WCAG AAA" : ratio >= 4.5 ? "WCAG AA" : ratio >= 3.0 ? "WCAG Large" : "Nicht konform"
 
                 return (
                   <div
@@ -851,9 +1000,9 @@ ${selectedToken.avoidFor ? `- Strictly Forbidden: ${selectedToken.avoidFor}` : "
                     }}
                   >
                     <div>
-                      <div className="text-xs font-semibold">Live Farbpaarung</div>
+                      <div className="text-xs font-semibold">{title}</div>
                       <div className="text-[10px] opacity-85">
-                        {fg} auf {bg}
+                        {label}
                       </div>
                     </div>
                     <div className="text-right">
@@ -867,7 +1016,7 @@ ${selectedToken.avoidFor ? `- Strictly Forbidden: ${selectedToken.avoidFor}` : "
           )}
 
           {/* Card 3: Multi-Target Pipeline Artifacts (Proof of Token Toolchain) */}
-          <div className="rounded-2xl border border-border/80 bg-card p-5 shadow-xs space-y-4">
+          <div className="rounded-2xl border border-border/80 bg-card p-6 shadow-xs space-y-4">
             <div className="border-b border-border/60 pb-3">
               <h3 className="text-sm font-semibold tracking-tight text-foreground">
                 Export für Entwickler & KI
