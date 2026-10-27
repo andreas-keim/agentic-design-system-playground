@@ -108,10 +108,17 @@ src/
 * **Two-Pathway Architecture Diagram (`SpecsView.tsx`):** Connects Build Pipeline (B1–B4) directly to Governance Pipeline (A1–A4) via the B4 → A2 component-to-catalog link.
 * **Reproducible Testfall 03:** Direct verification of CLI fixture rejection (`Unrecognized key(s) in object: 'className'`).
 * **CLI Benchmark Documentation:** 11 of 12 targeted fixtures verified as expected; 1 documented semantic gap (fixture 08: destructive cancellation).
-* **Planned Future Deliverables:**
-  * In-App Role-Based Guided Tour dropdown (*planned*).
-  * Command Palette (`Cmd + K`) shortcut launcher (*planned*).
-  * Video walkthrough & screen recordings (*planned*).
+* **V1 Production Release (2026-10-27):** Live on Vercel (`agentic-design-system-playground.vercel.app`).
+
+### Phase 5: The Agentic Experience Pattern Library (V2) — Planned
+* **Strategic Concept:** Expansion from pure governance (how design systems control coding agents) to human-agent collaboration interfaces (how interfaces keep humans in the loop and in control).
+* **Delivery Scope (5 Interactive AX Patterns):**
+  1. `<ApprovalGate />`: Stage & Commit architecture, visual side-by-side diffs, pre-click consequence summaries, 1-click dismissal (`Esc`).
+  2. `<ConfidenceBadge />`: Zoned uncertainty design (Green/Amber/Red) with progressive disclosure popovers explaining attribution drivers.
+  3. `<ToolCallTracker />`: Real-time agent tool-call execution pills (`[Read SAP DB...]` → `[Validate Tokens...]`), shimmer skeletons, and graceful abort controls.
+  4. `<SourceAttributionBadge />`: Clear provenance indicators (`👤 Manual` vs. `🤖 Agent SYS-REC`) with 1-click rollback to pre-AI state.
+  5. `<DualAudienceTokenCard />`: Interactive visualization of W3C DTCG tokens with formal `useFor` / `avoidFor` LLM contract metadata.
+* **Architecture & Delivery:** Dedicated 5th top-level navigation tab (`AX Patterns`), built on a separate feature branch (`feature/v2-ax-patterns`) to keep `main` stable.
 
 ---
 
@@ -124,3 +131,4 @@ src/
 - [x] **Step 5 (Phase 2 – Agentic UI Lab):** Build `src/showcase/AgenticLabView.tsx` with interactive error simulation and `prefers-reduced-motion` support.
 - [x] **Step 6 (Phase 3 – W3C Token Explorer):** Build `src/showcase/TokenView.tsx` rendering `tokens.json` taxonomy, contrast matrix, and code snippets.
 - [x] **Step 7 (Phase 4 – Architecture Specs & V1 Stabilization):** Build `src/showcase/SpecsView.tsx` with B4 → A2 connection, stabilize responsive layouts (390px, 768px, 1280px with 0 page overflows), align all statements with repo facts, and deploy to Vercel via `main`.
+- [ ] **Step 8 (Phase 5 – AX Pattern Library V2):** Implement 5 core interaction patterns in `src/components/ax/` and integrate into a dedicated `AXPatternsView.tsx` tab.
