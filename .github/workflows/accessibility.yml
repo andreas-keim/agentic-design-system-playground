@@ -89,7 +89,7 @@ jobs:
               | while read -r old_run_id; do rm -rf "run-$old_run_id"; done
 
             git add -A
-            git -c user.name="github-actions" -c user.email="github-actions@github.com" commit -q -m "a11y screenshots for run ${{ github.run_id }} (prune old runs beyond $KEEP_RUNS)"
+            git -c user.name="github-actions" -c user.email="github-actions@github.com" commit -q -m "a11y screenshots for run ${{ github.run_id }} (prune old runs beyond $KEEP_RUNS) [skip ci]"
             if git push -q origin a11y-screenshots; then
               exit 0
             fi
