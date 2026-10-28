@@ -123,7 +123,7 @@ export function WorkbenchView() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-6 py-8">
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 py-6 sm:py-8">
       <PageHeader
         title="Komponenten-Workbench"
         subtitle="Ich habe ein Design System gebaut, das Agenten auf freigegebene Komponenten begrenzt und strukturierte UI-Ausgaben gegen konkrete Regeln prüft."
@@ -144,10 +144,10 @@ export function WorkbenchView() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start lg:items-stretch">
         {/* Left: The Component Stage Card */}
         <div className="lg:col-span-8 rounded-2xl border border-border/80 bg-card shadow-xs flex flex-col overflow-hidden">
-          {/* Stage Header / Toolbar: h-16 für horizontales Divider-Alignment auf Desktop, umbruchsicher auf Mobile */}
-          <div className="flex items-center border-b border-border/60 px-6 h-16 bg-card shrink-0">
+          {/* Stage Header / Toolbar: min-h-16 für horizontales Divider-Alignment auf Desktop, umbruchsicher auf Mobile */}
+          <div className="flex items-center border-b border-border/60 px-4 sm:px-6 min-h-16 py-3 bg-card shrink-0">
             {/* Apple-Style Segmented Component Selector */}
-            <div className="overflow-x-auto scrollbar-none max-w-full">
+            <div className="overflow-x-auto scrollbar-none max-w-full py-0.5">
               <SegmentedTabs<ActiveComponent>
                 items={[
                   { id: "edit-panel", label: "Record Panel" },
@@ -269,8 +269,8 @@ export function WorkbenchView() {
 
         {/* Right: The Quiet Inspector Panel Card */}
         <div className="lg:col-span-4 rounded-2xl border border-border/80 bg-card overflow-hidden shadow-xs flex flex-col">
-          {/* Header: Exakt h-16 bündig mit linker Stage-Toolbar auf Desktop */}
-          <div className="border-b border-border/60 px-6 h-16 flex flex-col justify-center bg-card shrink-0">
+          {/* Header: Bündig mit linker Stage-Toolbar */}
+          <div className="border-b border-border/60 px-4 sm:px-6 min-h-16 py-3 flex flex-col justify-center bg-card shrink-0">
             <h3 className="text-base font-semibold tracking-tight text-foreground leading-tight">
               Component Inspector
             </h3>
@@ -279,7 +279,7 @@ export function WorkbenchView() {
             </p>
           </div>
 
-          <div className="p-6 flex-1 flex flex-col justify-between">
+          <div className="p-4 sm:p-6 flex-1 flex flex-col justify-between">
             {/* 1. Design-Regeln dieser Ansicht (verständlich für Recruiter / Stakeholder) */}
             <div>
               <span className="text-xs font-mono text-muted-foreground block mb-3 uppercase tracking-wider">

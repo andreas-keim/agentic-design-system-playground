@@ -350,7 +350,7 @@ export function SpecsView() {
     : null
 
   return (
-    <div className="mx-auto max-w-7xl px-6 py-8">
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 py-6 sm:py-8">
       {/* 1. STANDARDIZIERTER PAGE HEADER */}
       <PageHeader
         title="So prüft das System Agenten-Ausgaben"
@@ -363,7 +363,7 @@ export function SpecsView() {
           id="testfall-03"
           tabIndex={-1}
           aria-labelledby="testfall-03-title"
-          className="scroll-mt-20 rounded-2xl border border-border/80 bg-card p-6 shadow-xs space-y-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+          className="scroll-mt-20 rounded-2xl border border-border/80 bg-card p-4 sm:p-6 shadow-xs space-y-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
         >
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border/60">
             <div>
@@ -449,7 +449,7 @@ export function SpecsView() {
       {/* 3. DAS ARCHITEKTUR-SCHNITT-BILD MIT ZWEI VERBUNDENEN PFADEN */}
       <section className="rounded-2xl border border-border/80 bg-card overflow-hidden shadow-xs flex flex-col">
         {/* Header Toolbar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border/60 px-6 py-4 bg-card">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border/60 px-4 sm:px-6 py-4 bg-card">
           <div className="space-y-0.5">
             <h3 className="text-sm font-semibold tracking-tight text-foreground">
               Vom Design Token zur geprüften Agenten-Ausgabe
@@ -464,7 +464,7 @@ export function SpecsView() {
         </div>
 
         {/* Die beiden visuellen Pfade */}
-        <div className="p-6 space-y-6">
+        <div className="p-4 sm:p-6 space-y-6">
           {/* PFAD 1: BUILD-PIPELINE */}
           <div className="space-y-3">
             <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
@@ -611,7 +611,7 @@ export function SpecsView() {
 
         {/* 4. DETAILBEREICH DER AUSGEWÄHLTEN STATION (NUR NACH AUSWAHL) */}
         {activeStation ? (
-          <div className="border-t border-border/60 bg-muted/10 p-6 space-y-4">
+          <div className="border-t border-border/60 bg-muted/10 p-4 sm:p-6 space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-border/60">
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="font-mono text-xs font-bold text-foreground">

@@ -45,7 +45,7 @@ export function SegmentedTabs<T extends string = string>({
             } ${
               isMd
                 ? "rounded-lg px-3.5 py-1.5 text-xs"
-                : "rounded-md px-3 py-1 text-xs"
+                : "rounded-md px-2.5 sm:px-3 py-1 text-xs"
             } ${
               isActive
                 ? "bg-card text-foreground font-semibold shadow-xs"

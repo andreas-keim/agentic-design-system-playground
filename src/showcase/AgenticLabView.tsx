@@ -178,7 +178,7 @@ export function AgenticLabView() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-6 py-8">
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 py-6 sm:py-8">
       {/* 1. Page Header with thesis and direct Specs link */}
       <PageHeader
         title="Agentic UI Guardrail Lab"
@@ -208,8 +208,8 @@ export function AgenticLabView() {
             </div>
           )}
 
-          {/* Left Header: Exact h-16, px-6, matching right header */}
-          <div className="h-16 px-6 border-b border-border/60 bg-card shrink-0 flex items-center justify-between gap-4">
+          {/* Left Header: Responsive min-h-16, px-4 sm:px-6 */}
+          <div className="min-h-16 py-3 px-4 sm:px-6 border-b border-border/60 bg-card shrink-0 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <h3 className="text-base font-semibold tracking-tight text-foreground leading-tight">
               {isFullyGuarded ? "Korrigierte Ausgabe" : "Ungeprüfte Ausgabe"}
             </h3>
@@ -221,7 +221,7 @@ export function AgenticLabView() {
                 size="sm"
                 disabled={isScanning}
                 onClick={healAll}
-                className="text-xs h-8 px-3.5 font-medium cursor-pointer shrink-0"
+                className="text-xs h-8 px-3.5 font-medium cursor-pointer shrink-0 self-start sm:self-auto"
               >
                 Fehler automatisch korrigieren
               </Button>
@@ -245,7 +245,7 @@ export function AgenticLabView() {
           </div>
 
           {/* Canvas Area: Centered with generous breathing room */}
-          <div className="flex-1 min-h-[380px] p-6 sm:p-8 flex items-center justify-center bg-muted/25 dark:bg-muted/10">
+          <div className="flex-1 min-h-[380px] p-4 sm:p-8 flex items-center justify-center bg-muted/25 dark:bg-muted/10">
             {/* The Live Component (Neutral card border, calm presentation) */}
             <div className="w-full max-w-md rounded-xl border border-border/80 bg-card p-6 shadow-xs transition-all">
               {/* Header */}
@@ -297,12 +297,12 @@ export function AgenticLabView() {
               </div>
 
               {/* 3. Element: Action Buttons */}
-              <div className="pt-3 border-t border-border/60 flex items-center justify-between gap-2 flex-wrap">
-                <Button variant="outline" size="sm" className="text-xs h-8">
+              <div className="pt-3 border-t border-border/60 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                <Button variant="outline" size="sm" className="text-xs h-8 w-full sm:w-auto">
                   Widerrufen
                 </Button>
 
-                <div className="flex items-center gap-2 flex-wrap justify-end">
+                <div className="flex items-center gap-2 justify-end flex-wrap w-full sm:w-auto">
                   {isColorBroken && (
                     <ViolationMarker
                       label="Farbe nicht freigegeben"
@@ -330,8 +330,8 @@ export function AgenticLabView() {
           </div>
 
           {/* Left Footer: Clear Component & Status Info */}
-          <div className="h-12 px-6 border-t border-border/60 text-xs text-muted-foreground flex items-center justify-between bg-card shrink-0">
-            <span className="font-medium text-foreground truncate">
+          <div className="min-h-12 py-2 px-4 sm:px-6 border-t border-border/60 text-xs text-muted-foreground flex flex-col sm:flex-row sm:items-center justify-between gap-1 bg-card shrink-0">
+            <span className="font-medium text-foreground">
               Beispiel: Rollen- &amp; Rechteverwaltung
             </span>
             <span
@@ -352,8 +352,8 @@ export function AgenticLabView() {
 
         {/* Right Column: Simulated Inspector / Diff (6 Cols) */}
         <section className="lg:col-span-6 rounded-2xl border border-border/80 bg-card shadow-xs flex flex-col overflow-hidden">
-          {/* Right Header: Exact h-16, px-6, matching left header */}
-          <div className="h-16 px-6 border-b border-border/60 bg-card shrink-0 flex items-center justify-between gap-4">
+          {/* Right Header: Responsive min-h-16, px-4 sm:px-6 */}
+          <div className="min-h-16 py-3 px-4 sm:px-6 border-b border-border/60 bg-card shrink-0 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <h3 className="text-base font-semibold tracking-tight text-foreground leading-tight">
               Simulierter Prüfbericht
             </h3>
@@ -369,7 +369,7 @@ export function AgenticLabView() {
           </div>
 
           {/* Right Body: Top-aligned Diff/Rules + Bottom Error Simulator */}
-          <div className="p-6 flex-1 flex flex-col justify-between gap-6">
+          <div className="p-4 sm:p-6 flex-1 flex flex-col justify-between gap-6">
             {/* Top: Diff / Rule Report */}
             <div>
               <div className="p-4 overflow-y-auto font-mono text-xs leading-relaxed select-text rounded-xl border border-border/60 bg-muted/25 dark:bg-muted/10 min-h-[220px]">
@@ -377,7 +377,7 @@ export function AgenticLabView() {
                   <div className="space-y-2.5">
                     {/* Line 1: Label / Input */}
                     {isA11yBroken ? (
-                      <div className="bg-rose-500/8 border-l-2 border-rose-500 px-3 py-2 flex items-start justify-between gap-2 rounded-r">
+                      <div className="bg-rose-500/8 border-l-2 border-rose-500 px-3 py-2 flex flex-col sm:flex-row sm:items-start justify-between gap-1 sm:gap-2 rounded-r">
                         <div className="text-foreground">
                           <span className="text-rose-500 font-bold mr-1.5">-</span>
                           <span>&lt;input type="text" placeholder="Key..." /&gt;</span>
@@ -385,7 +385,7 @@ export function AgenticLabView() {
                         <span className="text-[11px] text-muted-foreground shrink-0 font-sans"># Label fehlt</span>
                       </div>
                     ) : (
-                      <div className="bg-emerald-500/8 border-l-2 border-emerald-500 px-3 py-2 flex items-start justify-between gap-2 rounded-r">
+                      <div className="bg-emerald-500/8 border-l-2 border-emerald-500 px-3 py-2 flex flex-col sm:flex-row sm:items-start justify-between gap-1 sm:gap-2 rounded-r">
                         <div className="text-foreground">
                           <span className="text-emerald-600 dark:text-emerald-400 font-bold mr-1.5">+</span>
                           <span>&lt;FormField label="Sicherheits-Schlüssel" /&gt;</span>
@@ -396,39 +396,39 @@ export function AgenticLabView() {
 
                     {/* Line 2: Spacing Grid */}
                     {isGridBroken ? (
-                      <div className="bg-rose-500/8 border-l-2 border-rose-500 px-3 py-2 flex items-start justify-between gap-2 rounded-r">
+                      <div className="bg-rose-500/8 border-l-2 border-rose-500 px-3 py-2 flex flex-col sm:flex-row sm:items-start justify-between gap-1 sm:gap-2 rounded-r">
                         <div className="text-foreground">
                           <span className="text-rose-500 font-bold mr-1.5">-</span>
                           <span>&lt;div style=&#123;&#123; marginBottom: "13px" &#125;&#125; /&gt;</span>
                         </div>
-                        <span className="text-[11px] text-muted-foreground shrink-0 font-sans"># Abstand außerhalb des Rasters</span>
+                        <span className="text-[11px] text-muted-foreground shrink-0 font-sans"># Raster verletzt</span>
                       </div>
                     ) : (
-                      <div className="bg-emerald-500/8 border-l-2 border-emerald-500 px-3 py-2 flex items-start justify-between gap-2 rounded-r">
+                      <div className="bg-emerald-500/8 border-l-2 border-emerald-500 px-3 py-2 flex flex-col sm:flex-row sm:items-start justify-between gap-1 sm:gap-2 rounded-r">
                         <div className="text-foreground">
                           <span className="text-emerald-600 dark:text-emerald-400 font-bold mr-1.5">+</span>
                           <span>&lt;div className="mb-4" /&gt;</span>
                         </div>
-                        <span className="text-[11px] text-muted-foreground shrink-0 font-sans"># 8-px-Raster eingehalten</span>
+                        <span className="text-[11px] text-muted-foreground shrink-0 font-sans"># 8-px-Raster ok</span>
                       </div>
                     )}
 
                     {/* Line 3: Action Button Color */}
                     {isColorBroken ? (
-                      <div className="bg-rose-500/8 border-l-2 border-rose-500 px-3 py-2 flex items-start justify-between gap-2 rounded-r">
+                      <div className="bg-rose-500/8 border-l-2 border-rose-500 px-3 py-2 flex flex-col sm:flex-row sm:items-start justify-between gap-1 sm:gap-2 rounded-r">
                         <div className="text-foreground">
                           <span className="text-rose-500 font-bold mr-1.5">-</span>
                           <span>&lt;button style=&#123;&#123; backgroundColor: "#ef4444" &#125;&#125;&gt;</span>
                         </div>
-                        <span className="text-[11px] text-muted-foreground shrink-0 font-sans"># Farbe ohne Token</span>
+                        <span className="text-[11px] text-muted-foreground shrink-0 font-sans"># Ohne Token</span>
                       </div>
                     ) : (
-                      <div className="bg-emerald-500/8 border-l-2 border-emerald-500 px-3 py-2 flex items-start justify-between gap-2 rounded-r">
+                      <div className="bg-emerald-500/8 border-l-2 border-emerald-500 px-3 py-2 flex flex-col sm:flex-row sm:items-start justify-between gap-1 sm:gap-2 rounded-r">
                         <div className="text-foreground">
                           <span className="text-emerald-600 dark:text-emerald-400 font-bold mr-1.5">+</span>
                           <span>&lt;Button variant="primary"&gt;Speichern&lt;/Button&gt;</span>
                         </div>
-                        <span className="text-[11px] text-muted-foreground shrink-0 font-sans"># Primär-Token verwendet</span>
+                        <span className="text-[11px] text-muted-foreground shrink-0 font-sans"># Token gebunden</span>
                       </div>
                     )}
                   </div>

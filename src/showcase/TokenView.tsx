@@ -493,7 +493,7 @@ ${selectedToken.avoidFor ? `- Strictly Forbidden: ${selectedToken.avoidFor}` : "
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-6 py-8">
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 py-6 sm:py-8">
       <PageHeader
         title="W3C Design Token Architecture"
         subtitle="Ein Token-System, das Gestaltung, Code und Agenten an dieselben freigegebenen Regeln bindet."
@@ -504,7 +504,7 @@ ${selectedToken.avoidFor ? `- Strictly Forbidden: ${selectedToken.avoidFor}` : "
         {/* Left Column (7/12): Token Directory Card mit integrierter Toolbar */}
         <div className="lg:col-span-7 min-w-0 rounded-2xl border border-border/80 bg-card overflow-hidden shadow-xs">
           {/* Card Header Toolbar: Tabs + Search */}
-          <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between border-b border-border/60 px-6 py-3.5 sm:py-0 sm:h-16 bg-card">
+          <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between border-b border-border/60 px-4 sm:px-6 py-3.5 sm:py-0 sm:h-16 bg-card">
             <div className="overflow-x-auto scrollbar-none pb-0.5 sm:pb-0">
               <SegmentedTabs<TokenFilterTab>
                 items={[
@@ -536,7 +536,8 @@ ${selectedToken.avoidFor ? `- Strictly Forbidden: ${selectedToken.avoidFor}` : "
             </div>
           </div>
 
-          <div className="w-full overflow-x-auto scrollbar-thin">
+          {/* Desktop Table View (>= sm) */}
+          <div className="hidden sm:block w-full overflow-x-auto scrollbar-thin">
             <table className="w-full min-w-[580px] text-left font-mono text-xs">
                 <thead className="border-b border-border/60 bg-muted/30 text-muted-foreground text-[10px] uppercase tracking-wider">
                   <tr>
@@ -636,6 +637,89 @@ ${selectedToken.avoidFor ? `- Strictly Forbidden: ${selectedToken.avoidFor}` : "
               </table>
             </div>
 
+          {/* Mobile Card / List View (< sm) */}
+          <div className="block sm:hidden divide-y divide-border/60">
+            {filteredTokens.map((token) => {
+              const isSelected = token.id === selectedTokenId
+              return (
+                <button
+                  key={token.id}
+                  type="button"
+                  onClick={() => setSelectedTokenId(token.id)}
+                  aria-pressed={isSelected}
+                  aria-label={`Token ${token.cssVar} (${token.path}) auswählen`}
+                  className={`w-full text-left p-4 transition-colors border-l-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 cursor-pointer ${
+                    isSelected
+                      ? "bg-primary/5 dark:bg-primary/10 border-primary"
+                      : "border-transparent hover:bg-muted/30"
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0 flex-1">
+                      <div className={`font-semibold text-xs tracking-tight truncate font-mono ${
+                        isSelected ? "text-primary" : "text-foreground"
+                      }`}>
+                        {token.cssVar}
+                      </div>
+                      <div className="text-[11px] text-muted-foreground font-mono mt-0.5 truncate">
+                        {token.path}
+                      </div>
+                    </div>
+
+                    {/* Preview Swatch / Badge on right */}
+                    <div className="shrink-0 flex items-center gap-1.5 font-mono text-xs">
+                      {token.type === "color" ? (
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[11px] text-muted-foreground">
+                            {token.resolvedValue}
+                          </span>
+                          <div
+                            className="h-5 w-5 rounded-md border border-border/80 shadow-2xs shrink-0"
+                            style={{ backgroundColor: token.resolvedValue }}
+                          />
+                        </div>
+                      ) : token.category === "space-radius" ? (
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[11px] text-muted-foreground">
+                            {token.resolvedValue}
+                          </span>
+                          <div
+                            className="bg-primary/20 border border-primary/40 rounded-xs shrink-0"
+                            style={{
+                              width: token.resolvedValue,
+                              height: token.resolvedValue,
+                              minWidth: "6px",
+                              minHeight: "6px",
+                            }}
+                          />
+                        </div>
+                      ) : (
+                        <span className="text-[11px] text-muted-foreground">
+                          {token.resolvedValue}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 mt-2 pt-2 border-t border-border/40 font-mono text-[11px]">
+                    <span
+                      className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium ${
+                        token.tier === "semantic"
+                          ? "bg-violet-500/10 text-violet-600 dark:text-violet-400 border border-violet-500/20"
+                          : "bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20"
+                      }`}
+                    >
+                      {token.tier}
+                    </span>
+                    <span className="text-muted-foreground truncate">
+                      {token.value}
+                    </span>
+                  </div>
+                </button>
+              )
+            })}
+          </div>
+
             {filteredTokens.length === 0 && (
               <div className="p-8 text-center text-xs text-muted-foreground">
                 Keine Tokens gefunden für die aktuelle Filterung.
@@ -646,7 +730,7 @@ ${selectedToken.avoidFor ? `- Strictly Forbidden: ${selectedToken.avoidFor}` : "
         {/* Right Column (5/12): Inspector, Traceability, Contrast & Code Export */}
         <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-16">
           {/* Card 1: Token-Herkunft & Komponentenbindung */}
-          <div className="rounded-2xl border border-border/80 bg-card p-6 shadow-xs space-y-4">
+          <div className="rounded-2xl border border-border/80 bg-card p-4 sm:p-6 shadow-xs space-y-4">
             <div className="border-b border-border/60 pb-3">
               <h3 className="text-sm font-semibold tracking-tight text-foreground">
                 Token-Herkunft & Komponentenbindung
@@ -827,7 +911,7 @@ ${selectedToken.avoidFor ? `- Strictly Forbidden: ${selectedToken.avoidFor}` : "
 
           {/* Card 2: Barrierefreiheit & Kontraste (für Color Tokens) */}
           {selectedToken.type === "color" && (
-            <div className="rounded-2xl border border-border/80 bg-card p-6 shadow-xs space-y-4">
+            <div className="rounded-2xl border border-border/80 bg-card p-4 sm:p-6 shadow-xs space-y-4">
               <div className="border-b border-border/60 pb-3">
                 <h3 className="text-sm font-semibold tracking-tight text-foreground">
                   Barrierefreiheit & Kontraste
@@ -1016,7 +1100,7 @@ ${selectedToken.avoidFor ? `- Strictly Forbidden: ${selectedToken.avoidFor}` : "
           )}
 
           {/* Card 3: Multi-Target Pipeline Artifacts (Proof of Token Toolchain) */}
-          <div className="rounded-2xl border border-border/80 bg-card p-6 shadow-xs space-y-4">
+          <div className="rounded-2xl border border-border/80 bg-card p-4 sm:p-6 shadow-xs space-y-4">
             <div className="border-b border-border/60 pb-3">
               <h3 className="text-sm font-semibold tracking-tight text-foreground">
                 Export für Entwickler & KI
@@ -1027,10 +1111,10 @@ ${selectedToken.avoidFor ? `- Strictly Forbidden: ${selectedToken.avoidFor}` : "
             <SegmentedTabs<"json" | "css" | "ts" | "prompt">
               fullWidth
               items={[
-                { id: "json", label: "W3C JSON" },
-                { id: "css", label: "CSS Vars" },
-                { id: "ts", label: "TS-Snippet" },
-                { id: "prompt", label: "LLM-Prompt" },
+                { id: "json", label: <span><span className="hidden sm:inline">W3C </span>JSON</span> },
+                { id: "css", label: <span>CSS<span className="hidden sm:inline"> Vars</span></span> },
+                { id: "ts", label: <span>TS<span className="hidden sm:inline">-Snippet</span></span> },
+                { id: "prompt", label: <span><span className="hidden sm:inline">LLM-</span>Prompt</span> },
               ]}
               value={exportFormat}
               onChange={setExportFormat}

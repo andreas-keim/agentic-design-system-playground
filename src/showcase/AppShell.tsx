@@ -119,26 +119,29 @@ export function AppShell() {
           </div>
         </div>
 
-        {/* Mobile / Tablet Navigation: Shown below lg, lets content dictate header height naturally */}
+        {/* Mobile / Tablet Navigation: Refined segmented pill strip below lg */}
         <nav
           aria-label="Mobile Navigation"
-          className="flex lg:hidden px-4 sm:px-6 py-2 gap-4 border-t border-border/40 overflow-x-auto scrollbar-none"
+          className="flex lg:hidden px-4 sm:px-6 py-2 gap-1.5 border-t border-border/40 overflow-x-auto scrollbar-none items-center"
         >
-          {navItems.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => handleNavTab(item.id)}
-              aria-current={activeTab === item.id ? "page" : undefined}
-              className={`shrink-0 text-xs tracking-tight transition-colors cursor-pointer py-0.5 px-1 -mx-1 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
-                activeTab === item.id
-                  ? "text-foreground font-semibold"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {item.label}
-            </button>
-          ))}
+          {navItems.map((item) => {
+            const isActive = activeTab === item.id
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => handleNavTab(item.id)}
+                aria-current={isActive ? "page" : undefined}
+                className={`shrink-0 text-xs tracking-tight transition-all cursor-pointer py-1.5 px-3 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
+                  isActive
+                    ? "bg-foreground text-background font-semibold shadow-xs"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+                }`}
+              >
+                {item.label}
+              </button>
+            )
+          })}
         </nav>
       </header>
 
