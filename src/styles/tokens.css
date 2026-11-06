@@ -12,21 +12,21 @@
   --colors-blue-700: #1d4ed8;
   --colors-red-700: #b91c1c;
   --colors-white: #ffffff;
-  --color-background-primary-default: #6d28d9;
+  --color-background-primary-default: #6d28d9; /** Haupt-Aktion in einem Flow, primärer CTA. Nicht für dekorative Flächen oder sekundäre Aktionen verwenden. */
   --color-background-primary-hover: #5b21b6;
   --color-text-primary-default: #ffffff;
-  --color-text-destructive-default: #b91c1c;
+  --color-text-destructive-default: #b91c1c; /** Text auf getöntem Destructive-Button-Hintergrund (bg-destructive/10). Heller als Standard-Destructive für Kontrast >= 4.5:1. */
   --color-border-primary-default: #7c3aed;
   --space-component-sm: 8px;
   --space-component-md: 16px;
   --radii-md: 6px;
-  --font-size-sm: 12px;
+  --font-size-sm: 12px; /** Hilfstext oder Caption unterhalb eines Feldes (z. B. Formular-Fehlermeldungen). */
   --font-size-md: 14px;
-  --font-size-xl: 24px;
+  --font-size-xl: 24px; /** Headline und Seitentitel (z. B. 'Welcome back' auf Login-Seiten). */
   --font-weight-medium: 500;
-  --font-weight-bold: 700;
-  --font-line-height-sm: 16px;
+  --font-weight-bold: 700; /** Headline-Gewichtung, zusammen mit font.size.xl. */
+  --font-line-height-sm: 16px; /** Zeilenhöhe für kleine Schriften, zusammen mit font.size.sm. */
   --font-line-height-md: 20px;
-  --font-line-height-xl: 32px;
-  --font-family-base: 'Geist Variable';
+  --font-line-height-xl: 32px; /** Zeilenhöhe für Headlines, zusammen mit font.size.xl. */
+  --font-family-base: 'Geist Variable'; /** CSS-Wert für den Web-Code. In Figma als 'Geist' hinterlegt. */
 }
