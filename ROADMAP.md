@@ -103,6 +103,7 @@ src/
 * **Taxonomy Explorer (`TokenView.tsx`):** Faceted search across `src/tokens/tokens.json`.
 * **Computed WCAG 2.1 Contrast Matrix:** Mathematical contrast calculations ($L_1 + 0.05 / L_2 + 0.05$) against White, Dark (`#09090b`), and Primary Violet (`#6d28d9`).
 * **Multi-Format Developer Snippets:** Copy drawer for W3C JSON, CSS Variables, TypeScript Snippet (reference), and LLM Prompt rules.
+* **W3C DTCG 2025.10 Migration:** Dual-audience governance update introducing native `$description` (auto-rendered into CSS variable comments) and machine-readable behavioral guardrails (`$extensions.agentic` with `useFor` / `avoidFor` constraint lists).
 
 ### Phase 4: Architecture Specs & V1 Stabilization — Completed
 * **Two-Pathway Architecture Diagram (`SpecsView.tsx`):** Connects Build Pipeline (B1–B4) directly to Governance Pipeline (A1–A4) via the B4 → A2 component-to-catalog link.

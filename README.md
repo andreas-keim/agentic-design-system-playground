@@ -25,8 +25,8 @@ Most "AI-ready design system" claims are untested. This project tests the claim 
 ## How it's structured
 
 ```
-Tokens (W3C DTCG, tokens.json)
-  → Style Dictionary → CSS variables + Figma-shaped JSON
+Tokens (W3C DTCG 2025.10, tokens.json)
+  → Style Dictionary → CSS variables (with generated comments) + Figma-shaped JSON
   → Components (shadcn/ui primitives, tokens wired in, not left as raw Tailwind defaults)
   → *.meta.json (structure: props, variants, which token binds where)
   → *.guidelines.md (prose: when to use which variant, documented gotchas)
@@ -34,6 +34,16 @@ Tokens (W3C DTCG, tokens.json)
   → Storybook (+ @storybook/addon-mcp, so an agent can query the live component set)
   → Automated accessibility gate (Playwright + axe-core, CI-enforced, auto-files a GitHub issue on failure)
 ```
+
+### Dual-Audience Token Architecture (W3C DTCG 2025.10)
+
+The token tier (`src/tokens/tokens.json`) strictly adheres to the latest **W3C Design Tokens Community Group (DTCG 2025.10)** draft specification, implementing a clean dual-audience contract:
+
+1. **Human-Facing Context (`$description`):** Every token carries a clear semantic description. Style Dictionary automatically renders these as inline comments in `src/styles/tokens.css` and pushes them into Figma variable descriptions during sync.
+2. **Agentic Behavioral Guardrails (`$extensions.agentic`):** Under the official W3C `$extensions` namespace, tokens declare machine-readable constraints:
+   * `useFor`: String array defining valid, intended agent use cases (e.g., `["primary actions", "high-emphasis submit buttons"]`).
+   * `avoidFor`: String array defining explicit anti-patterns to prevent subtle hallucinated styling (e.g., `["body text", "decorative card borders", "destructive confirmations"]`).
+3. **Spec-Compliant Inheritance:** Group-level properties (`$type`, `$extensions`) cascade cleanly to leaf tokens, allowing leaf tokens to inherit contracts or define specialized boundaries without redundant boilerplate.
 
 Every one of those arrows was built, then audited against the running app for drift — several real bugs were found this way (a button that visually matched its own design tokens by coincidence rather than by binding; a WCAG contrast failure found only once Figma's variable-driven render was compared against the app's actual computed styles). See [`ACCESSIBILITY.md`](ACCESSIBILITY.md) for the accessibility-specific findings and [`NEVER.md`](NEVER.md) for a running list of concrete mistakes turned into hard rules.
 
