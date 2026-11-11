@@ -1,4 +1,46 @@
 {
+  "colors.copper.500": {
+    "name": "primitive/copper/500",
+    "type": "COLOR",
+    "resolvedValue": "#e87a5d",
+    "scopes": [],
+    "codeSyntax": "var(--colors-copper-500)"
+  },
+  "colors.graphite.400": {
+    "name": "primitive/graphite/400",
+    "type": "COLOR",
+    "resolvedValue": "#9e9ea8",
+    "scopes": [],
+    "codeSyntax": "var(--colors-graphite-400)"
+  },
+  "colors.graphite.800": {
+    "name": "primitive/graphite/800",
+    "type": "COLOR",
+    "resolvedValue": "#2e3038",
+    "scopes": [],
+    "codeSyntax": "var(--colors-graphite-800)"
+  },
+  "colors.graphite.900": {
+    "name": "primitive/graphite/900",
+    "type": "COLOR",
+    "resolvedValue": "#202227",
+    "scopes": [],
+    "codeSyntax": "var(--colors-graphite-900)"
+  },
+  "colors.graphite.950": {
+    "name": "primitive/graphite/950",
+    "type": "COLOR",
+    "resolvedValue": "#191a1e",
+    "scopes": [],
+    "codeSyntax": "var(--colors-graphite-950)"
+  },
+  "colors.sand.100": {
+    "name": "primitive/sand/100",
+    "type": "COLOR",
+    "resolvedValue": "#f4f3ee",
+    "scopes": [],
+    "codeSyntax": "var(--colors-sand-100)"
+  },
   "colors.violet.500": {
     "name": "primitive/violet/500",
     "type": "COLOR",
@@ -62,6 +104,41 @@
     "scopes": [],
     "codeSyntax": "var(--colors-white)"
   },
+  "color.brand.copper": {
+    "name": "semantic/color/brand/copper",
+    "type": "COLOR",
+    "resolvedValue": "#e87a5d",
+    "scopes": [
+      "FRAME_FILL",
+      "SHAPE_FILL",
+      "STROKE_COLOR",
+      "TEXT_FILL"
+    ],
+    "codeSyntax": "var(--color-brand-copper)",
+    "aliasOf": "primitive/copper/500"
+  },
+  "color.background.base": {
+    "name": "semantic/color/background/base",
+    "type": "COLOR",
+    "resolvedValue": "#191a1e",
+    "scopes": [
+      "FRAME_FILL",
+      "SHAPE_FILL"
+    ],
+    "codeSyntax": "var(--color-background-base)",
+    "aliasOf": "primitive/graphite/950"
+  },
+  "color.background.surface": {
+    "name": "semantic/color/background/surface",
+    "type": "COLOR",
+    "resolvedValue": "#202227",
+    "scopes": [
+      "FRAME_FILL",
+      "SHAPE_FILL"
+    ],
+    "codeSyntax": "var(--color-background-surface)",
+    "aliasOf": "primitive/graphite/900"
+  },
   "color.background.primary.default": {
     "name": "semantic/color/background/primary/default",
     "type": "COLOR",
@@ -84,6 +161,28 @@
     "codeSyntax": "var(--color-background-primary-hover)",
     "aliasOf": "primitive/violet/800"
   },
+  "color.foreground.primary": {
+    "name": "semantic/color/foreground/primary",
+    "type": "COLOR",
+    "resolvedValue": "#f4f3ee",
+    "scopes": [
+      "TEXT_FILL",
+      "SHAPE_FILL"
+    ],
+    "codeSyntax": "var(--color-foreground-primary)",
+    "aliasOf": "primitive/sand/100"
+  },
+  "color.foreground.muted": {
+    "name": "semantic/color/foreground/muted",
+    "type": "COLOR",
+    "resolvedValue": "#9e9ea8",
+    "scopes": [
+      "TEXT_FILL",
+      "SHAPE_FILL"
+    ],
+    "codeSyntax": "var(--color-foreground-muted)",
+    "aliasOf": "primitive/graphite/400"
+  },
   "color.text.primary.default": {
     "name": "semantic/color/text/primary/default",
     "type": "COLOR",
@@ -103,6 +202,16 @@
     ],
     "codeSyntax": "var(--color-text-destructive-default)",
     "aliasOf": "primitive/red/700"
+  },
+  "color.border.subtle": {
+    "name": "semantic/color/border/subtle",
+    "type": "COLOR",
+    "resolvedValue": "#2e3038",
+    "scopes": [
+      "STROKE_COLOR"
+    ],
+    "codeSyntax": "var(--color-border-subtle)",
+    "aliasOf": "primitive/graphite/800"
   },
   "color.border.primary.default": {
     "name": "semantic/color/border/primary/default",

@@ -36,7 +36,9 @@ function toCssVariable(path) {
 
 function toScopes(path) {
   if (path[0] === 'colors') return []
+  if (path[0] === 'color' && path[1] === 'brand') return ['FRAME_FILL', 'SHAPE_FILL', 'STROKE_COLOR', 'TEXT_FILL']
   if (path[0] === 'color' && path[1] === 'background') return ['FRAME_FILL', 'SHAPE_FILL']
+  if (path[0] === 'color' && path[1] === 'foreground') return ['TEXT_FILL', 'SHAPE_FILL']
   if (path[0] === 'color' && path[1] === 'text') return ['TEXT_FILL']
   if (path[0] === 'color' && path[1] === 'border') return ['STROKE_COLOR']
   if (path[0] === 'space') return ['GAP']

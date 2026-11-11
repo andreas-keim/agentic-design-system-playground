@@ -3,6 +3,12 @@
  */
 
 :root {
+  --colors-copper-500: #e87a5d;
+  --colors-graphite-400: #9e9ea8;
+  --colors-graphite-800: #2e3038;
+  --colors-graphite-900: #202227;
+  --colors-graphite-950: #191a1e;
+  --colors-sand-100: #f4f3ee;
   --colors-violet-500: #8b5cf6;
   --colors-violet-600: #7c3aed;
   --colors-violet-700: #6d28d9;
@@ -12,10 +18,16 @@
   --colors-blue-700: #1d4ed8;
   --colors-red-700: #b91c1c;
   --colors-white: #ffffff;
+  --color-brand-copper: #e87a5d; /** Markenakzent für Technical Copper: Passermarken, Highlights und fokussierte Primäraktionen. */
+  --color-background-base: #191a1e; /** Dunkler Canvas-Hintergrund (Dark Graphite). */
+  --color-background-surface: #202227; /** Abgesetzte Fläche (Elevated Graphite) für Karten, Modals und CTA-Container. */
   --color-background-primary-default: #6d28d9; /** Haupt-Aktion in einem Flow, primärer CTA. Nicht für dekorative Flächen oder sekundäre Aktionen verwenden. */
   --color-background-primary-hover: #5b21b6;
+  --color-foreground-primary: #f4f3ee; /** Primärtext und primäre Icons (Off-White) für blendfreie Lesbarkeit auf dunklem Grund. */
+  --color-foreground-muted: #9e9ea8; /** Sekundärtext, Metadaten und gedämpfte Icons (Muted Gray). */
   --color-text-primary-default: #ffffff;
   --color-text-destructive-default: #b91c1c; /** Text auf getöntem Destructive-Button-Hintergrund (bg-destructive/10). Heller als Standard-Destructive für Kontrast >= 4.5:1. */
+  --color-border-subtle: #2e3038; /** Subtile Trennlinien und Konturen (Subtle Border). */
   --color-border-primary-default: #7c3aed;
   --space-component-sm: 8px;
   --space-component-md: 16px;
@@ -29,4 +41,5 @@
   --font-line-height-md: 20px;
   --font-line-height-xl: 32px; /** Zeilenhöhe für Headlines, zusammen mit font.size.xl. */
   --font-family-base: 'Geist Variable'; /** CSS-Wert für den Web-Code. In Figma als 'Geist' hinterlegt. */
+  --font-family-mono: 'JetBrains Mono'; /** Monospace-Font für Code-Snippets, Metadaten und Terminal-Tags. */
 }
