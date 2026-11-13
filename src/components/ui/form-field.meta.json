@@ -4,7 +4,7 @@
   "importPath": "@/components/ui/form-field",
   "tokensSourceFile": "src/tokens/tokens.json",
   "base": {
-    "note": "Reine Komposition aus Label + Input + Fehlertext -- keine eigenen neuen Farb-/Radius-Entscheidungen. Übernimmt Rhythmus/Typografie 1:1 von den bestehenden Bausteinen (Label-Zeile: font-weight-medium, gleiche font-size/line-height wie Input-Text; vertikaler Abstand: --space-component-sm zwischen Label/Input/Fehlertext). Fehlertext läuft bewusst kleiner als Label/Input (--font-size-sm statt --font-size-md, 2026-08-27) und wird IMMER gerendert (leer/unsichtbar per `invisible`, wenn kein error gesetzt ist) -- reserviert die Zeilenhöhe dauerhaft, damit das Erscheinen eines Fehlers nie das Layout darunter verschiebt.",
+    "note": "Pure composition of Label + Input + Error text (no new color or radius decisions). Adopts rhythm and typography 1:1 from existing building blocks.",
     "tokens": [
       "--space-component-sm",
       "--font-size-md",
@@ -14,17 +14,40 @@
       "--font-line-height-sm"
     ]
   },
-  "figmaNote": "Kein eigenes Figma-Component-Set für FormField (Scope-Entscheidung, 2026-08-27, weiterhin gültig) -- aber das darunterliegende Muster (Fehlermeldung als reservierte, per Opacity ein-/ausgeblendete Zeile) ist inzwischen 1:1 in Figmas Input-Component-Set nachgebaut (State=Default/State=Error, siehe Step 7 Figma-Nachträge) und hier im Code seitdem ebenfalls so umgesetzt -- Figma und Code stimmen jetzt überein, auch ohne dass FormField selbst einen eigenen Figma-Node braucht.",
-  "composedOf": ["input", "button (optional, via labelAction)"],
+  "figmaNote": "No dedicated Figma component set for FormField (scope decision, 2026-08-27; FormField is a pure code composition pattern of Label + Input + Error text).",
+  "composedOf": [
+    "input",
+    "button (optional, via labelAction)"
+  ],
   "props": [
-    { "name": "label", "type": "ReactNode", "description": "Pflicht. Text/Inhalt des <label>, per htmlFor mit dem Input verknüpft." },
-    { "name": "labelAction", "type": "ReactNode", "description": "Optionales Element rechts neben dem Label, z.B. ein Button variant=\"link\" (siehe login-page.tsx, 'Forgot password?'). Nicht Teil der Fehlerlogik." },
-    { "name": "error", "type": "string", "description": "Vorhanden = Feld gilt als ungültig. Setzt intern aria-invalid + aria-describedby auf dem Input und rendert den Text unter dem Feld. Kein separates 'invalid'-Prop -- die Anwesenheit von error ist die einzige Quelle der Wahrheit (vermeidet den Fall, dass invalid=true gesetzt ist, aber error fehlt oder umgekehrt)." },
-    { "name": "id", "type": "string", "description": "Optional. Ohne Angabe generiert FormField selbst eine stabile ID per useId() -- Aufrufer muss keine manuellen IDs mehr vergeben (Unterschied zu login-page.tsx vor Step 7g, das eigene useId()-Aufrufe hatte, und sign-up-page.tsx, das feste String-IDs hatte)." },
-    { "name": "className", "type": "string", "description": "Wird auf den äußeren Wrapper (Label+Input+Error-Block) angewendet, nicht auf das Input selbst." }
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "description": "Required. Text content of the <label>, linked to Input via htmlFor."
+    },
+    {
+      "name": "labelAction",
+      "type": "ReactNode",
+      "description": "Optional element placed to the right of the label, e.g. a Button variant=\"link\"."
+    },
+    {
+      "name": "error",
+      "type": "string",
+      "description": "Present = field is marked invalid. Internally sets aria-invalid and aria-describedby on the Input."
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "description": "Optional. When omitted, FormField generates a stable ID via useId()."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "description": "Applied to the outer wrapper (Label + Input + Error container), not the input element itself."
+    }
   ],
   "passthrough": {
     "component": "@/components/ui/input",
-    "note": "Alle weiteren Props (type, value, onChange, placeholder, required, autoComplete, minLength, ...) werden unverändert an Input durchgereicht. id/aria-invalid/aria-describedby sind von FormField selbst verwaltet und lassen sich nicht von außen überschreiben (Omit im Prop-Typ)."
+    "note": "All additional props (type, value, onChange, placeholder, required, autoComplete, etc.) are passed directly to the inner Input component."
   }
 }

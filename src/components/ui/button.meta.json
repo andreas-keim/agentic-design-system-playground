@@ -5,10 +5,10 @@
   "tokensSourceFile": "src/tokens/tokens.json",
   "figmaParityCheck": {
     "file": "rules/button.yaml",
-    "note": "Seit dem Figma-Rebuild (ein Button-Component-Set mit Type×State-Varianten, 18 Kombinationen) deckt `figma-cli check` alle 6 Typen (Primary/Outline/Secondary/Ghost/Destructive/Link) × 3 Zustände ab, exhaustive. Nur `type: 'primary'` (vormals 'default') hat echte Token-Bindungen (fills.minBound zählt das); die anderen 5 Typen sind bewusst literale Fills, siehe die einzelnen Varianten-Notizen unten. Sizes bleiben weiterhin außerhalb dieses Checks — nur die default-Size ist geometrisch geprüft."
+    "note": "Since the Figma rebuild (a single Button component set with Type x State variants, 18 combinations), figma-cli check covers all 6 types (Primary/Outline/Secondary/Ghost/Destructive/Link) x 3 states exhaustively. Only type: primary (formerly default) uses real token bindings (fills: background.primary, typography: font-sm/md/lg); all other types use neutral styles from index.css."
   },
   "base": {
-    "note": "Gilt für alle Varianten und Sizes, nicht per Variante/Size wiederholt.",
+    "note": "Applies to all variants and sizes, not repeated per variant/size.",
     "tokens": [
       "--font-size-md",
       "--font-line-height-md",
@@ -16,7 +16,7 @@
     ],
     "radius": {
       "cssVar": "--radius-lg",
-      "note": "Nicht direkt in button.tsx referenziert, sondern über die Tailwind-Utility-Klasse `rounded-lg` im Basis-Klassenstring. Kette: --radius-lg (shadcn, @theme inline) = var(--radius) → --radius (überschrieben in index.css) = var(--radii-md) → radii.md in tokens.json. Indirekt, aber real gebunden."
+      "note": "Not referenced directly in button.tsx, but bound via Tailwind utility classes (rounded-md/sm/xs) and index.css."
     }
   },
   "variants": [
@@ -25,66 +25,105 @@
       "tokens": [
         "--color-background-primary-hover"
       ],
-      "note": "Primary-Fill/Text laufen über shadcns --primary/--primary-foreground, die in index.css auf color.background.primary.default/color.text.primary.default umgebogen sind (keine direkten var(--color-...)-Referenzen in button.tsx). Nur der Hover-Zustand referenziert das Token direkt. Umbenannt von 'default' zu 'primary' (Andreas, Figma-Sync-Session) — in Figma existiert dieselbe Variante als Type=Primary."
+      "note": "Primary fill and text rely on shadcns --primary / --primary-foreground mapped in index.css to brand.copper / background.base."
     },
     {
       "name": "outline",
       "tokens": [],
-      "note": "Nutzt ausschließlich shadcn-eigene Variablen (--border, --background, --muted, --foreground). color.border.primary.default existiert in tokens.json, ist aber hier nicht verdrahtet — anders als die Disabled-Tokens aus Step 2 (die per Prune-Skript gelöscht wurden, siehe FIGMA_SYNC_VALIDATION.md) bisher weder verdrahtet noch entfernt. Offene Aufräum-Entscheidung, keine bewusste 'dokumentiert-ungenutzt bleibt so'-Praxis. Visuell kaum von `secondary` unterschieden, siehe button.guidelines.md."
+      "note": "Uses shadcn native variables exclusively (--border, --background, --muted, --foreground)."
     },
     {
       "name": "secondary",
       "tokens": [],
-      "note": "Ausschließlich shadcn-eigene Variablen (--secondary, --secondary-foreground, --foreground). Visuell kaum von `outline` unterschieden, siehe button.guidelines.md."
+      "note": "Uses shadcn native variables exclusively (--secondary, --secondary-foreground, --foreground)."
     },
     {
       "name": "ghost",
       "tokens": [],
-      "note": "Ausschließlich shadcn-eigene Variablen (--muted, --foreground)."
+      "note": "Uses shadcn native variables exclusively (--muted, --foreground)."
     },
     {
       "name": "destructive",
-      "tokens": ["--color-text-destructive-default"],
-      "note": "Hintergrund (bg-destructive/10, hover:bg-destructive/20) bleibt shadcns eigene --destructive-Variable, ungetokened. Textfarbe seit dem Accessibility-Fix (2026-08-26) an ein eigenes Token gebunden: shadcns --destructive lag als Text auf dem getönten Hintergrund bei 3.98:1 statt WCAG-AA-4.5:1 (siehe ACCESSIBILITY.md). color.text.destructive.default (colors.red.700, #b91c1c) löst das auf 5.4:1, nur in Light Mode (dark:text-destructive bleibt bewusst unverändert — kein Dark-Mode-Support in diesem Token-System, siehe Step 1). Figma nachsynchronisiert (2026-08-26), figma-cli check gruen."
+      "tokens": [
+        "--color-text-destructive-default"
+      ],
+      "note": "Background (bg-destructive/10, hover:bg-destructive/20) uses shadcn native --destructive. Text uses custom token color.text.destructive.default."
     },
     {
       "name": "link",
       "tokens": [],
-      "note": "Nutzt text-primary — indirekt dasselbe --primary wie die primary-Variante, also faktisch an color.background.primary.default gebunden, aber ohne direkte var(--color-...)-Referenz im Code."
+      "note": "Uses text-primary, matching the primary variant token."
     }
   ],
   "sizes": [
     {
       "name": "default",
-      "tokens": ["--space-component-sm", "--space-component-md"]
+      "tokens": [
+        "--space-component-sm",
+        "--space-component-md"
+      ]
     },
     {
       "name": "xs",
-      "tokens": ["--radius-md"],
-      "note": "--radius-md hier ist die shadcn-abgeleitete Variable (calc(var(--radius) * 0.8)), nicht unser Token direkt — siehe base.radius. Über min(var(--radius-md), 10px) geklemmt."
+      "tokens": [
+        "--radius-md"
+      ],
+      "note": "--radius-md here is the shadcn-derived variable calc(var(--radius) * 0.8)."
     },
     {
       "name": "sm",
-      "tokens": ["--radius-md"],
-      "note": "Wie xs, geklemmt auf 12px."
+      "tokens": [
+        "--radius-md"
+      ],
+      "note": "Same as xs, clamped to 12px."
     },
     {
       "name": "lg",
       "tokens": [],
       "note": "Kein Size-eigener Radius-Override, erbt den Basis-rounded-lg (siehe base.radius)."
     },
-    { "name": "icon", "tokens": [] },
-    { "name": "icon-xs", "tokens": ["--radius-md"], "note": "Wie xs." },
-    { "name": "icon-sm", "tokens": ["--radius-md"], "note": "Wie sm." },
-    { "name": "icon-lg", "tokens": [] }
+    {
+      "name": "icon",
+      "tokens": []
+    },
+    {
+      "name": "icon-xs",
+      "tokens": [
+        "--radius-md"
+      ],
+      "note": "Wie xs."
+    },
+    {
+      "name": "icon-sm",
+      "tokens": [
+        "--radius-md"
+      ],
+      "note": "Wie sm."
+    },
+    {
+      "name": "icon-lg",
+      "tokens": []
+    }
   ],
   "props": [
-    { "name": "variant", "type": "'primary' | 'outline' | 'secondary' | 'ghost' | 'destructive' | 'link'", "defaultValue": "'primary'" },
-    { "name": "size", "type": "'default' | 'xs' | 'sm' | 'lg' | 'icon' | 'icon-xs' | 'icon-sm' | 'icon-lg'", "defaultValue": "'default'" },
-    { "name": "className", "type": "string", "description": "Wird über cn() mit den variant/size-Klassen gemerged, überschreibt sie bei Tailwind-Konflikten." }
+    {
+      "name": "variant",
+      "type": "'primary' | 'outline' | 'secondary' | 'ghost' | 'destructive' | 'link'",
+      "defaultValue": "'primary'"
+    },
+    {
+      "name": "size",
+      "type": "'default' | 'xs' | 'sm' | 'lg' | 'icon' | 'icon-xs' | 'icon-sm' | 'icon-lg'",
+      "defaultValue": "'default'"
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "description": "Merged with variant/size classes via cn(), overrides classes upon collision."
+    }
   ],
   "passthrough": {
     "component": "@base-ui/react/button",
-    "note": "Alle weiteren Props werden unverändert an ButtonPrimitive durchgereicht (Base UI). Nicht einzeln dokumentiert — siehe Base-UI-eigene Doku."
+    "note": "All additional props are passed unchanged to ButtonPrimitive (Base UI / Radix primitive)."
   }
 }

@@ -18,28 +18,28 @@
   --colors-blue-700: #1d4ed8;
   --colors-red-700: #b91c1c;
   --colors-white: #ffffff;
-  --color-brand-copper: #e87a5d; /** Markenakzent für Technical Copper: Passermarken, Highlights und fokussierte Primäraktionen. */
-  --color-background-base: #191a1e; /** Dunkler Canvas-Hintergrund (Dark Graphite). */
-  --color-background-surface: #202227; /** Abgesetzte Fläche (Elevated Graphite) für Karten, Modals und CTA-Container. */
-  --color-background-primary-default: #6d28d9; /** Haupt-Aktion in einem Flow, primärer CTA. Nicht für dekorative Flächen oder sekundäre Aktionen verwenden. */
+  --color-brand-copper: #e87a5d; /** Brand accent for Technical Copper: registration marks, highlights, and focused primary actions. */
+  --color-background-base: #191a1e; /** Dark canvas background (Dark Graphite). */
+  --color-background-surface: #202227; /** Elevated surface (Elevated Graphite) for cards, modals, and container panels. */
+  --color-background-primary-default: #6d28d9; /** Primary action in a flow, main CTA. Do not use for decorative surfaces or secondary actions. */
   --color-background-primary-hover: #5b21b6;
-  --color-foreground-primary: #f4f3ee; /** Primärtext und primäre Icons (Off-White) für blendfreie Lesbarkeit auf dunklem Grund. */
-  --color-foreground-muted: #9e9ea8; /** Sekundärtext, Metadaten und gedämpfte Icons (Muted Gray). */
+  --color-foreground-primary: #f4f3ee; /** Primary text and primary icons (Off-White) for glare-free readability on dark backgrounds. */
+  --color-foreground-muted: #9e9ea8; /** Secondary text, metadata, and dimmed icons (Muted Gray). */
   --color-text-primary-default: #ffffff;
-  --color-text-destructive-default: #b91c1c; /** Text auf getöntem Destructive-Button-Hintergrund (bg-destructive/10). Heller als Standard-Destructive für Kontrast >= 4.5:1. */
-  --color-border-subtle: #2e3038; /** Subtile Trennlinien und Konturen (Subtle Border). */
+  --color-text-destructive-default: #b91c1c; /** Text on tinted destructive button background (bg-destructive/10). Lighter than standard destructive for contrast >= 4.5:1. */
+  --color-border-subtle: #2e3038; /** Subtle structural lines and borders (Subtle Border). */
   --color-border-primary-default: #7c3aed;
   --space-component-sm: 8px;
   --space-component-md: 16px;
   --radii-md: 6px;
-  --font-size-sm: 12px; /** Hilfstext oder Caption unterhalb eines Feldes (z. B. Formular-Fehlermeldungen). */
+  --font-size-sm: 12px; /** Caption and helper text below fields (e.g. form validation messages). */
   --font-size-md: 14px;
-  --font-size-xl: 24px; /** Headline und Seitentitel (z. B. 'Welcome back' auf Login-Seiten). */
+  --font-size-xl: 24px; /** Headline and page title (e.g. Welcome back on login screens). */
   --font-weight-medium: 500;
-  --font-weight-bold: 700; /** Headline-Gewichtung, zusammen mit font.size.xl. */
-  --font-line-height-sm: 16px; /** Zeilenhöhe für kleine Schriften, zusammen mit font.size.sm. */
+  --font-weight-bold: 700; /** Headline weight, used alongside font.size.xl. */
+  --font-line-height-sm: 16px; /** Line height for small captions, paired with font.size.sm. */
   --font-line-height-md: 20px;
-  --font-line-height-xl: 32px; /** Zeilenhöhe für Headlines, zusammen mit font.size.xl. */
-  --font-family-base: 'Geist Variable'; /** CSS-Wert für den Web-Code. In Figma als 'Geist' hinterlegt. */
-  --font-family-mono: 'JetBrains Mono'; /** Monospace-Font für Code-Snippets, Metadaten und Terminal-Tags. */
+  --font-line-height-xl: 32px; /** Line height for headlines, paired with font.size.xl. */
+  --font-family-base: 'Geist Variable'; /** CSS font family value for web code. Configured as Geist in Figma. */
+  --font-family-mono: 'JetBrains Mono'; /** Monospace font for code snippets, metadata, and terminal tags. */
 }

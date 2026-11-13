@@ -4,7 +4,7 @@
   "importPath": "@/components/ui/input",
   "tokensSourceFile": "src/tokens/tokens.json",
   "base": {
-    "note": "Genau eine Größe, keine Varianten -- anders als Button. Höhe/Rhythmus bewusst an Button.default angeglichen (gleiche px/py-Tokens), damit beide in einem Formular dieselbe Zeilenhöhe haben.",
+    "note": "Single size, no variants (unlike Button). Height and rhythm intentionally aligned with Button.default (identical px/py tokens) so both share the same line height in forms.",
     "tokens": [
       "--space-component-md",
       "--space-component-sm",
@@ -20,26 +20,38 @@
     {
       "name": "default",
       "tokens": [],
-      "note": "Rand (--border/--input) und Fokus-Ring (--ring) bleiben shadcns eigene, neutrale Variablen, ungetokened -- gleiches Muster wie Button.outline/secondary. Kein eigenes Border-Token, weil ein neutraler Formular-Rand keine Markenfarbe transportiert."
+      "note": "Border (--border/--input) and focus ring (--ring) remain shadcn neutral variables."
     },
     {
       "name": "disabled",
       "tokens": [],
-      "note": "Ausschließlich shadcn-eigene Variablen (--input/50, opacity-50)."
+      "note": "Uses shadcn native variables exclusively (--input/50, opacity-50)."
     },
     {
       "name": "invalid (aria-invalid)",
       "tokens": [],
-      "note": "Teilt sich exakt dieselbe shadcn --destructive-Konvention wie Button (aria-invalid:border-destructive, ring-destructive/20) -- keine eigene Fehlerfarbe, kein eigenes Token. Nicht verwechseln mit color.text.destructive.default (Button-Text-Fix) -- das ist eine andere Anwendung (Text auf getöntem Hintergrund, nicht Rand/Ring)."
+      "note": "Shares the exact same shadcn --destructive convention as Button (aria-invalid border-destructive, ring-destructive/20)."
     }
   ],
   "props": [
-    { "name": "type", "type": "HTMLInputTypeAttribute", "description": "Wird 1:1 durchgereicht (z.B. 'email', 'password', 'text')." },
-    { "name": "className", "type": "string", "description": "Wird über cn() mit den Basis-Klassen gemerged." },
-    { "name": "onValueChange", "type": "(value: string, eventDetails: Input.ChangeEventDetails) => void", "description": "Base UIs eigene kontrollierte API, alternativ zu nativem value/onChange. Seit Step 7 korrekt typisiert (siehe input.guidelines.md)." }
+    {
+      "name": "type",
+      "type": "HTMLInputTypeAttribute",
+      "description": "Wird 1:1 durchgereicht (z.B. 'email', 'password', 'text')."
+    },
+    {
+      "name": "className",
+      "type": "string",
+      "description": "Merged with base classes via cn()."
+    },
+    {
+      "name": "onValueChange",
+      "type": "(value: string, eventDetails: Input.ChangeEventDetails) => void",
+      "description": "Base UIs eigene kontrollierte API, alternativ zu nativem value/onChange. Seit Step 7 korrekt typisiert (siehe input.guidelines.md)."
+    }
   ],
   "passthrough": {
     "component": "@base-ui/react/input",
-    "note": "Alle weiteren Props werden unverändert an InputPrimitive durchgereicht (Base UI)."
+    "note": "All additional props are passed unchanged to InputPrimitive (Base UI)."
   }
 }
