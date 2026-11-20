@@ -20,7 +20,15 @@ export default defineConfig({
   test: {
     projects: [{
       extends: true,
-      test: { name: "unit", include: ["__tests__/**/*.test.ts"], environment: "node" }
+      test: { name: "unit", include: ["__tests__/**/*.test.ts"], exclude: ["__tests__/ax-patterns.test.ts"], environment: "node" }
+    }, {
+      extends: true,
+      optimizeDeps: { include: ["ajv-formats", "ajv/dist/2020"] },
+      test: {
+        name: "ax",
+        include: ["__tests__/ax-patterns.test.ts"],
+        browser: { enabled: true, headless: true, provider: playwright({}), instances: [{ browser: "chromium" }] }
+      }
     }, {
       extends: true,
       plugins: [

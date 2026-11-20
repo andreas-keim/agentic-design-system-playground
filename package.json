@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
+    "test:ax": "vitest run --project ax",
     "test:governance": "vitest run --project unit",
     "preview": "vite preview",
     "tokens:build": "style-dictionary build --config style-dictionary.config.js",

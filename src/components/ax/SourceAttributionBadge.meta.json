@@ -1,0 +1,17 @@
+{
+  "name": "SourceAttributionBadge",
+  "importPath": "@/components/ax/SourceAttributionBadge",
+  "props": [
+    {
+      "name": "source",
+      "type": "ManualSource | AgentSource"
+    }
+  ],
+  "tokensSourceFile": "src/tokens/tokens.json",
+  "tokens": [
+    "--font-weight-bold",
+    "--radii-md",
+    "--space-component-md",
+    "--space-component-sm"
+  ]
+}

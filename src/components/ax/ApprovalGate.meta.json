@@ -1,0 +1,35 @@
+{
+  "name": "ApprovalGate",
+  "importPath": "@/components/ax/ApprovalGate",
+  "props": [
+    {
+      "name": "stage",
+      "type": "Stage"
+    },
+    {
+      "name": "impactSummary",
+      "type": "string"
+    },
+    {
+      "name": "allowUndo",
+      "type": "boolean (default true)"
+    },
+    {
+      "name": "onReject",
+      "type": "() => void"
+    },
+    {
+      "name": "onCommit",
+      "type": "(stage: Stage, approvedDigest: string) => void"
+    }
+  ],
+  "tokensSourceFile": "src/tokens/tokens.json",
+  "tokens": [
+    "--color-background-base",
+    "--font-weight-bold",
+    "--font-weight-medium",
+    "--radii-md",
+    "--space-component-md",
+    "--space-component-sm"
+  ]
+}

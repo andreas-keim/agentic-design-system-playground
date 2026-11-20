@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { ApprovalGate } from "../ax/ApprovalGate"
 import { Button } from "../ui/button"
 import {
   commitChanges, createToolLedger, fmea, stageChanges, stageRollback, verifyChanges,
@@ -49,6 +50,7 @@ type Approval = { stage: Stage; requestId: string; undo: boolean }
 export function GuardrailInspector({ surface, store }: { surface: Surface; store: SurfaceStore }) {
   const [scenario, setScenario] = useState("case-03")
   const [approval, setApproval] = useState<Approval>()
+  const [gateOpen, setGateOpen] = useState(false)
   const [committed, setCommitted] = useState<Stage>()
   const [receipt, setReceipt] = useState<Receipt<Surface>>()
   const [busy, setBusy] = useState(false)
@@ -71,6 +73,7 @@ export function GuardrailInspector({ surface, store }: { surface: Surface; store
         ? await stageRollback(surface, committed, workbenchPolicy)
         : await stageChanges(surface, edits, workbenchPolicy)
       setApproval({ stage, requestId: crypto.randomUUID(), undo })
+      setGateOpen(true)
     } catch (failure) {
       setError(failure instanceof Error ? failure.message : String(failure))
     } finally {
@@ -78,13 +81,14 @@ export function GuardrailInspector({ surface, store }: { surface: Surface; store
     }
   }
 
-  async function apply() {
-    if (!reviewing) return
+  async function apply(stage: Stage, approvedDigest: string) {
+    if (!reviewing || reviewing.stage.digest !== approvedDigest) return
+    setGateOpen(false)
     setBusy(true)
     setError("")
     try {
-      const { stage, requestId, undo } = reviewing
-      const ack = ledger.submit(requestId, stage.digest, () => commitChanges(store, stage, stage.digest, workbenchPolicy))
+      const { requestId, undo } = reviewing
+      const ack = ledger.submit(requestId, approvedDigest, () => commitChanges(store, stage, approvedDigest, workbenchPolicy))
       setReceipt(ack)
       await ack.result
       setCommitted(undo ? undefined : stage)
@@ -135,23 +139,26 @@ export function GuardrailInspector({ surface, store }: { surface: Surface; store
         </ul>
       </details>
       {issues.map(issue => <p key={JSON.stringify(issue)}>{issue.reason} {issue.replacement && <strong>{issue.replacement}</strong>}</p>)}
-      {reviewing && <div className="space-y-1">
-        <p>Rollback preview</p>
-        {reviewing.stage.rollback.map(edit => <p key={JSON.stringify([edit.componentId, edit.field])}>
-          {edit.componentId}.{edit.field} · {edit.before ?? "(unset)"} → {edit.after ?? "(unset)"}
-        </p>)}
-        <code className="block break-all text-xs">SHA-256 {reviewing.stage.digest}</code>
-      </div>}
       {receipt && busy && <PendingRequest key={receipt.requestId} receipt={receipt} />}
       {receipt && <p className="break-all text-xs" role="status">Request {receipt.requestId} · <time dateTime={receipt.timestamp}>{receipt.timestamp}</time></p>}
       {error && <p role="alert">{error}</p>}
       <div className="flex flex-wrap gap-2">
-        {reviewing
-          ? <Button variant="outline" disabled={busy || !valid} onClick={apply}>Approve {reviewing.undo ? "rollback" : "commit"}</Button>
-          : <Button variant="outline" disabled={!valid || busy} onClick={() => prepare(false)}>Stage changes</Button>}
-        {committed?.version === surface.version - 1 && !reviewing &&
-          <Button variant="ghost" disabled={busy} onClick={() => prepare(true)}>Review rollback</Button>}
+        <Button variant="outline" aria-disabled={busy || !valid} onClick={() => {
+          if (busy || !valid) return
+          if (reviewing) setGateOpen(true)
+          else void prepare(false)
+        }}>{reviewing ? "Review staged changes" : "Stage changes"}</Button>
+        {committed?.version === surface.version - 1 &&
+          <Button variant="ghost" aria-disabled={busy || !!reviewing} onClick={() => {
+            if (!busy && !reviewing) void prepare(true)
+          }}>Review rollback</Button>}
       </div>
+      {reviewing && gateOpen && <ApprovalGate stage={reviewing.stage}
+        impactSummary={reviewing.undo
+          ? "Die Schaltflächen erhalten ihre vorherigen Varianten."
+          : "Die primäre Aktion wechselt auf die andere Schaltfläche."}
+        onReject={() => { setGateOpen(false); setApproval(undefined) }}
+        onCommit={apply} />}
     </section>
   )
 }
