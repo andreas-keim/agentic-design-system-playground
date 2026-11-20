@@ -1,6 +1,8 @@
 // Ebene 2: Regeln aus den Guidelines, die ein JSON-Schema nicht ausdrücken kann.
 // Jede Regel nennt ihre Quelle und wie belastbar sie ist. Absichtlich NICHT
 // umgesetzt: "destructive nur für Zerstörendes" (rein semantisch, siehe README-Befund).
+import { isPrimaryButton } from "../lib/governance/primary-button.ts"
+
 type Comp = { id: string; component: string; [k: string]: unknown }
 
 function collect(messages: unknown[]): Comp[] {
@@ -16,7 +18,7 @@ const rules: { name: string; source: string; check: (c: Comp[]) => string | null
     name: "max-ein-primary",
     source: "button.guidelines.md: nicht mehr als eine primary-Instanz sichtbar (zählbar, belastbar)",
     check: (c) => {
-      const n = c.filter((x) => x.component === "Button" && (x.variant ?? "primary") === "primary").length
+      const n = c.filter((x) => isPrimaryButton(x.component, x.variant)).length
       return n > 1 ? `${n} primary-Buttons, erlaubt ist 1` : null
     },
   },
@@ -44,7 +46,7 @@ const rules: { name: string; source: string; check: (c: Comp[]) => string | null
     source: "Beim Rendern gefunden: Action eines primary-Buttons muss jeden FormField-Pfad im context binden (belastbar)",
     check: (c) => {
       const paths = c.filter((x) => x.component === "FormField").map((x) => (x.value as { path?: string })?.path)
-      const btn = c.find((x) => x.component === "Button" && (x.variant ?? "primary") === "primary")
+      const btn = c.find((x) => isPrimaryButton(x.component, x.variant))
       if (!paths.length || !btn) return null
       const ctx = JSON.stringify((btn.action as { event?: { context?: unknown } })?.event?.context ?? {})
       const missing = paths.filter((p) => p && !ctx.includes(p))

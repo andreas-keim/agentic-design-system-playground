@@ -1,13 +1,17 @@
-import { useState } from "react"
+import { lazy, Suspense, useState } from "react"
 import { CheckCircle2, ArrowRight } from "lucide-react"
 
 import { useShowcase } from "./ShowcaseContext"
 import { PageHeader } from "./PageHeader"
+import { createWorkbenchStore, initialButtonSurface } from "@/lib/governance/workbench-surface"
 import { SegmentedTabs } from "./SegmentedTabs"
 import { Button } from "@/components/ui/button"
 import { FormField } from "@/components/ui/form-field"
 import { EditEntryPanel } from "@/components/edit-entry-panel"
 import { LoginPage } from "@/components/login-page"
+
+const GuardrailInspector = lazy(() => import("@/components/governance/GuardrailInspector")
+  .then(module => ({ default: module.GuardrailInspector })))
 
 type ActiveComponent = "edit-panel" | "button" | "form-field" | "login-page"
 
@@ -102,6 +106,10 @@ const INSPECTION_DATA: Record<ActiveComponent, ViewInspectionData> = {
 export function WorkbenchView() {
   const { setActiveTab } = useShowcase()
   const [activeComponent, setActiveComponent] = useState<ActiveComponent>("edit-panel")
+
+  const [buttonSurface, setButtonSurface] = useState(initialButtonSurface)
+  const [buttonStore] = useState(() => createWorkbenchStore(buttonSurface, setButtonSurface))
+  const mainAction = buttonSurface.components.find(button => button.props.variant === "primary")!.id
 
   // Sample Enterprise Record Data
   const [systemRecord, setSystemRecord] = useState<string | null>(
@@ -206,12 +214,12 @@ export function WorkbenchView() {
             {activeComponent === "button" && (
               <div className="flex flex-col gap-6 items-center w-full max-w-md bg-card p-8 rounded-xl border border-border/80 shadow-xs">
                 <div className="flex flex-wrap gap-3 justify-center items-center w-full">
-                  <Button variant="primary">
-                    Primary
+                  <Button variant={mainAction === "publish" ? "primary" : "outline"}>
+                    Publish
                   </Button>
 
-                  <Button variant="outline">
-                    Outline
+                  <Button variant={mainAction === "save-draft" ? "primary" : "outline"}>
+                    Save draft
                   </Button>
 
                   <Button variant="destructive">
@@ -298,6 +306,12 @@ export function WorkbenchView() {
                 ))}
               </div>
             </div>
+
+            {activeComponent === "button" && (
+              <Suspense fallback={<p role="status">Loading guardrails...</p>}>
+                <GuardrailInspector surface={buttonSurface} store={buttonStore} />
+              </Suspense>
+            )}
 
             {/* 2. Dezent gestalteter Textlink zu den technischen Token-Details */}
             <div className="border-t border-border/60 pt-4 mt-5">

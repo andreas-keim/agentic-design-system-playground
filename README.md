@@ -62,6 +62,14 @@ This repo is marked as a GitHub template — "Use this template" on the repo pag
 - `scripts/sync-figma-variables.js` and `scripts/check-accessibility.mjs`
 - `NEVER.md` and the CI accessibility gate (`.github/workflows/accessibility.yml`)
 
+## Governance checks
+
+Open **Workbench → Button Variants → Guardrail inspector**. Case 03 combines the raw-color fixture with a second primary action. **Swap the primary action** stages a valid change to the visible buttons. The inspector shows each field, its source, the inverse diff and the approval digest. Run `npm run test:governance` for the unit suite.
+
+`validateToken` checks an individual leaf against the bundled Draft 2020-12 profile. `createTokenLinter` resolves token aliases and checks a slot's expected token, purpose, scope, agency limit and review date. The caller supplies the slot contract from trusted component policy. The Workbench profiles cover `color.background.primary.default` and `color.background.surface`. Their evidence digest identifies the original intent descriptions in `src/tokens/tokens.json` at commit `c6c03a7`. The initial review deadline is 2027-01-31 UTC. Other existing leaves can be inspected with `validateToken` to identify missing metadata.
+
+`stageChanges` and `commitChanges` operate on string-valued component properties within one visible surface. A null edit value denotes an absent property. For server writes, recover the approved digest from a trusted approval record and implement `SurfaceStore.compareAndSwap` with an atomic version check. The Workbench keeps its surface and receipts in memory. A receipt covers one logical request in one ledger, including simultaneous calls and unknown outcomes. Cross-process or restart-safe deduplication requires the destination to persist the request ID and digest together with the write.
+
 ## Getting started
 
 ```bash

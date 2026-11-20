@@ -1,0 +1,190 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/schemas/agentic-token-v1.json",
+  "title": "Organizational profile for a DTCG token leaf",
+  "type": "object",
+  "required": [
+    "$value",
+    "$extensions"
+  ],
+  "properties": {
+    "$extensions": {
+      "type": "object",
+      "required": [
+        "agentic"
+      ],
+      "properties": {
+        "agentic": {
+          "$ref": "#/$defs/guardrail"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "guardrail": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "ruleId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{1,63}$"
+        },
+        "ownerTeam": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{1,63}$"
+        },
+        "scope": {
+          "$ref": "#/$defs/scope"
+        },
+        "useFor": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]{1,63}$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "avoidFor": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]{1,63}$"
+          },
+          "uniqueItems": true
+        },
+        "maxAgency": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "findingId": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]{1,63}$"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "findingId",
+              "sha256"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "reviewBy": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "ruleId",
+        "ownerTeam",
+        "scope",
+        "useFor",
+        "avoidFor",
+        "maxAgency",
+        "evidence",
+        "reviewBy"
+      ],
+      "additionalProperties": false
+    },
+    "scope": {
+      "type": "object",
+      "properties": {
+        "domain": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{1,63}$"
+        },
+        "journey": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{1,63}$"
+        },
+        "actor": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{1,63}$"
+        }
+      },
+      "required": [
+        "domain",
+        "journey",
+        "actor"
+      ],
+      "additionalProperties": false
+    },
+    "finding": {
+      "type": "object",
+      "properties": {
+        "findingId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{1,63}$"
+        },
+        "ownerTeam": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{1,63}$"
+        },
+        "scope": {
+          "$ref": "#/$defs/scope"
+        },
+        "method": {
+          "enum": [
+            "usability-test",
+            "field-observation",
+            "interview",
+            "support-analysis",
+            "experiment"
+          ]
+        },
+        "sampleSize": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "claim": {
+          "type": "string",
+          "minLength": 1
+        },
+        "limitation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceRecordId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{1,63}$"
+        },
+        "observedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "reviewBy": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "findingId",
+        "ownerTeam",
+        "scope",
+        "method",
+        "sampleSize",
+        "claim",
+        "limitation",
+        "sourceRecordId",
+        "observedAt",
+        "reviewBy"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
