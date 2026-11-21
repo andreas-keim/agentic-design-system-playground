@@ -6,7 +6,9 @@ import { Button } from "../ui/button"
 
 export interface ApprovalGateProps {
   stage: Stage
+  inlineActionLabel?: string
   reviewContent?: React.ReactNode
+  rollbackSummary?: string
   impactSummary: string
   allowUndo?: boolean
   onReject: () => void
@@ -18,7 +20,7 @@ export function ApprovalGate(props: ApprovalGateProps) {
   return <Review key={props.stage.digest} {...props} />
 }
 
-function Review({ stage, impactSummary, reviewContent, allowUndo = true, onReject, onCommit }: ApprovalGateProps) {
+function Review({ stage, impactSummary, inlineActionLabel, reviewContent, rollbackSummary, allowUndo = true, onReject, onCommit }: ApprovalGateProps) {
   const [proposal] = useState(() => structuredClone(stage))
   const [open, setOpen] = useState(true)
   const [seconds, setSeconds] = useState<number | null>(null)
@@ -62,6 +64,26 @@ function Review({ stage, impactSummary, reviewContent, allowUndo = true, onRejec
     deadlineTimer.current = window.setTimeout(commit, 5000)
   }
 
+  if (inlineActionLabel) {
+    return (
+      <div className="space-y-3" onKeyDown={event => {
+        if (event.key === "Escape" && seconds !== null) reject()
+      }}>
+        <p role="status" aria-atomic="true" className="text-sm">
+          {seconds === null ? "Nach der Freigabe bleiben fünf Sekunden zum Widerruf."
+            : `Übernahme in ${seconds} ${seconds === 1 ? "Sekunde" : "Sekunden"}.`}
+        </p>
+        <div className="flex flex-wrap gap-2">
+          {seconds === null && <Button onClick={approve} className="max-w-full whitespace-normal">{inlineActionLabel}</Button>}
+          <Button ref={cancelButton} variant={seconds === null ? "ghost" : "outline"} onClick={reject}>
+            {seconds === null ? "Vorschlag verwerfen" : "Freigabe zurücknehmen (Esc)"}
+          </Button>
+        </div>
+        {rollbackSummary && <p className="text-sm text-muted-foreground">{rollbackSummary}</p>}
+      </div>
+    )
+  }
+
   return (
     <Dialog.Root open={open} onOpenChange={next => { if (!next) reject() }} disablePointerDismissal>
       <Dialog.Portal>
@@ -86,17 +108,8 @@ function Review({ stage, impactSummary, reviewContent, allowUndo = true, onRejec
                 </div>
               ))}
             </dl>}
-            <details>
-              <summary>Rollback-Vorschau und Prüfsumme</summary>
-              <ul>
-                {proposal.rollback.map(edit => (
-                  <li key={JSON.stringify([edit.componentId, edit.field])} className="break-all">
-                    {edit.componentId}.{edit.field} · {displayValue(edit.before)} → {displayValue(edit.after)}
-                  </li>
-                ))}
-              </ul>
-              <p className="break-all">SHA-256 <code>{proposal.digest}</code></p>
-            </details>
+            {rollbackSummary && <p>{rollbackSummary}</p>}
+            <ApprovalDetails proposal={proposal} />
             <p role="status" aria-live="polite" aria-atomic="true">
               {seconds === null
                 ? allowUndo && "Nach der Freigabe bleiben fünf Sekunden zum Zurücknehmen."
@@ -112,6 +125,24 @@ function Review({ stage, impactSummary, reviewContent, allowUndo = true, onRejec
         </div>
       </Dialog.Portal>
     </Dialog.Root>
+  )
+}
+
+export function ApprovalDetails({ proposal }: { proposal: Stage }) {
+  return (
+    <details className="text-sm text-muted-foreground">
+      <summary className="cursor-pointer">Technische Details zum Vorschlag</summary>
+      <p className="mt-2 font-medium text-foreground">Diese Feldwerte werden beim Rückgängigmachen wiederhergestellt</p>
+      <ul>
+        {proposal.rollback.map(edit => (
+          <li key={JSON.stringify([edit.componentId, edit.field])} className="break-all">
+            {edit.componentId}.{edit.field} · {displayValue(edit.before)} → {displayValue(edit.after)}
+          </li>
+        ))}
+      </ul>
+      <p className="mt-3">Vor der Übernahme prüft das System, ob die Änderung genau dem Vorschlag entspricht, den du freigegeben hast. Dafür vergleicht es die SHA-256-Prüfsummen.</p>
+      <p className="mt-1">Prüfsumme dieses Vorschlags <code className="block break-all">{proposal.digest}</code></p>
+    </details>
   )
 }
 

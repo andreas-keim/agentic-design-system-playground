@@ -214,7 +214,7 @@ export function AgenticLabView() {
         </Tabs.List>
         <Tabs.Panel value="approval" keepMounted>
           <Suspense fallback={<p role="status">Vorschlag wird geladen …</p>}>
-            {visitedApproval && <ApprovalScenario />}
+            {visitedApproval && <ApprovalScenario active={scenario === "approval"} />}
           </Suspense>
         </Tabs.Panel>
         <Tabs.Panel value="checks" keepMounted>

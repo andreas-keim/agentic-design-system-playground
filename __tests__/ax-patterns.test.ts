@@ -4,6 +4,7 @@ import { createRoot, type Root } from "react-dom/client"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { page, userEvent } from "vitest/browser"
 import { ApprovalGate, type ApprovalGateProps } from "../src/components/ax/ApprovalGate"
+import ApprovalScenario from "../src/showcase/ApprovalScenario"
 import { GuardrailInspector } from "../src/components/governance/GuardrailInspector"
 import { SourceAttributionBadge, type AgentSource, type ManualSource } from "../src/components/ax/SourceAttributionBadge"
 import { commitChanges, stageChanges, stageRollback, type Surface } from "../src/lib/governance/fmea-guardrails"
@@ -68,11 +69,11 @@ describe("ApprovalGate", () => {
     const reject = button(/Ablehnen/)
     await expect.element(reject).toHaveFocus()
     await userEvent.keyboard("{Shift>}{Tab}{/Shift}")
-    await expect.element(page.getByText("Rollback-Vorschau und Prüfsumme")).toHaveFocus()
+    await expect.element(page.getByText("Technische Details zum Vorschlag")).toHaveFocus()
     await userEvent.keyboard("{Shift>}{Tab}{/Shift}")
     await expect.element(button("Änderungen freigeben")).toHaveFocus()
     await userEvent.keyboard("{Tab}")
-    await expect.element(page.getByText("Rollback-Vorschau und Prüfsumme")).toHaveFocus()
+    await expect.element(page.getByText("Technische Details zum Vorschlag")).toHaveFocus()
     await userEvent.keyboard("{Tab}")
     await expect.element(reject).toHaveFocus()
     await userEvent.keyboard("{Escape}")
@@ -117,6 +118,25 @@ describe("ApprovalGate", () => {
     expect(onCommit).not.toHaveBeenCalled()
   })
 
+  it("approves in place, supports Escape, and commits once after the deadline", async () => {
+    const label = "Use draft as the primary action"
+    const { onCommit, onReject } = renderGate({ inlineActionLabel: label })
+    clock()
+    await button(label).click()
+    await expect.element(dialog()).not.toBeInTheDocument()
+    await userEvent.keyboard("{Escape}")
+    advance(5000)
+    expect(onReject).toHaveBeenCalledOnce()
+    expect(onCommit).not.toHaveBeenCalled()
+    flushSync(() => root.render(null))
+    renderGate({ inlineActionLabel: label, onCommit })
+    await button(label).click()
+    advance(4999)
+    expect(onCommit).not.toHaveBeenCalled()
+    advance(1)
+    expect(onCommit).toHaveBeenCalledExactlyOnceWith(stage, stage.digest)
+  })
+
   it("commits immediately when the undo window is disabled", async () => {
     const { onCommit } = renderGate({ allowUndo: false })
     await button("Änderungen freigeben").click()
@@ -137,6 +157,32 @@ describe("ApprovalGate", () => {
     advance(5000)
     expect(onCommit).not.toHaveBeenCalled()
   })
+})
+
+it.each(["approve", "discard"])("keeps the original review details accessible after %s", async action => {
+  clock()
+  vi.setSystemTime(new Date("2026-11-20T10:00:00Z"))
+  flushSync(() => root.render(h(ApprovalScenario, { active: true })))
+  const technical = page.getByText("Technische Details zum Vorschlag", { exact: true })
+  const policy = page.getByText("Welche Regel greift hier?", { exact: true })
+  await technical.click()
+  const details = technical.element().closest("details")!
+  const digest = details.querySelector("code")?.textContent
+  expect(digest).toMatch(/^[a-f0-9]{64}$/)
+  if (action === "discard") {
+    await button("Vorschlag verwerfen").click()
+    await expect.element(button("Vorschlag erneut ansehen")).toBeVisible()
+  } else {
+    await button(/als Hauptaktion übernehmen/).click()
+    advance(5000)
+    await expect.element(button("Vom Agenten vorgeschlagen")).toBeVisible()
+  }
+  await expect.element(technical).toBeVisible()
+  expect(details.open).toBe(true)
+  expect(details.querySelector("code")?.textContent).toBe(digest)
+  await policy.click()
+  expect(policy.element().closest("details")?.querySelector("figcaption")?.textContent)
+    .toContain("von publish zu save-draft")
 })
 
 it("stages the Workbench proposal and commits the reviewed change through the store", async () => {

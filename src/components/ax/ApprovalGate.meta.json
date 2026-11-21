@@ -11,6 +11,18 @@
       "type": "string"
     },
     {
+      "name": "inlineActionLabel",
+      "type": "string (optional; renders the approval controls in place)"
+    },
+    {
+      "name": "rollbackSummary",
+      "type": "string (optional)"
+    },
+    {
+      "name": "reviewContent",
+      "type": "ReactNode (optional modal preview)"
+    },
+    {
       "name": "allowUndo",
       "type": "boolean (default true)"
     },
