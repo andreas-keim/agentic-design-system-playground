@@ -184,19 +184,19 @@ const TOKEN_PRESENTATION_META: Record<string, TokenPresentationMeta> = {
 
 interface DtcgLeafNode {
   $value: string | number
-  $type: "color" | "dimension" | "fontFamily" | "number"
+  $type?: "color" | "dimension" | "fontFamily" | "number"
+  $description?: string
+  $extensions?: {
+    agentic?: {
+      useFor?: string | string[]
+      avoidFor?: string | string[]
+      [key: string]: unknown
+    }
+    [key: string]: unknown
+  }
   useFor?: string
   avoidFor?: string
   [key: string]: unknown
-}
-
-function isDtcgLeaf(node: unknown): node is DtcgLeafNode {
-  return (
-    typeof node === "object" &&
-    node !== null &&
-    "$value" in node &&
-    "$type" in node
-  )
 }
 
 function resolveTokenValue(
@@ -231,16 +231,16 @@ function resolveTokenValue(
     current = (current as Record<string, unknown>)[segment]
   }
 
-  if (!isDtcgLeaf(current)) {
+  if (typeof current !== "object" || current === null || !("$value" in current)) {
     throw new Error(
-      `Ungültige Alias-Referenz: "{${aliasPath}}" verweist auf keinen gültigen DTCG-Leaf mit $value und $type.`
+      `Ungültige Alias-Referenz: "{${aliasPath}}" verweist auf keinen gültigen DTCG-Leaf mit $value.`
     )
   }
 
   const nextVisited = new Set(visited)
   nextVisited.add(aliasPath)
 
-  return resolveTokenValue(current.$value, tokensRoot, nextVisited)
+  return resolveTokenValue((current as { $value: string | number }).$value, tokensRoot, nextVisited)
 }
 
 function toCssVar(path: string): string {
@@ -275,19 +275,59 @@ function buildTokenCatalog(
   raw: Record<string, unknown>,
   presentationMeta: Record<string, TokenPresentationMeta> = {}
 ): TokenItem[] {
-  const leaves: Array<{ path: string; leaf: DtcgLeafNode }> = []
+  const leaves: Array<{
+    path: string
+    leaf: DtcgLeafNode
+    type: "color" | "dimension" | "fontFamily" | "number"
+    description?: string
+    useFor?: string
+    avoidFor?: string
+  }> = []
 
-  function traverse(node: unknown, pathSegments: string[]) {
-    if (isDtcgLeaf(node)) {
-      leaves.push({ path: pathSegments.join("."), leaf: node })
+  function traverse(node: unknown, pathSegments: string[], inheritedType?: string) {
+    if (typeof node !== "object" || node === null) return
+
+    const currentType = ((node as Record<string, unknown>)["$type"] as string | undefined) || inheritedType
+
+    if ("$value" in node) {
+      const rec = node as DtcgLeafNode
+      const desc = rec.$description
+      const agentic = rec.$extensions?.agentic
+
+      let useFor: string | undefined
+      if (typeof agentic?.useFor === "string") {
+        useFor = agentic.useFor
+      } else if (Array.isArray(agentic?.useFor)) {
+        useFor = agentic.useFor.join(", ")
+      } else if (typeof rec.useFor === "string") {
+        useFor = rec.useFor
+      }
+
+      let avoidFor: string | undefined
+      if (typeof agentic?.avoidFor === "string") {
+        avoidFor = agentic.avoidFor
+      } else if (Array.isArray(agentic?.avoidFor)) {
+        avoidFor = agentic.avoidFor.join(", ")
+      } else if (typeof rec.avoidFor === "string") {
+        avoidFor = rec.avoidFor
+      }
+
+      const effectiveType = (rec.$type || currentType || "color") as "color" | "dimension" | "fontFamily" | "number"
+
+      leaves.push({
+        path: pathSegments.join("."),
+        leaf: rec,
+        type: effectiveType,
+        description: desc,
+        useFor,
+        avoidFor,
+      })
       return
     }
 
-    if (typeof node === "object" && node !== null) {
-      for (const [key, value] of Object.entries(node)) {
-        if (key.startsWith("$")) continue
-        traverse(value, [...pathSegments, key])
-      }
+    for (const [key, value] of Object.entries(node)) {
+      if (key.startsWith("$")) continue
+      traverse(value, [...pathSegments, key], currentType)
     }
   }
 
@@ -303,7 +343,7 @@ function buildTokenCatalog(
     return a.path.localeCompare(b.path)
   })
 
-  return leaves.map(({ path, leaf }) => {
+  return leaves.map(({ path, leaf, type, description: leafDesc, useFor, avoidFor }) => {
     const rawVal = leaf.$value
     const value = String(rawVal)
     const aliasMatch = typeof rawVal === "string" ? rawVal.trim().match(/^\{([^}]+)\}$/) : null
@@ -311,13 +351,13 @@ function buildTokenCatalog(
     const resolvedValue = resolveTokenValue(rawVal, raw)
     const cssVar = toCssVar(path)
     const tier = classifyTier(path)
-    const category = classifyCategory(path, leaf.$type)
+    const category = classifyCategory(path, type)
     const meta = presentationMeta[path]
 
     // Fallbacks für fehlende Präsentations-Metadaten
     const name = meta?.displayName || path
     const componentTarget = meta?.componentTarget
-    const description = meta?.description
+    const description = meta?.description || leafDesc
 
     const item: TokenItem = {
       id: path,
@@ -326,13 +366,13 @@ function buildTokenCatalog(
       cssVar,
       value,
       resolvedValue,
-      type: leaf.$type,
+      type,
       tier,
       category,
       ...(alias ? { alias } : {}),
       ...(componentTarget ? { componentTarget } : {}),
-      ...(typeof leaf.useFor === "string" ? { useFor: leaf.useFor } : {}),
-      ...(typeof leaf.avoidFor === "string" ? { avoidFor: leaf.avoidFor } : {}),
+      ...(useFor ? { useFor } : {}),
+      ...(avoidFor ? { avoidFor } : {}),
       ...(description ? { description } : {}),
     }
 
