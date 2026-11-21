@@ -14,6 +14,8 @@ export interface ManualSource extends Provenance {
 
 export interface AgentSource extends Provenance {
   kind: "agent"
+  label?: string
+  rollbackLabel?: string
   model: string
   version: string
   /** Restore this field and return the provenance of the restored value. */
@@ -52,7 +54,7 @@ function Attribution({ source }: { source: ManualSource | AgentSource }) {
     <Popover.Root open={open} onOpenChange={setOpen}>
       <Popover.Trigger render={<Button size="sm" variant="outline" lang="de" />}>
         <span aria-hidden="true">{current.kind === "manual" ? "👤" : "🤖"}</span>
-        {current.kind === "manual" ? "Manuell" : `Agent (${current.model}/${current.version})`}
+        {current.kind === "manual" ? "Manuell" : current.label ?? `Agent (${current.model}/${current.version})`}
       </Popover.Trigger>
       <span role="status" aria-live="polite" className="sr-only" lang="de">
         {restored && "Vor-KI-Version wiederhergestellt."}
@@ -67,7 +69,7 @@ function Attribution({ source }: { source: ManualSource | AgentSource }) {
             </dl>
             {current.kind === "agent" && <Button variant="outline" aria-disabled={pending} onClick={rollback}
               className="whitespace-normal">
-              <Undo2 aria-hidden="true" /> Auf Vor-KI-Version zurücksetzen
+              <Undo2 aria-hidden="true" /> {current.rollbackLabel ?? "Auf Vor-KI-Version zurücksetzen"}
             </Button>}
             {pending && <p role="status">Feld wird zurückgesetzt …</p>}
             {error && <p role="alert">{error}</p>}

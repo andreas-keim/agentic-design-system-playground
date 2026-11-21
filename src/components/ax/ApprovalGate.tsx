@@ -6,6 +6,7 @@ import { Button } from "../ui/button"
 
 export interface ApprovalGateProps {
   stage: Stage
+  reviewContent?: React.ReactNode
   impactSummary: string
   allowUndo?: boolean
   onReject: () => void
@@ -17,7 +18,7 @@ export function ApprovalGate(props: ApprovalGateProps) {
   return <Review key={props.stage.digest} {...props} />
 }
 
-function Review({ stage, impactSummary, allowUndo = true, onReject, onCommit }: ApprovalGateProps) {
+function Review({ stage, impactSummary, reviewContent, allowUndo = true, onReject, onCommit }: ApprovalGateProps) {
   const [proposal] = useState(() => structuredClone(stage))
   const [open, setOpen] = useState(true)
   const [seconds, setSeconds] = useState<number | null>(null)
@@ -72,9 +73,9 @@ function Review({ stage, impactSummary, allowUndo = true, onReject, onCommit }: 
               <ShieldCheck aria-hidden="true" /> Änderungen prüfen
             </Dialog.Title>
             <Dialog.Description className="break-words">
-              {impactSummary} · {proposal.surfaceId} (Version {proposal.version}) · {count} {count === 1 ? "Datensatz" : "Datensätze"}
+              {impactSummary}{!reviewContent && <> · {proposal.surfaceId} (Version {proposal.version}) · {count} {count === 1 ? "Datensatz" : "Datensätze"}</>}
             </Dialog.Description>
-            <dl className="grid gap-[var(--space-component-md)]">
+            {reviewContent ?? <dl className="grid gap-[var(--space-component-md)]">
               {proposal.edits.map(edit => (
                 <div key={JSON.stringify([edit.componentId, edit.field])}>
                   <dt className="break-all font-[var(--font-weight-medium)]">{edit.componentId}.{edit.field}</dt>
@@ -84,7 +85,7 @@ function Review({ stage, impactSummary, allowUndo = true, onReject, onCommit }: 
                   </dd>
                 </div>
               ))}
-            </dl>
+            </dl>}
             <details>
               <summary>Rollback-Vorschau und Prüfsumme</summary>
               <ul>

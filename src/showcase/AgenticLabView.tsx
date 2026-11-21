@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react"
+import { lazy, Suspense, useState, useRef, useEffect } from "react"
 import {
   RotateCcw,
   AlertTriangle,
@@ -7,6 +7,7 @@ import {
   Check,
   X,
 } from "lucide-react"
+import { Tabs } from "@base-ui/react/tabs"
 import { Tooltip } from "@base-ui/react/tooltip"
 
 import { useShowcase } from "./ShowcaseContext"
@@ -14,6 +15,9 @@ import { PageHeader } from "./PageHeader"
 import { SegmentedTabs } from "./SegmentedTabs"
 import { Button } from "@/components/ui/button"
 import { FormField } from "@/components/ui/form-field"
+
+const ApprovalScenario = lazy(() => import("./ApprovalScenario"))
+const scenarioTabClass = "rounded-lg px-3 py-2 text-sm text-muted-foreground data-active:bg-card data-active:text-foreground data-active:font-semibold data-active:shadow-xs focus-visible:outline-2 focus-visible:outline-ring"
 
 interface ViolationMarkerProps {
   label: string
@@ -88,6 +92,8 @@ function SimulationSwitch({ label, checked, onChange }: SimulationSwitchProps) {
 
 export function AgenticLabView() {
   const { setActiveTab } = useShowcase()
+  const [scenario, setScenario] = useState("checks")
+  const [visitedApproval, setVisitedApproval] = useState(false)
 
   // Direct error states: starts in the unguided raw LLM state (3 violations active)
   const [sabotageHex, setSabotageHex] = useState<boolean>(true)
@@ -182,8 +188,10 @@ export function AgenticLabView() {
       {/* 1. Page Header with thesis and direct Specs link */}
       <PageHeader
         title="Agentic UI Guardrail Lab"
-        subtitle="Browser-Simulation: So korrigiert ein deterministisches Design System typische Fehler in Agenten-Ausgaben."
-        action={
+        subtitle={scenario === "checks"
+          ? "Browser-Simulation: So korrigiert ein deterministisches Design System typische Fehler in Agenten-Ausgaben."
+          : "Browser-Simulation: Prüfe, wie sich ein Agentenvorschlag auf die Bedienung auswirkt."}
+        action={scenario === "checks" &&
           <button
             type="button"
             onClick={handleCheckSpecs}
@@ -196,6 +204,20 @@ export function AgenticLabView() {
         }
       />
 
+      <Tabs.Root value={scenario} onValueChange={value => {
+        if (value === "approval") setVisitedApproval(true)
+        setScenario(value)
+      }}>
+        <Tabs.List aria-label="Testfälle im Agentic Lab" className="mb-6 inline-flex max-w-full rounded-xl border border-border bg-muted p-1">
+          <Tabs.Tab className={scenarioTabClass} value="checks">Ausgabe prüfen</Tabs.Tab>
+          <Tabs.Tab className={scenarioTabClass} value="approval">Änderung freigeben</Tabs.Tab>
+        </Tabs.List>
+        <Tabs.Panel value="approval" keepMounted>
+          <Suspense fallback={<p role="status">Vorschlag wird geladen …</p>}>
+            {visitedApproval && <ApprovalScenario />}
+          </Suspense>
+        </Tabs.Panel>
+        <Tabs.Panel value="checks" keepMounted>
       {/* 2. Split-Studio Stage (24px gap, aligned top and bottoms) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
         {/* Left Column: Live Component Canvas (6 Cols) */}
@@ -533,6 +555,8 @@ export function AgenticLabView() {
           </div>
         </section>
       </div>
+        </Tabs.Panel>
+      </Tabs.Root>
     </div>
   )
 }
